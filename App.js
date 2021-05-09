@@ -9,6 +9,7 @@ import './index'
 import { HomeScreen, SearchScreen, ProfileScreen } from './index';
 import { color } from 'react-native-reanimated';
 import { HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
+import { PRIMARY_COLOR } from './common';
 
 //Bottom Tab:
 const Tab = createMaterialBottomTabNavigator();
@@ -23,20 +24,20 @@ export default function App(navigation) {
       inactiveColor="#000000"
       barStyle={{ backgroundColor: '#fe4a49' }}>
         <Tab.Screen name="HomeTab" component={HomeStackNavigator} 
-        options={{ tabBarLabel: 'Home', tabBarColor:'#FF6347', tabBarIcon: ({ color }) => (
+        options={{ tabBarLabel: 'Home', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
             <MaterialIcons name='home' color={color} size={26}></MaterialIcons>
           ),
         }}/>
         
         <Tab.Screen name="SearchTab" component={SearchStackNavigator} 
-        options={{ tabBarLabel: 'Search', tabBarColor:'#2a9d8f', tabBarIcon: ({ color }) => (
+        options={{ tabBarLabel: 'Search', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
           <MaterialIcons name='search' color={color} size={26}></MaterialIcons>
           ),
         }}/>
 
         <Tab.Screen name="ProFileTab" component={ProfileStackNavigator} 
-        options={{ tabBarLabel: 'ProFile',tabBarColor:'#fcbf49', tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="face-profile" color={color} size={26} />
+        options={{ tabBarLabel: 'Profile',tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
           ),
         }}/>
       </Tab.Navigator>

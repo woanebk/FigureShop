@@ -2,17 +2,29 @@ import react from 'react';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { GOLD, GREY } from '../common';
 
 function Card(props){
     return(
         <View style={styles.card}>
             <Image style = {styles.cardImg} source ={props.itemImage} resizeMode='cover'></Image>
             <View style={styles.cardInfo}>
-              <Text numberOfLines={1} style={styles.itemName}>{props.title}</Text>
+              <View style={{flex:1}}>
+                <Text numberOfLines={1} style={styles.itemName}>{props.title}</Text>
+                <View style = {styles.saleTag}>
+                  <Text style= {styles.salePercentageTxt}>-10%</Text>
+                </View>
+              </View>
+
               <View style={styles.descriptionContainer}>
                 <Text numberOfLines={2} style={styles.itemDescripton}> {props.description}</Text>
               </View>
-              <Text numberOfLines={1} style={styles.itemPrice}> {props.itemPrice}</Text>
+
+              <View style={{flex:1}}>
+                <Text numberOfLines={1} style={styles.itemPrice}> {props.itemPrice}</Text>
+                <Text numberOfLines={1} style={styles.itemSalePrice}> {props.itemPrice}</Text>
+                
+              </View>
             </View>
           </View>
     );
@@ -21,7 +33,7 @@ function Card(props){
 const styles = StyleSheet.create({
     card:{
         marginTop:10,
-        height:100,
+        height:110,
         width:'100%',
         marginVertical:10,
         flexDirection: 'row',
@@ -33,7 +45,7 @@ const styles = StyleSheet.create({
         borderRadius:1,
       },
     cardInfo:{ 
-        flex:2
+        flex:2,
         },
     cardImg:{
         height:'100%',
@@ -47,22 +59,44 @@ const styles = StyleSheet.create({
         marginLeft:15,
         marginTop:10,
         fontWeight:'bold',
-        
     },
     descriptionContainer:{
       alignSelf:'center',
-      height:'40%',
       width:'90%',
       marginLeft:5,
+      flex:1,
     },
     itemDescripton:{
-        fontSize:12,
-        color:'#444'
+      fontSize:12,
+      color:'#444'
     },
     itemPrice:{
       color:'#FF0000',
       fontWeight:'bold',
       marginLeft:10,
+      fontSize:14
+    },
+    itemSalePrice:{
+      color:GREY,
+      marginLeft:12,
+      fontSize:12,
+      textDecorationLine: 'line-through',
+      textDecorationStyle: 'solid',
+    },
+    saleTag:{
+      backgroundColor:GOLD,
+      width:45,
+      height:45,
+      borderRadius:50,
+      position:'absolute',
+      top:'-30%',
+      right:'-6%',
+      justifyContent:'center',
+      alignItems:'center'
+    },
+    salePercentageTxt:{
+      fontSize:14,
+      fontWeight:'bold',
     },
   });
 

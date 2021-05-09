@@ -4,8 +4,10 @@ import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'reac
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 function UserPFP(props){
-    return(
-      <Image style={styles.pfp} source ={props.profileimage}></Image>
+    return(//style to use in stylesheet when call component
+      <View style={props.style}>
+        <Image style={styles.pfp} source ={props.image}></Image>
+      </View>
     );
 }
 
@@ -14,7 +16,6 @@ var styles = StyleSheet.create({
     width:120,
     height:120,
     borderRadius:100,
-    top:120,
     borderWidth:1,
     borderColor:'#000',
   },

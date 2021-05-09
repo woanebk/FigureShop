@@ -1,9 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-import { HomeScreen, SearchScreen, ProfileScreen, ItemDetailScreen } from './index';
+import { HomeScreen, SearchScreen, ProfileScreen, ItemDetailScreen, EditProfileScreen, CategoryItemsScreen } from './index';
 import { IconButton } from "react-native-paper";
 
 const HomeStack = createStackNavigator();
@@ -52,6 +51,30 @@ const HomeStackNavigator = (navigation)=>{
                 color:'#fff',
               },
               title:'',
+              headerTransparent:true,
+              headerStyle: {
+                backgroundColor: 'transparent',
+                elevation: 0,
+                shadowOpacity: 0,
+                borderBottomWidth: 0,
+              },
+              headerTintColor: '#fff',
+              headerRight:()=>(
+                <View style={{marginLeft:10}}>
+                  <IconButton icon="shopping" onPress={() => console.log('Bag Pressed')}
+                color = "#fff" size={25}/>
+                </View>
+              ),
+            }}
+            ></HomeStack.Screen>
+
+            <HomeStack.Screen name='CategoryItems' component={CategoryItemsScreen}
+            options={{
+              headerTitleStyle:{
+                color:'#fff',
+              },
+              title:'',
+              headerTransparent:true,
               headerStyle: {
                 backgroundColor: 'transparent',
                 elevation: 0,
@@ -159,14 +182,23 @@ const ProfileStackNavigator = (navigation)=>{
               shadowOpacity: 0,
               borderBottomWidth: 0,
             },
+            headerTransparent:true,
             headerLeft:()=>(
               <View style={{marginLeft:10}}>
                 <IconButton icon="menu" onPress={() => console.log('Menu Pressed')}
               color = "#FF6347" size={25}/>
               </View>
             ),
+            
           }}
           />
+          <ProfileStack.Screen name='EditProfile' component={EditProfileScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff'
+          }}>
+
+          </ProfileStack.Screen>
       </ProfileStack.Navigator>
   );
 }
