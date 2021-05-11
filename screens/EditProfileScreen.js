@@ -2,18 +2,62 @@ import react from 'react';
 import React, { Component, Dimensions  } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, TextInput } from 'react-native';
 import { TouchableRipple, IconButton } from 'react-native-paper';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
-import { GREY, PRIMARY_COLOR, SECONDARY_COLOR, WHITE, LIGHT_GREY } from '../common';
+import { GREY, PRIMARY_COLOR, SECONDARY_COLOR, WHITE, LIGHT_GREY, DARK_PRIMARY_COLOR } from '../common';
 import UserPFP from '../components/UserPFP';
 
+
 export default function EditProfileScreen({navigation}) {
+
+  const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
+  const fall= new Animated.Value(1); //blur animation
+
+  const renderSheet = ()=>(
+    <View style={styles.bottomsheetWrapper}>
+      <Text style={styles.panelTitleTxt}>Upload Photo</Text>
+      <Text style={styles.panelSubtitleTxt}>Chọn Ảnh Đại Diện</Text>
+      <View style={{width:'90%'}}>
+      <TouchableOpacity style={styles.commandBtn}>
+          <Text style={styles.commandTxt}>Chụp Ảnh</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.commandBtn}>
+          <Text style={styles.commandTxt}>Chọn từ Kho Ảnh</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.commandBtn} 
+        onPress={()=>bottomsheetRef.current.snapTo(0)}>
+          <Text style={styles.commandTxt}>Hủy</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+  const renderSheetHeader = ()=>(
+    <View style={styles.header}>
+        <View style={styles.panelHandle}></View>
+    </View>
+  )
+
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
+      <BottomSheet 
+      ref={bottomsheetRef}
+      snapPoints={[0, 300]}
+      initialSnap={0} //0 is 0, 1 is 300
+      callbackNode={fall}
+      enabledGestureInteraction={false}
+      renderContent={renderSheet}
+      renderHeader={renderSheetHeader}
+      />
       {/* =======Profile Picture Area */}
+      <Animated.View style={{opacity: Animated.add(0.1, Animated.multiply(fall,1.0))}}>
       <View style={styles.topdock}>
       </View>
-      <TouchableOpacity style={styles.userpfp} onPress={()=>{console.log('image')}}>
+      <TouchableOpacity style={styles.userpfp} onPress={()=>bottomsheetRef.current.snapTo(1)}>
           <View>
             <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP>
             <View style={styles.editpfpBtn}>
@@ -24,6 +68,7 @@ export default function EditProfileScreen({navigation}) {
 
       <View style={styles.infoWrapper}>
         <Text style={styles.usernameTxt}> UserName</Text>
+
         <View style={styles.userInfo}>
           <Ionicons style={{alignSelf:'center'}} name='person' size={18} color={GREY}/>
           <TextInput style={styles.textInput} placeholder='Họ Tên'/>
@@ -48,13 +93,15 @@ export default function EditProfileScreen({navigation}) {
           <Text style={styles.commandTxt}>Xác Nhận</Text>
         </TouchableOpacity>
       </View>
+      </Animated.View>
+      
     </View>
   );
 }
 
 var styles = StyleSheet.create({
   container:{
-    
+    height:'100%'
   },
   topdock:{
     height:180,
@@ -89,7 +136,7 @@ var styles = StyleSheet.create({
   infoWrapper:{
     marginTop:70,
     width:'90%',
-    alignSelf:'center'
+    alignSelf:'center',
     //backgroundColor:SECONDARY_COLOR,
   },
   userInfo:{
@@ -109,7 +156,7 @@ var styles = StyleSheet.create({
   commandBtn:{
     padding:15,
     borderRadius:10,
-    backgroundColor:PRIMARY_COLOR,
+    backgroundColor:DARK_PRIMARY_COLOR,
     alignItems:'center',
     marginTop:10,
     height:50,
@@ -117,6 +164,37 @@ var styles = StyleSheet.create({
   },
   commandTxt:{
     color:WHITE, 
+    fontSize:18,
+    fontWeight:'bold'
+  },
+  header:{
+    backgroundColor:WHITE,
+    shadowColor:'#333333',
+    shadowOffset:{width:-1, height:-3},
+    shadowRadius:2,
+    shadowOpacity:0.4,
+    paddingTop:20,
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
+    //elevation:20,
+    alignItems:'center'
+  },
+  panelHandle:{
+    width:40,
+    height:8,
+    borderRadius:4,
+    backgroundColor:GREY,
+    marginBottom:10,
+  },
+  bottomsheetWrapper:{
+    alignItems:'center',
+     backgroundColor:'#fff',
+  },
+  panelTitleTxt:{
     fontSize:25,
-  }
+  },
+  panelSubtitleTxt:{
+    color:GREY,
+    fontSize:13
+  },
 })

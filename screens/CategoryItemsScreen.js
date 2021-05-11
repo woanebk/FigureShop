@@ -24,7 +24,6 @@ export default function CategoryItemsScreen({route, navigation}) {
           //Shadow Opacity when scrolling
           maxOverlayOpacity={0.6}
           minOverlayOpacity={0.3}
-          fadeOutForeground
           renderForeground={()=>(
             <View style={styles.categoryName}>
               <Text style={styles.categoryNameTxt}>{categoryName}</Text>

@@ -1,5 +1,6 @@
 export const PRIMARY_COLOR = '#FF6347'
 export const SECONDARY_COLOR = '#f5c4bc'
+export const DARK_PRIMARY_COLOR = '#f74727'
 export const GREY = '#7E7E7E'
 export const LIGHT_GREY = '#D3D3D3'
 export const GOLD = '#F9A602'

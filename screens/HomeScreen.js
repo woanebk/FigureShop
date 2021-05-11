@@ -239,6 +239,5 @@ var styles = StyleSheet.create({
   salecardWrapper:{
     padding:10,
     paddingLeft:0,
-    elevation:10
   }
 })
