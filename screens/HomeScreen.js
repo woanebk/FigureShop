@@ -2,14 +2,11 @@ import react from 'react';
 import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, TouchableHighlightBase } from 'react-native';
 import Swiper from 'react-native-swiper/src';
-import '../index'
 
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { Card } from '../index';
 import { TouchableRipple } from 'react-native-paper';
 import { PRIMARY_COLOR } from '../common';
-import ItemCard from '../components/ItemCard';
-import CategoryCard from '../components/CategoryCard';
+import {ItemCard, CategoryCard, Card} from '../items'
 
 export default function HomeScreen ({navigation}) {
   return (
@@ -41,7 +38,7 @@ export default function HomeScreen ({navigation}) {
       </View>
       {/* ============ categories ========== */}
       <View style={styles.categoryContainer}>
-        <TouchableOpacity onPress = {()=>{navigation.navigate('CategoryItems')}}>
+        <TouchableOpacity onPress = {()=>{navigation.navigate('CategoryItems',{categoryName:'Dragon Ball'})}}>
           <View style={styles.categoryIcon}>
             <Ionicons name='sad' size={30} color='#FF6347'></Ionicons>
           </View>

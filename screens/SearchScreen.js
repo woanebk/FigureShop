@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AwesomeTextInput } from 'react-native-awesome-text-input';
 
-import { Card } from '../index';
+import { Card } from '../items';
 
 export default function SearchScreen ({navigation}){
   return (

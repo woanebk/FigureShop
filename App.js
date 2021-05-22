@@ -1,19 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import './index'
-import { HomeScreen, SearchScreen, ProfileScreen } from './index';
-import { color } from 'react-native-reanimated';
 import { HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
 import { PRIMARY_COLOR } from './common';
 
 //Bottom Tab:
 const Tab = createMaterialBottomTabNavigator();
-//StackNavigator:
 
 export default function App(navigation) {
   return (

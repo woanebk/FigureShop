@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, TouchableOpacity } from 'react-native';
 
-import { HomeScreen, SearchScreen, ProfileScreen, ItemDetailScreen, EditProfileScreen, CategoryItemsScreen } from './index';
+import { HomeScreen, SearchScreen, ProfileScreen, ItemDetailScreen, EditProfileScreen, CategoryItemsScreen, AddCategoryScreen, ListCategoryScreen } from './items';
 import { IconButton } from "react-native-paper";
 
 const HomeStack = createStackNavigator();
@@ -192,13 +192,30 @@ const ProfileStackNavigator = (navigation)=>{
             
           }}
           />
+
           <ProfileStack.Screen name='EditProfile' component={EditProfileScreen}
           options={{
             headerTransparent:true,
             headerTintColor:'#fff'
           }}>
-
           </ProfileStack.Screen>
+          
+          <ProfileStack.Screen name='ListCategory' component={ListCategoryScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff',
+            title:'Danh Sách Loại Sản Phẩm'
+          }}>
+          </ProfileStack.Screen>
+
+          <ProfileStack.Screen name='AddCategory' component={AddCategoryScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff',
+            title:'Thêm Loại Sản Phẩm'
+          }}>
+          </ProfileStack.Screen>
+
       </ProfileStack.Navigator>
   );
 }

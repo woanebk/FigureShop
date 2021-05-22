@@ -3,7 +3,7 @@ import React, { Component, Dimensions, useEffect  } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { TouchableRipple, IconButton } from 'react-native-paper';
 import { GREY, LIGHT_GREY, SECONDARY_COLOR } from '../common';
-import {DashBoard, UserPFP, ProfileButton, InfoDisplayer} from '../index'
+import {DashBoard, UserPFP, ProfileButton, InfoDisplayer} from '../items'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react/cjs/react.development';
 
@@ -47,8 +47,8 @@ export default function ProfileScreen ({navigation}) {
 
       <View style={styles.btnsMenuWrapper}>
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() => console.log('Menu ')}>
-            <ProfileButton iconName='robot' text='Quản Lý Sản Phẩm' ></ProfileButton>
+          <TouchableRipple onPress={() => navigation.navigate('ListCategory')}>
+            <ProfileButton iconName='robot' text='Quản Lý Loai Sản Phẩm' ></ProfileButton>
           </TouchableRipple>
         </View>
 
