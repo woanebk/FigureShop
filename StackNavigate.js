@@ -2,14 +2,15 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, TouchableOpacity } from 'react-native';
 
-import { HomeScreen, SearchScreen, ProfileScreen, ItemDetailScreen, EditProfileScreen, CategoryItemsScreen, AddCategoryScreen, ListCategoryScreen } from './items';
+import { HomeScreen, SearchScreen, ProfileScreen, ItemDetailScreen, EditProfileScreen, CategoryItemsScreen, AddCategoryScreen, ListCategoryScreen, CartScreen } from './items';
 import { IconButton } from "react-native-paper";
+import { PRIMARY_COLOR, WHITE } from "./common";
 
 const HomeStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 
-const HomeStackNavigator = (navigation)=>{
+const HomeStackNavigator = ({navigation})=>{
     return(
         <HomeStack.Navigator
             screenOptions={{
@@ -24,7 +25,13 @@ const HomeStackNavigator = (navigation)=>{
             headerTitleStyle: {
               alignSelf:'center'
             },
-            headerTitleAlign:'center'
+            headerTitleAlign:'center',
+            headerRight:()=>(
+              <View style={{marginLeft:10}}>
+                <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
+              color = "#FF6347" size={25}/>
+              </View>
+            ),
           }}
         >
             <HomeStack.Screen name='Home' component={HomeScreen}
@@ -36,12 +43,15 @@ const HomeStackNavigator = (navigation)=>{
                 color = "#FF6347" size={25}/>
                 </View>
               ),
-              headerRight:()=>(
-                <View style={{marginLeft:10}}>
-                  <IconButton icon="shopping" onPress={() => console.log('Bag Pressed')}
-                color = "#FF6347" size={25}/>
-                </View>
-              ),
+            }}
+            />
+
+              <HomeStack.Screen name='Cart' component={CartScreen}
+              options={{
+              title:'Giỏ Hàng',
+              headerRight:()=>(<></>),
+              headerTintColor:WHITE,
+              headerTransparent:true,
             }}
             />
 
@@ -59,12 +69,6 @@ const HomeStackNavigator = (navigation)=>{
                 borderBottomWidth: 0,
               },
               headerTintColor: '#fff',
-              headerRight:()=>(
-                <View style={{marginLeft:10}}>
-                  <IconButton icon="shopping" onPress={() => console.log('Bag Pressed')}
-                color = "#fff" size={25}/>
-                </View>
-              ),
             }}
             ></HomeStack.Screen>
 
@@ -82,19 +86,13 @@ const HomeStackNavigator = (navigation)=>{
                 borderBottomWidth: 0,
               },
               headerTintColor: '#fff',
-              headerRight:()=>(
-                <View style={{marginLeft:10}}>
-                  <IconButton icon="shopping" onPress={() => console.log('Bag Pressed')}
-                color = "#fff" size={25}/>
-                </View>
-              ),
             }}
             ></HomeStack.Screen>
         </HomeStack.Navigator>
     );
 }
 
-const SearchStackNavigator = (navigation)=>{
+const SearchStackNavigator = ({navigation})=>{
   return(
       <SearchStack.Navigator
           screenOptions={{
@@ -109,7 +107,13 @@ const SearchStackNavigator = (navigation)=>{
           headerTitleStyle: {
             alignSelf:'center'
           },
-          headerTitleAlign:'center'
+          headerTitleAlign:'center',
+          headerRight:()=>(
+            <View style={{marginLeft:10}}>
+              <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
+            color = "#FF6347" size={25}/>
+            </View>
+          ),
         }}
       >
           <SearchStack.Screen name='Search' component={SearchScreen}
@@ -118,12 +122,6 @@ const SearchStackNavigator = (navigation)=>{
             headerLeft:()=>(
               <View style={{marginLeft:10}}>
                 <IconButton icon="menu" onPress={() => console.log('Menu Pressed')}
-              color = "#FF6347" size={25}/>
-              </View>
-            ),
-            headerRight:()=>(
-              <View style={{marginLeft:10}}>
-                <IconButton icon="shopping" onPress={() => console.log('Bag Pressed')}
               color = "#FF6347" size={25}/>
               </View>
             ),
@@ -143,12 +141,6 @@ const SearchStackNavigator = (navigation)=>{
               borderBottomWidth: 0,
             },
             headerTintColor: '#fff',
-            headerRight:()=>(
-              <View style={{marginLeft:10}}>
-                <IconButton icon="shopping" onPress={() => console.log('Bag Pressed')}
-              color = "#fff" size={25}/>
-              </View>
-            ),
           }}
           ></SearchStack.Screen>
       </SearchStack.Navigator>

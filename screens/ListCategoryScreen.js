@@ -56,6 +56,7 @@ export default function ListCategoryScreen({navigation}) {
           ></ListItem>
         )}
         keyExtractor={item=>item.key}
+        showsVerticalScrollIndicator={false}
       />
       <TouchableOpacity onPress={()=>{navigation.navigate('AddCategory',{readonly:false})}} style={styles.newBtn}>
         <MaterialIcons name='add' size={30} color={WHITE} ></MaterialIcons>

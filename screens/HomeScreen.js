@@ -36,13 +36,14 @@ export default function HomeScreen ({navigation}) {
         </View>
       </Swiper>
       </View>
-      {/* ============ categories ========== */}
+      {/* ============ character categories ========== */}
+      <Text style={styles.subjectsTxt}> Nhân Vật Nổi Bật</Text>
       <View style={styles.categoryContainer}>
         <TouchableOpacity onPress = {()=>{navigation.navigate('CategoryItems',{categoryName:'Dragon Ball'})}}>
           <View style={styles.categoryIcon}>
             <Ionicons name='sad' size={30} color='#FF6347'></Ionicons>
           </View>
-          <Text style={styles.categoryText}> One Piece</Text>
+          <Text style={styles.categoryText}> Goku</Text>
         </TouchableOpacity>
         
         <TouchableOpacity onPress = {()=>{}}>
@@ -56,14 +57,14 @@ export default function HomeScreen ({navigation}) {
           <View style={styles.categoryIcon}>
             <Ionicons name='scan' size={30} color='#FF6347'></Ionicons>
           </View>
-          <Text style={styles.categoryText}> DragonBall</Text>
+          <Text style={styles.categoryText}> Luffy</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress = {()=>{}}>
           <View style={styles.categoryIcon}>
             <Ionicons name='scan' size={30} color='#FF6347'></Ionicons>
           </View>
-          <Text style={styles.categoryText}> DragonBall</Text>
+          <Text style={styles.categoryText}> Sasuke</Text>
         </TouchableOpacity>
 
       </View>
@@ -216,7 +217,7 @@ var styles = StyleSheet.create({
     fontSize:17, 
     fontWeight:'bold', 
     textAlign:'left',
-    marginTop:20,
+    marginTop:15,
     marginLeft:'5%'
   },
   saleCardsContainer:{

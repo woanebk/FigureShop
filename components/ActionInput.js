@@ -6,7 +6,7 @@ import {GREY, LIGHT_GREY } from '../common';
 function ActionInput(props){
     return(
         <View style={styles.Info}>
-          <View style={{flex:1}}>
+          <View style={{flex:0.5}}>
             <Text>{props.title}</Text>
           </View>
           <View style={{flex:1, flexDirection:'row'}}>
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         height:60,
         width:'100%',
         alignSelf:'center',
-        marginTop:10,
+        marginTop:5,
         marginBottom:10,
         borderBottomWidth:1,
         borderBottomColor:LIGHT_GREY,

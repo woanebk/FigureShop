@@ -2,7 +2,7 @@ import react from 'react';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { GOLD, GREY } from '../common';
+import { GOLD, GREY, WHITE } from '../common';
 
 function Card(props){
     return(
@@ -41,8 +41,9 @@ const styles = StyleSheet.create({
         shadowOffset:{width:0, height:1},
         shadowOpacity:0.8,
         shadowRadius:2,
-        elevation: 1,
+        elevation: 5,
         borderRadius:1,
+        backgroundColor:WHITE
       },
     cardInfo:{ 
         flex:2,

@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GREY, PRIMARY_COLOR, SECONDARY_COLOR, WHITE, LIGHT_GREY, DARK_PRIMARY_COLOR } from '../common';
 import UserPFP from '../components/UserPFP';
 import * as ImagePicker from 'expo-image-picker';
+import { ActionInput } from '../items';
 
 
 export default function EditProfileScreen({navigation}) {
@@ -130,25 +131,21 @@ export default function EditProfileScreen({navigation}) {
       <View style={styles.infoWrapper}>
         <Text style={styles.usernameTxt}> UserName</Text>
 
-        <View style={styles.userInfo}>
-          <Ionicons style={{alignSelf:'center'}} name='person' size={18} color={GREY}/>
-          <TextInput style={styles.textInput} placeholder='Họ Tên'/>
-        </View>
+        <ActionInput title = 'Họ Tên' ionIconName='person'
+          placeholder='Nhập Họ Tên'
+        ></ActionInput>
 
-        <View style={styles.userInfo}>
-          <Ionicons style={{alignSelf:'center'}} name='call' size={18} color={GREY}/>
-          <TextInput style={styles.textInput} placeholder='Số Điện thoại' keyboardType='number-pad'/>
-        </View>
+        <ActionInput title = 'Số Điện Thoại' ionIconName='call'
+          placeholder='Nhập Số Điện Thoại'
+        ></ActionInput>
 
-        <View style={styles.userInfo}>
-          <Ionicons style={{alignSelf:'center'}} name='location' size={18} color={GREY}/>
-          <TextInput style={styles.textInput} placeholder='Địa Chỉ'/>
-        </View>
+        <ActionInput title = 'Địa Chỉ' ionIconName='location'
+          placeholder='Nhập Địa Chỉ'
+        ></ActionInput>
 
-        <View style={styles.userInfo}>
-          <Ionicons style={{alignSelf:'center'}} name='mail' size={18} color={GREY}/>
-          <TextInput style={styles.textInput} placeholder='Email' keyboardType='email-address'/>
-        </View>
+        <ActionInput title = 'Email' ionIconName='mail'
+          placeholder='Nhập Email'
+        ></ActionInput>
         
         <TouchableOpacity style={styles.commandBtn}>
           <Text style={styles.commandTxt}>Xác Nhận</Text>

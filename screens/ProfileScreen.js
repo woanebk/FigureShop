@@ -29,7 +29,7 @@ export default function ProfileScreen ({navigation}) {
           <UserPFP image={require('../assets/banner/op_swiper_1.jpg')}></UserPFP>
         </View>
         <View style={styles.userinfo}>
-          <Text style={styles.usernameTxt}> User Name</Text>
+          <Text style={styles.usernameTxt}> User Name{'  '}</Text>
 
           <View style={{height:30}}>
             <InfoDisplayer ionIconName='call' text='0976712345' ></InfoDisplayer>

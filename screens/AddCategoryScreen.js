@@ -1,6 +1,6 @@
 import react from 'react';
 import React, { Component, Dimensions, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from 'react-native';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {IconButton } from 'react-native-paper';
@@ -132,6 +132,13 @@ export default function AddCategoryScreen({route, navigation}) {
     })
   }
 
+  const UpdateAnime = (ten_anime, url_hinh_anh)=>{
+    firebaseApp.database().ref('Anime/' + itemID).update({
+      TenAnime: ten_anime,
+      HinhAnh: url_hinh_anh,
+    })
+  }
+
   const clearInput = ()=>{
     setCategoryName('');
     setImage(null);
@@ -139,15 +146,15 @@ export default function AddCategoryScreen({route, navigation}) {
   }
 
   const Submit = ()=>{
+    //validate data:
+    if( categoryName == '' || image == null)
+    {
+      alert('Vui lòng điển đủ thông tin và hình ảnh');
+      return;
+    }
+
     if(!readonly) //================ ADD
     {
-        //validate data:
-      if( categoryName == '' || image == null)
-      {
-        alert('Vui lòng điển đủ thông tin và hình ảnh');
-        return;
-      }
-      
       // neu da dien du thong tin thi goi ham upload image len firebase storage
       uploadImage(image)
         .then(()=>{ //sau khi up load thanh cong goi api lay download url cua hinh anh
@@ -169,10 +176,24 @@ export default function AddCategoryScreen({route, navigation}) {
     }
     else //=========================EDIT
     {
-      alert('EDIT')
-      setEditing(false)
+      uploadImage(image)
+        .then(()=>{ //sau khi up load thanh cong goi api lay download url cua hinh anh
+          return firebaseApp.storage().ref().child('images/category/' + categoryName +'.jpg').getDownloadURL();
+        })
+        .then((url)=>{ //gan download url vao bien state imageURL
+          setImageURL(url);
+          UpdateAnime(categoryName, url);
+        })
+        .then(()=>{
+          setIsLoading(false);
+          setEditing(false)
+          alert('Sửa Anime Thành Công');
+        })
+        .catch((error)=>{
+          setIsLoading(false);
+          alert(error);
+        })
     }
-    
   }
 
   //RENDER BOTTOM SHEET:
@@ -217,7 +238,8 @@ export default function AddCategoryScreen({route, navigation}) {
       />
       <Animated.View style={{opacity: Animated.add(0.1, Animated.multiply(fall,1.0))}}>
       <View style={styles.topdock}></View>
-      <ActivityIndicator animating={isLoading} color = '#bc2b78' size = "large"></ActivityIndicator>
+      <ActivityIndicator
+        animating={isLoading} color = '#bc2b78' size = "large"></ActivityIndicator>
       <TouchableOpacity disabled={!editing && readonly} style={styles.imgHolder} onPress={()=>bottomsheetRef.current.snapTo(1)}>
         <View>
           <Image style={styles.image} source ={{uri:image}}></Image>
@@ -225,7 +247,7 @@ export default function AddCategoryScreen({route, navigation}) {
         </View>
       </TouchableOpacity>
 
-      <View style={styles.infoWrapper}>
+      <ScrollView style={styles.infoWrapper}>
 
         <ActionInput title = 'Tên Loại Sản Phẩm' ionIconName='ios-logo-android'
           placeholder='Nhập Tên Loại Sản Phẩm' value={categoryName} 
@@ -235,7 +257,7 @@ export default function AddCategoryScreen({route, navigation}) {
         <TouchableOpacity style={[styles.commandBtn, readonly && !editing ?styles.hide:{} ]} onPress={Submit}>
           <Text style={styles.commandTxt}>Xác Nhận</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
       </Animated.View>
       
     </View>
@@ -324,4 +346,14 @@ var styles = StyleSheet.create({
   hide:{
     display:'none'
   },
+  loading:{
+    position:'absolute',
+    opacity:0.8,
+    left:0,
+    top:0,
+    right:0,
+    bottom:0,
+    backgroundColor:'#000',
+    zIndex:100
+  }
 })

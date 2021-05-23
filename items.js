@@ -6,6 +6,7 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import CategoryItemsScreen from './screens/CategoryItemsScreen';
 import AddCategoryScreen from './screens/AddCategoryScreen';
 import ListCategoryScreen from './screens/ListCategoryScreen';
+import CartScreen from './screens/CartScreen';
 
 import Card from './components/Card';
 import UserPFP from './components/UserPFP';
@@ -16,6 +17,7 @@ import InfoDisplayer from './components/InfoDisplayer';
 import CategoryCard from './components/CategoryCard';
 import ListItem from './components/ListItem';
 import ActionInput from './components/ActionInput';
+import CartItem from './components/CartItem';
 
 export {
     HomeScreen,
@@ -26,6 +28,8 @@ export {
     CategoryItemsScreen,
     AddCategoryScreen,
     ListCategoryScreen,
+    CartScreen,
+    
     Card,
     UserPFP,
     DashBoard,
@@ -35,4 +39,5 @@ export {
     CategoryCard,
     ListItem,
     ActionInput,
+    CartItem,
 }
