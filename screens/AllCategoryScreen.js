@@ -89,5 +89,7 @@ var styles = StyleSheet.create({
     bottom:'70%',
     fontWeight:'bold',
     color:WHITE,
+    textAlign:'center',
+    width:'100%'
   },
 })

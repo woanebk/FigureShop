@@ -1,6 +1,6 @@
 import react from 'react';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { AwesomeTextInput } from 'react-native-awesome-text-input';
 
 import { Card } from '../items';
@@ -8,6 +8,7 @@ import { Card } from '../items';
 export default function SearchScreen ({navigation}){
   return (
     <View style={{backgroundColor:'#fff'}} >
+      <StatusBar barStyle='dark-content'></StatusBar>
       <View style={styles.searchbarWrapper}>
       <AwesomeTextInput label="Search for items"
       customStyles={{ 

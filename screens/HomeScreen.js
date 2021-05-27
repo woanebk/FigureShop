@@ -38,10 +38,8 @@ export default function HomeScreen ({navigation}) {
     })
   }
 
-  return (
-    <ScrollView style = {styles.container} showsVerticalScrollIndicator={false}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'}></StatusBar>
-      <View style={styles.slidercontainer}>
+  const renderSwiper = ()=>(
+    <View style={styles.slidercontainer}>
       <Swiper height={200} activeDotColor='#FF6347' autoplay={true} showsButtons={false}>
         <View style={styles.slide}>
           <Image style={styles.sliderimage}
@@ -65,6 +63,12 @@ export default function HomeScreen ({navigation}) {
         </View>
       </Swiper>
       </View>
+  )
+  
+  return (
+    <ScrollView style = {styles.container} showsVerticalScrollIndicator={false}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'}></StatusBar>
+      {renderSwiper()}
       {/* ============ character categories ========== */}
       <Text style={styles.subjectsTxt}> Nhân Vật Nổi Bật</Text>
       <View style={styles.categoryContainer}>

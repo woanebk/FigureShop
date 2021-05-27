@@ -1,48 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { NavigationContainer } from '@react-navigation/native';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { CategoryStackNavigator, HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
-import { PRIMARY_COLOR } from './common';
+import {TabNavigator, CategoryStackNavigator, HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
+import { PRIMARY_COLOR, WHITE } from './common';
+import { createStackNavigator } from '@react-navigation/stack';
+import CartScreen from './screens/CartScreen';
+import LoginScreen from './screens/LoginScreen';
 
-//Bottom Tab:
-const Tab = createMaterialBottomTabNavigator();
+const MainStack = createStackNavigator()
 
 export default function App(navigation) {
   return (
     <NavigationContainer >
-      <Tab.Navigator
-      shifting='true'
-      activeColor="#f0edf6"
-      inactiveColor="#000000"
-      barStyle={{ backgroundColor: '#fe4a49' }}>
-        <Tab.Screen name="HomeTab" component={HomeStackNavigator} 
-        options={{ tabBarLabel: 'Home', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
-            <MaterialIcons name='home' color={color} size={26}></MaterialIcons>
-          ),
-        }}/>
-
-        <Tab.Screen name="CategoryTab" component={CategoryStackNavigator} 
-        options={{ tabBarLabel: 'Anime', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
-          <MaterialIcons name='menu' color={color} size={26}></MaterialIcons>
-          ),
-        }}/>
-        
-        <Tab.Screen name="SearchTab" component={SearchStackNavigator} 
-        options={{ tabBarLabel: 'Search', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
-          <MaterialIcons name='search' color={color} size={26}></MaterialIcons>
-          ),
-        }}/>
-
-        <Tab.Screen name="ProFileTab" component={ProfileStackNavigator} 
-        options={{ tabBarLabel: 'Profile',tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
-          ),
-        }}/>
-      </Tab.Navigator>
+      <MainStack.Navigator>
+        <MainStack.Screen name='Tab' component={TabNavigator}
+        options={{
+          headerShown:false,
+        }}
+        ></MainStack.Screen>
+        <MainStack.Screen name='Cart' component={CartScreen}
+          options={{
+            headerShown:true,
+            headerTransparent:true,
+            headerTintColor:WHITE,
+            title:''
+          }}
+        ></MainStack.Screen>
+        <MainStack.Screen name='Login' component={LoginScreen}
+        ></MainStack.Screen>
+      </MainStack.Navigator>
     </NavigationContainer>
   );
 }

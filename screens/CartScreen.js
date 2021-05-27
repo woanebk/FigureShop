@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE } from '../common';
 import { CartItem } from '../items';
 
 export default function CartScreen({route, navigation}) {
+
+  useEffect(()=>{
+
+  })
 
   return (
       <View style={styles.container}>
@@ -66,10 +70,10 @@ export default function CartScreen({route, navigation}) {
 var styles = StyleSheet.create({
   container:{
     height:'100%',
-    backgroundColor:OFF_WHITE
+    backgroundColor:WHITE
   },
   topdock:{
-    height:120,
+    height:110,
     backgroundColor:PRIMARY_COLOR,
     borderBottomRightRadius:70
   },

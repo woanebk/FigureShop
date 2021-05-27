@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   itemNameWrapper:{
     paddingHorizontal:20,
     marginTop:10,
-    flex:1.3,
+    height:70,
     flexDirection:'row',
   },
   itemName:{
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     //alignSelf:'center',
   },
   itemPriceWrapper:{
-    flex:1,
+    height:60,
     flexDirection:'row',
     alignItems:'center',
   },
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   itemDetailWrapper:{
     paddingLeft:18,
-    flex: 1,
+    height:50
   },
   itemDetail:{ //View inside of Item Detail wrapper
     flex:1,
