@@ -5,7 +5,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import { NavigationContainer } from '@react-navigation/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
+import { CategoryStackNavigator, HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
 import { PRIMARY_COLOR } from './common';
 
 //Bottom Tab:
@@ -22,6 +22,12 @@ export default function App(navigation) {
         <Tab.Screen name="HomeTab" component={HomeStackNavigator} 
         options={{ tabBarLabel: 'Home', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
             <MaterialIcons name='home' color={color} size={26}></MaterialIcons>
+          ),
+        }}/>
+
+        <Tab.Screen name="CategoryTab" component={CategoryStackNavigator} 
+        options={{ tabBarLabel: 'Anime', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
+          <MaterialIcons name='menu' color={color} size={26}></MaterialIcons>
           ),
         }}/>
         

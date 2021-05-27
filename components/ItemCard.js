@@ -1,10 +1,7 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import {Divider} from 'react-native-paper'
-import { PRIMARY_COLOR,GREY, RED } from '../common';
-import { ceil } from 'react-native-reanimated';
+import React from 'react';
+import { View, Text, StyleSheet, Image} from 'react-native';
+import { Ionicons} from '@expo/vector-icons';
+import { GREY, RED } from '../common';
 
 function ItemCard(props){
     return(

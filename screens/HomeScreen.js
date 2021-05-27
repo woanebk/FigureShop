@@ -1,16 +1,45 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, TouchableHighlightBase } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, TouchableHighlightBase, FlatList } from 'react-native';
 import Swiper from 'react-native-swiper/src';
 
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { TouchableRipple } from 'react-native-paper';
-import { PRIMARY_COLOR } from '../common';
-import {ItemCard, CategoryCard, Card} from '../items'
+import {ItemCard, CategoryCard, Card} from '../items';
+import { firebaseApp } from '../firebaseconfig';
 
 export default function HomeScreen ({navigation}) {
+
+  const [firstRun,setFirstRun]=useState(0);
+
+  const [listAnime, setListAnime] = useState(); //chứa 4 Anime ra màn hình
+
+  useEffect(()=>{
+    if(firstRun == 0){
+      getAnimes()
+      setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
+    }
+  }) 
+
+  const getAnimes = () => {
+    let list=[];
+    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').limitToFirst(4).on('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        list = []; //reset list tránh trùng lặp
+        snapshot.forEach((child)=>
+        {
+          list.push({
+            key: child.key, 
+            TenAnime: child.val().TenAnime, 
+            HinhAnh:child.val().HinhAnh
+          })
+        })
+        setListAnime(list)
+      }
+    })
+  }
+
   return (
-    <ScrollView style = {styles.container} >
+    <ScrollView style = {styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'}></StatusBar>
       <View style={styles.slidercontainer}>
       <Swiper height={200} activeDotColor='#FF6347' autoplay={true} showsButtons={false}>
@@ -46,7 +75,7 @@ export default function HomeScreen ({navigation}) {
           <Text style={styles.categoryText}> Goku</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity onPress = {()=>{}}>
+        <TouchableOpacity onPress = {()=>{console.log(listAnime)}}>
           <View style={styles.categoryIcon}>
             <Ionicons name='happy' size={30} color='#FF6347'></Ionicons>
           </View>
@@ -112,21 +141,18 @@ export default function HomeScreen ({navigation}) {
       
       {/* ============ CategoryCard */}
       <Text style={styles.subjectsTxt}> Danh mục Truyện tranh/Anime</Text>
-      <ScrollView style={styles.categoryCardsContainer} centerContent={true} horizontal={true}>
-        <View style={{flexDirection:'row',}}>
-          <TouchableOpacity onPress={()=>navigation.navigate('CategoryItems',{categoryName:'Dragon Ball'})} style={styles.categoryCardWrapper }>
-            <CategoryCard style={{padding:5,}}></CategoryCard>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.categoryCardWrapper}>
-            <CategoryCard style={{padding:5}}></CategoryCard>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.categoryCardWrapper}>
-            <CategoryCard style={{padding:5}}></CategoryCard>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      <FlatList
+        style={styles.categoryCardsContainer} horizontal={true}
+        data={listAnime}
+        renderItem = {({item})=>(
+            <CategoryCard style={{padding:5}}
+              name={item.TenAnime} image={{uri:item.HinhAnh}}
+              onPress = {()=>{navigation.navigate('CategoryItems',{animeID:item.key})}}
+            ></CategoryCard>
+        )}
+        keyExtractor={item=>item.key}
+        showsHorizontalScrollIndicator={false}
+      />
 
       {/*========== Best Seller Cards */}
       

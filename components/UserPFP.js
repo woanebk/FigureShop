@@ -1,7 +1,5 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 
 function UserPFP(props){
     return(//style to use in stylesheet when call component

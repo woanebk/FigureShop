@@ -1,16 +1,18 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { PRIMARY_COLOR,GREY, RED, BLACK, WHITE } from '../common';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {  WHITE } from '../common';
 
 function CategoryCard(props){
     return(
-        <View style={[styles.card, props.style]}>
-            <Image style={styles.cardImg} source={require('../assets/banner/naruto_swiper_1.jpg')}/>
-            <View style={styles.cardInfo}>
-                <Text numberOfLines={1} style={styles.nameTxt}>Naruto Shippuden</Text>
+        <TouchableOpacity onPress={props.onPress}>
+            <View style={[styles.card, props.style]}>
+                <Image style={styles.cardImg} source={props.image}/>
+                <View style={styles.cardInfo}>
+                    <Text numberOfLines={1} style={styles.nameTxt}>{props.name}</Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
+        
     );
 }
 
@@ -25,6 +27,8 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'100%',
         borderRadius:10,
+        backgroundColor:'#000',
+        opacity:0.95
     },
     cardInfo:{ 
         position:'absolute',

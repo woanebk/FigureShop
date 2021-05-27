@@ -1,7 +1,6 @@
 import react from 'react';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { GOLD, GREY, WHITE } from '../common';
 
 function Card(props){

@@ -1,7 +1,6 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, Animated, TouchableWithoutFeedback } from 'react-native';
-import { BLACK, GOLD, GREY, WHITE } from '../common';
+import React from 'react';
+import { View, Text, StyleSheet, Image, Animated, TouchableWithoutFeedback } from 'react-native';
+import { GREY, WHITE } from '../common';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { MaterialIcons } from '@expo/vector-icons';

@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { TouchableRipple, IconButton } from 'react-native-paper';
-import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
-import { useState } from 'react';
-import { DARK_PRIMARY_COLOR, GREY, PRIMARY_COLOR, WHITE } from '../common';
+import { DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE } from '../common';
 import { CartItem } from '../items';
 
 export default function CartScreen({route, navigation}) {
@@ -69,7 +66,7 @@ export default function CartScreen({route, navigation}) {
 var styles = StyleSheet.create({
   container:{
     height:'100%',
-    backgroundColor:WHITE
+    backgroundColor:OFF_WHITE
   },
   topdock:{
     height:120,
@@ -83,9 +80,10 @@ var styles = StyleSheet.create({
   },
   scroller:{
     //backgroundColor:WHITE,
+    marginTop:40
   },
   commandBtn:{
-    borderRadius:10,
+    borderRadius:50,
     backgroundColor:DARK_PRIMARY_COLOR,
     alignItems:'center',
     height:50,
@@ -101,14 +99,15 @@ var styles = StyleSheet.create({
   },
   total:{
     //backgroundColor:PRIMARY_COLOR,
-    height:40,
+    height:50,
     width:'90%',
     alignSelf:'center',
     alignItems:'center',
     flexDirection:'row',
     justifyContent:'space-between',
     borderTopWidth:1,
-    borderColor:GREY
+    borderColor:GREY,
+    marginTop:10
   },
   totalTxt:{
     color:GREY,

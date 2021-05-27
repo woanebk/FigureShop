@@ -128,7 +128,8 @@ export default function AddCategoryScreen({route, navigation}) {
   const AddAnime = (ten_anime, url_hinh_anh)=>{
     firebaseApp.database().ref('Anime').push({
       TenAnime:ten_anime,
-      HinhAnh: url_hinh_anh
+      HinhAnh: url_hinh_anh,
+      TrangThai: "on"
     })
   }
 

@@ -1,9 +1,7 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet} from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { GREY, PRIMARY_COLOR } from '../common';
-import { TouchableRipple } from 'react-native-paper';
 
 function ProfileButton(props){
     return(

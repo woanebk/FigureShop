@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { PRIMARY_COLOR,GREY, RED, WHITE, DARK_PRIMARY_COLOR } from '../common';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Ionicons} from '@expo/vector-icons';
+import { GREY, WHITE, DARK_PRIMARY_COLOR } from '../common';
 import { IconButton } from 'react-native-paper';
 
 function CartItem(props){
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         width:'90%',
         height:110,
         alignSelf:'center',
-        borderRadius:10,
+        borderRadius:5,
         elevation:2,
         flexDirection:'row',
         marginVertical:10
@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
         //backgroundColor:'#000',
         width:95,
         height:'100%',
-        borderTopLeftRadius:10,
-        borderBottomLeftRadius:10,
+        borderTopLeftRadius:5,
+        borderBottomLeftRadius:5,
     },
     infoWrapper:{
         //backgroundColor:PRIMARY_COLOR,
         flex:1,
-        marginLeft:10
+        marginLeft:20
     },
     nameTxt:{
         fontSize:18,

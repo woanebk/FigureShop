@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet,} from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { GREY, PRIMARY_COLOR } from '../common';
+import { Ionicons} from '@expo/vector-icons';
+import { GREY} from '../common';
 
 function InfoDisplayer(props){
     return(

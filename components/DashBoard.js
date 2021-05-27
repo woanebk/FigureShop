@@ -1,7 +1,6 @@
-import react from 'react';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import {PRIMARY_COLOR, PROFILE_DOCK_COLOR} from '../common'
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import {PRIMARY_COLOR} from '../common'
 
 function DashBoard(props){
     return(

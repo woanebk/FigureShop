@@ -1,18 +1,39 @@
-import react from 'react';
-import React, { Component, Dimensions  } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { TouchableRipple, IconButton } from 'react-native-paper';
 import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
-import { useState } from 'react';
 import { WHITE } from '../common';
+import { firebaseApp } from '../firebaseconfig';
 
 export default function CategoryItemsScreen({route, navigation}) {
 
   //get data passed from previous screen
-  const {categoryName}= route.params; //Name of the category (must same name with parameter)
+  const {animeID}= route.params; //id of the Anime (must same name with parameter)
 
-  let [item, setItem] = useState({name:'ok', quantity:2, price:1200000, sale:0.1, description:'ok ok'})
+  const [firstRun,setFirstRun]=useState(0);
+  
+  const [bannerImage, setBannerImage] = useState();
+  const [bannerName, setBannerName] = useState('');
 
+  useEffect(()=>{
+    if(firstRun == 0)
+    {
+      getBanner()
+      setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
+    }
+  })
+
+  const getBanner = ()=>{
+    firebaseApp.database().ref('Anime').orderByKey().equalTo(animeID).limitToFirst(1).on('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        snapshot.forEach((child)=>
+        {
+          setBannerName(child.val().TenAnime)
+          setBannerImage(child.val().HinhAnh)
+        })
+      }
+    })
+  }
 
   return (
       <View style={styles.container}>
@@ -20,13 +41,13 @@ export default function CategoryItemsScreen({route, navigation}) {
         <ImageHeaderScrollView
           maxHeight={350}
           minHeight={100}
-          headerImage={require('../assets/banner/dbz_swiper_1.jpg')}
+          headerImage={{uri:bannerImage}}
           //Shadow Opacity when scrolling
           maxOverlayOpacity={0.6}
           minOverlayOpacity={0.3}
           renderForeground={()=>(
             <View style={styles.categoryName}>
-              <Text style={styles.categoryNameTxt}>{categoryName}</Text>
+              <Text style={styles.categoryNameTxt}>{bannerName}</Text>
             </View>
           )}
         >
