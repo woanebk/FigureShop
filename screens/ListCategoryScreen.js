@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useLayoutEffect } from 'react';
 import { View,StyleSheet, StatusBar, TouchableOpacity, FlatList, Text } from 'react-native';
-import { GREY, OFF_WHITE, PRIMARY_COLOR, WHITE} from '../../common';
-import { ListItem } from '../../items';
+import { GREY, OFF_WHITE, PRIMARY_COLOR, WHITE} from '../common';
+import { ListItem } from '../items';
 import { MaterialIcons } from '@expo/vector-icons';
-import { firebaseApp } from '../../firebaseconfig';
+import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 
 export default function ListCategoryScreen({navigation}) {
