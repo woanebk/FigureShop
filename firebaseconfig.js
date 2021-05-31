@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
-import 'firebase/storage';
-import 'firebase/database';
-import 'firebase/auth';
+// import 'firebase/storage';
+// import 'firebase/database';
+// import 'firebase/auth';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
