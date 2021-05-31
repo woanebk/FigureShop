@@ -35,6 +35,7 @@ cardImg:{
 },
 cardInfo:{ 
     position:'absolute',
+    width:'100%',
     top:'40%'
     },
 nameTxt:{

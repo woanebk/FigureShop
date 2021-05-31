@@ -47,14 +47,14 @@ export default function ProfileScreen ({navigation}) {
 
       <View style={styles.btnsMenuWrapper}>
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() => navigation.navigate('ListCategory')}>
-            <ProfileButton iconName='robot' text='Quản Lý Loai Sản Phẩm' ></ProfileButton>
+          <TouchableRipple onPress={() => navigation.navigate('ManageCategory')}>
+            <ProfileButton iconName='robot' text='Quản Lý Loai Sản Phẩm - Anime' ></ProfileButton>
           </TouchableRipple>
         </View>
 
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() => console.log('Menu ')}>
-            <ProfileButton iconName='heart' text='Quản Lý Bán Hàng' ></ProfileButton>
+          <TouchableRipple onPress={() => navigation.navigate('ManageFigures')}>
+            <ProfileButton iconName='heart' text='Quản Lý Sản Phẩm' ></ProfileButton>
           </TouchableRipple>
         </View>
 

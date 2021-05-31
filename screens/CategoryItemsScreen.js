@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions , StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
 import { WHITE } from '../common';
 import { firebaseApp } from '../firebaseconfig';
@@ -10,7 +10,8 @@ export default function CategoryItemsScreen({route, navigation}) {
   const {animeID}= route.params; //id of the Anime (must same name with parameter)
 
   const [firstRun,setFirstRun]=useState(0);
-  
+  const window_width = Dimensions.get('window').width
+
   const [bannerImage, setBannerImage] = useState();
   const [bannerName, setBannerName] = useState('');
 
@@ -47,7 +48,7 @@ export default function CategoryItemsScreen({route, navigation}) {
           minOverlayOpacity={0.3}
           renderForeground={()=>(
             <View style={styles.categoryName}>
-              <Text style={styles.categoryNameTxt}>{bannerName}</Text>
+              <Text style={styles.categoryNameTxt}>{bannerName +'  '}</Text>
             </View>
           )}
         >
@@ -63,7 +64,8 @@ export default function CategoryItemsScreen({route, navigation}) {
 
 var styles = StyleSheet.create({
   container:{
-    height:'100%'
+    height:'100%',
+    textAlign:'center'
   },
   categoryName:{
     justifyContent:'center',
@@ -71,8 +73,12 @@ var styles = StyleSheet.create({
     alignItems:'center',
   },
   categoryNameTxt:{
-    fontSize:45,
+    fontSize:40,
     color:WHITE,
     fontWeight:'bold',
+    width:'100%',
+    textAlign:'center',
+    marginLeft:20
+    //backgroundColor:'#000'
   },
 })

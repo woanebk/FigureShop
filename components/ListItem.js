@@ -16,12 +16,6 @@ function ListItem(props){
 
         return(
         <View style={{flexDirection:'row', width:190}}>
-            {/* <Animated.View style={{flex:1, transform:[{translateX:trans}] }}>
-                <RectButton onPress={props.onEditPress} style={[ styles.rightAction, {backgroundColor:'#7E7E7E'} ]}>
-                    <MaterialIcons name='edit' size={25} color = {BLACK}></MaterialIcons>
-                </RectButton>
-            </Animated.View> */}
-
             <Animated.View style={{flex:1, transform:[{translateX:trans}] }}>
                 <RectButton onPress={props.onDeletePress} style={[ styles.rightAction, {backgroundColor:'#dd2c00'} ]}>
                     <MaterialIcons name='delete' size={25} color = {WHITE}></MaterialIcons>

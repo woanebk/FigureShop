@@ -18,6 +18,8 @@
     "core-js": "^3.13.0",
     "expo": "~40.0.0",
     "expo-image-picker": "~9.2.0",
+    "expo-image-picker-multiple": "^1.4.1",
+    "expo-screen-orientation": "^3.1.0",
     "expo-status-bar": "~1.0.3",
     "firebase": "8.6.0",
     "react": "16.13.1",

@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     },
     cardInfo:{ 
         position:'absolute',
-        top:'70%'
+        top:'70%',
+        width:'100%'
         },
     nameTxt:{
         fontSize:23,

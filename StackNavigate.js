@@ -1,6 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, TouchableOpacity } from 'react-native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
@@ -9,17 +11,55 @@ import ItemDetailScreen from './screens/ItemDetailScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import CategoryItemsScreen from './screens/CategoryItemsScreen';
 import AddCategoryScreen from './screens/AddCategoryScreen';
-import ListCategoryScreen from './screens/ListCategoryScreen';
+import ManageCategoryScreen from './screens/ManageCategoryScreen';
 import CartScreen from './screens/CartScreen';
 
 import { IconButton } from "react-native-paper";
 import { BLACK, PRIMARY_COLOR, WHITE } from "./common";
 import AllCategoryScreen from "./screens/AllCategoryScreen";
+import ManageFiguresScreen from "./screens/ManageFiguresScreen";
+import AddFigureScreen from "./screens/AddFigureScreen";
+
+const Tab = createMaterialBottomTabNavigator();//Bottom Tab:
 
 const HomeStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const CategoryStack = createStackNavigator();
+
+const TabNavigator = ({navigation})=>{
+  return (
+    <Tab.Navigator
+      shifting='true'
+      activeColor="#f0edf6"
+      inactiveColor="#000000"
+      barStyle={{ backgroundColor: '#fe4a49' }}>
+        <Tab.Screen name="HomeTab" component={HomeStackNavigator} 
+        options={{ tabBarLabel: 'Home', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
+            <MaterialIcons name='home' color={color} size={26}></MaterialIcons>
+          ),
+        }}/>
+
+        <Tab.Screen name="CategoryTab" component={CategoryStackNavigator} 
+        options={{ tabBarLabel: 'Anime', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
+          <MaterialIcons name='menu' color={color} size={26}></MaterialIcons>
+          ),
+        }}/>
+        
+        <Tab.Screen name="SearchTab" component={SearchStackNavigator} 
+        options={{ tabBarLabel: 'Search', tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
+          <MaterialIcons name='search' color={color} size={26}></MaterialIcons>
+          ),
+        }}/>
+
+        <Tab.Screen name="ProFileTab" component={ProfileStackNavigator} 
+        options={{ tabBarLabel: 'Profile',tabBarColor:PRIMARY_COLOR, tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
+          ),
+        }}/>
+      </Tab.Navigator>
+  )
+}
 
 const HomeStackNavigator = ({navigation})=>{
     return(
@@ -54,21 +94,12 @@ const HomeStackNavigator = ({navigation})=>{
                 color = "#FF6347" size={25}/>
                 </View>
               ),
-              headerRight:()=>(
+              headerRight:()=>( //Để Cái nút này cho Khác màu với cái nút chung ở các màn hình khác
                 <View style={{marginLeft:10}}>
                   <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
                 color = {PRIMARY_COLOR} size={25}/>
                 </View>
               ),
-            }}
-            />
-
-              <HomeStack.Screen name='Cart' component={CartScreen}
-              options={{
-              title:'Giỏ Hàng',
-              headerRight:()=>(<></>),
-              headerTintColor:WHITE,
-              headerTransparent:true,
             }}
             />
 
@@ -269,7 +300,7 @@ const ProfileStackNavigator = (navigation)=>{
           }}>
           </ProfileStack.Screen>
           
-          <ProfileStack.Screen name='ListCategory' component={ListCategoryScreen}
+          <ProfileStack.Screen name='ManageCategory' component={ManageCategoryScreen}
           options={{
             headerTransparent:true,
             headerTintColor:'#fff',
@@ -285,8 +316,24 @@ const ProfileStackNavigator = (navigation)=>{
           }}>
           </ProfileStack.Screen>
 
+          <ProfileStack.Screen name='ManageFigures' component={ManageFiguresScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff',
+            title:'Danh Sách Sản Phẩm'
+          }}>
+          </ProfileStack.Screen>
+
+          <ProfileStack.Screen name='AddFigure' component={AddFigureScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff',
+            title:'Thêm Sản Phẩm'
+          }}>
+          </ProfileStack.Screen>
+
       </ProfileStack.Navigator>
   );
 }
 
-export {HomeStackNavigator,SearchStackNavigator, ProfileStackNavigator, CategoryStackNavigator};
+export {TabNavigator, HomeStackNavigator,SearchStackNavigator, ProfileStackNavigator, CategoryStackNavigator};

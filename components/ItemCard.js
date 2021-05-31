@@ -14,7 +14,7 @@ function ItemCard(props){
                 
                 <View style={styles.iconWrapper}>
                     <Ionicons name='body' color='#F9A602' size={16}></Ionicons>
-                    <Text style={{fontSize:13, marginLeft:3}}>Naruto</Text>
+                    <Text style={{fontSize:13, marginLeft:3, width:'100%'}}>Naruto</Text>
                 </View>
 
                 <View style={styles.priceWrapper}>
@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
         fontSize:14,
         textDecorationLine: 'line-through',
         textDecorationStyle: 'solid',
-        alignSelf:'center'
+        alignSelf:'center',
+        width:'60%'
     },
     saleTag:{
         backgroundColor:RED,
