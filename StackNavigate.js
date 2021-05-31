@@ -7,14 +7,14 @@ import SearchScreen from './screens/SearchScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ItemDetailScreen from './screens/ItemDetailScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
-import CategoryItemsScreen from './screens/Category/CategoryItemsScreen';
-import AddCategoryScreen from './screens/Category/AddCategoryScreen';
-import ListCategoryScreen from './screens/Category/ListCategoryScreen';
+import CategoryItemsScreen from './screens/CategoryItemsScreen';
+import AddCategoryScreen from './screens/AddCategoryScreen';
+import ListCategoryScreen from './screens/ListCategoryScreen';
 import CartScreen from './screens/CartScreen';
 
 import { IconButton } from "react-native-paper";
 import { BLACK, PRIMARY_COLOR, WHITE } from "./common";
-import AllCategoryScreen from "./screens/Category/AllCategoryScreen";
+import AllCategoryScreen from "./screens/AllCategoryScreen";
 
 const HomeStack = createStackNavigator();
 const SearchStack = createStackNavigator();

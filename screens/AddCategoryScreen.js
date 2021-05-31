@@ -5,10 +5,10 @@ import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {IconButton } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { GREY, PRIMARY_COLOR, SECONDARY_COLOR, WHITE, LIGHT_GREY, DARK_PRIMARY_COLOR, BLACK } from '../../common';
+import { GREY, PRIMARY_COLOR, SECONDARY_COLOR, WHITE, LIGHT_GREY, DARK_PRIMARY_COLOR, BLACK } from '../common';
 import * as ImagePicker from 'expo-image-picker';
-import {firebaseApp} from '../../firebaseconfig';
-import { ActionInput } from '../../items';
+import {firebaseApp} from '../firebaseconfig';
+import { ActionInput } from '../items';
 
 
 export default function AddCategoryScreen({route, navigation}) {
