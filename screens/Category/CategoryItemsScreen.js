@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
-import { WHITE } from '../common';
-import { firebaseApp } from '../firebaseconfig';
+import { WHITE } from '../../common';
+import { firebaseApp } from '../../firebaseconfig';
 
 export default function CategoryItemsScreen({route, navigation}) {
 
