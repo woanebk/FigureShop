@@ -1,8 +1,8 @@
 import React, {useState, useEffect } from 'react';
 import { View,StyleSheet, StatusBar, FlatList, Image, Text } from 'react-native';
-import { BLACK, PRIMARY_COLOR, WHITE} from '../common';
-import { CategorySmallCard, ListItem } from '../items';
-import { firebaseApp } from '../firebaseconfig';
+import { BLACK, PRIMARY_COLOR, WHITE} from '../../common';
+import { CategorySmallCard, ListItem } from '../../items';
+import { firebaseApp } from '../../firebaseconfig';
 
 export default function AllCategoryScreen({navigation}) {
 
