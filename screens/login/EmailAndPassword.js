@@ -1,7 +1,8 @@
 //import liraries
 import React, { Component } from 'react';
 import firebase from 'firebase'
-import { View, Text, StyleSheet,TextInput,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TextInput,TouchableOpacity, LogBox } from 'react-native';
+import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 
 // create a component
 class EmailAndPassword extends Component {
@@ -11,18 +12,20 @@ class EmailAndPassword extends Component {
         error:'',
         loading:false
     }
-
     onBottomPress = () =>{
         firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password)
         .then(this.onLoginSuccess)
         .catch(err => {
-            this.setState({
-                error:err.message
-            })
+          this.setState({
+            error:err.message })
         })
 
     
     }
+    onBottomPressguest = () =>{
+      firebase.auth().signInWithEmailAndPassword("khach@gmail.com","khachdata").then(this.onLoginSuccess)
+      }
+  
     onLoginSuccess =  () =>{
         this.setState({
             error:'',
@@ -49,15 +52,22 @@ class EmailAndPassword extends Component {
                      onChangeText={password => this.setState({password})}
                      />
 
-                
-
-                 <TouchableOpacity style={styles.buttonContainer} onPress={this.onBottomPress} >
+                 <TouchableOpacity style={styles.buttonContainer} onPress=
+                 {this.onBottomPress} >
                      <Text style={styles.buttonText}>Login</Text>
                  </TouchableOpacity>
 
-                 <Text style={styles.errorText} >
+                 <Text style={styles.errorText,fontSize=14
+                } >
                          {this.state.error}
                      </Text>
+                  <TouchableOpacity style={styles.buttonText} onPress=
+                  {
+                    this.onBottomPressguest 
+                    
+                  } >
+                     <Text style={styles.buttonText}>Continue as guest</Text>
+                 </TouchableOpacity>
             </View>
         );
     }

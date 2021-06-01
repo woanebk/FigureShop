@@ -6,6 +6,7 @@ import { GREY, LIGHT_GREY, SECONDARY_COLOR } from '../common';
 import {DashBoard, UserPFP, ProfileButton, InfoDisplayer} from '../items'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react/cjs/react.development';
+import { firebaseApp } from '../firebaseconfig';
 
 export default function ProfileScreen ({navigation}) {
   var [logined, setLogined] = useState(true);
@@ -81,7 +82,12 @@ export default function ProfileScreen ({navigation}) {
             <ProfileButton iconName='chart-bar' text='Báo Cáo Doanh Thu' ></ProfileButton>
           </TouchableRipple>
         </View>
-        
+
+        <View style={styles.userBtn}>
+          <TouchableRipple onPress={() =>firebaseApp.auth().signOut()}>
+            <ProfileButton iconName='logout' text='Đăng xuất' ></ProfileButton>
+          </TouchableRipple>
+        </View>
       </View>
       
   </ScrollView>
