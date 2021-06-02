@@ -1,9 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React,{state,useEffect} from 'react';
-import { StyleSheet,ImageBackground } from 'react-native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { StyleSheet,ImageBackground, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {TabNavigator, CategoryStackNavigator, HomeStackNavigator, ProfileStackNavigator, SearchStackNavigator } from './StackNavigate';
+import {TabNavigator} from './StackNavigate';
 import { PRIMARY_COLOR, WHITE } from './common';
 import { createStackNavigator } from '@react-navigation/stack';
 import CartScreen from './screens/CartScreen';
@@ -15,11 +13,14 @@ import Loading from './screens/login/Loading'
 // //Bottom Tab:
 import { useState } from 'react/cjs/react.development';
 import { firebaseApp } from './firebaseconfig';
+import ItemDetailScreen from './screens/ItemDetailScreen';
 
 const MainStack = createStackNavigator()
 
 export default function App(navigation) { 
+
   const [state, setState] = useState(null)
+  
   useEffect(() => {
     firebaseApp.auth().onAuthStateChanged(user => {
       if(user){
@@ -29,9 +30,10 @@ export default function App(navigation) {
         setState(false
         )
       }
- })
+    })
     return () => { }
   })
+
     switch (state) {
     case false:
       return <ImageBackground style={styles.container} source={BG} >
@@ -54,6 +56,22 @@ export default function App(navigation) {
               title:''
             }}
           ></MainStack.Screen>
+          <MainStack.Screen name='ItemDetail' component={ItemDetailScreen}
+            options={{
+              headerTitleStyle:{
+                color:'#fff',
+              },
+              title:'',
+              headerTransparent:true,
+              headerStyle: {
+                backgroundColor: 'transparent',
+                elevation: 0,
+                shadowOpacity: 0,
+                borderBottomWidth: 0,
+              },
+              headerTintColor: PRIMARY_COLOR,
+            }}
+            ></MainStack.Screen>
           {/* <MainStack.Screen name='Login' component={LoginScreen}
           ></MainStack.Screen> */}
         </MainStack.Navigator>

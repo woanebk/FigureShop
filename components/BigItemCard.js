@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback} from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import { GREY, RED, WHITE } from '../common';
 
 function BigItemCard(props){
     return(
-        <View style={styles.card}>
+        <TouchableWithoutFeedback onPress = {props.onPress}>
+            <View style={styles.card}>
             <Image style={styles.cardImg} source ={props.image} resizeMode={'cover'}></Image>
             <View style={styles.cardInfo}>
                 <View style={styles.itemNameWrapper}>
@@ -31,6 +32,7 @@ function BigItemCard(props){
                 <Text style={styles.salePriceTxt}>{'-' + props.giamgia * 100 +'%  '}</Text>
             </View>
         </View>
+        </TouchableWithoutFeedback>
     );
 }
 
