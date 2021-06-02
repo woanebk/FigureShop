@@ -1,37 +1,63 @@
 import react from 'react';
 import React, { Component } from 'react';
+import { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, ScrollView, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Swiper from 'react-native-swiper/src';
+import { useState } from 'react/cjs/react.development';
 import {PRIMARY_COLOR, SECONDARY_COLOR, GREY} from '../common';
+import {firebaseApp} from '../firebaseconfig'
 
-export default function ItemDetailScreen ({navigation}){
+export default function ItemDetailScreen ({route, navigation}){
+  const {anime_ID}= route.params; 
+  const {sanpham_ID}= route.params;
+
+  const [sanPham,setSanPham] = useState({}) // initial object tranh loi
+  const [tenAnime, setTenAnime] = useState('')
+  const [hinhAnhs, setHinhAnhs] = useState([])
+
+  useEffect (()=>{
+    navigation.addListener('focus', () => {getSanPham() ; getTenAnime()} )
+  })
+
+  const getSanPham = async () => {
+    firebaseApp.database().ref('Anime/' + anime_ID + '/SanPham/' + sanpham_ID).once('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        setSanPham(snapshot.val())
+        setHinhAnhs(snapshot.val().HinhAnh)
+      }
+    })
+  }
+
+  const getTenAnime = async () => {
+    firebaseApp.database().ref('Anime/' + anime_ID).once('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        setTenAnime(snapshot.val().TenAnime)
+      }
+    })
+  }
+
+  const renderSlides = () => {
+    return hinhAnhs.map(element=>(
+      <View >
+          <Image style={styles.swiperImg}
+              source ={{uri: element}}
+              resizeMode='cover'
+              key = {element}
+            />
+        </View>
+    ))
+    
+  }
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle='light-content' translucent/>
       <View style={styles.swiperWrapper}>
         <Swiper>
-          <View >
-            <Image style={styles.swiperImg}
-              source ={require('../assets/jimbei-1.jpg')}
-              resizeMode='cover'
-            />
-          </View>
-
-          <View >
-            <Image style={styles.swiperImg}
-            source ={require('../assets/jimbei-2.jpg')}
-            resizeMode='cover'
-            ></Image>
-          </View>
-
-          <View >
-            <Image style={styles.swiperImg}
-            source ={require('../assets/jimbei-3.jpg')}
-            resizeMode='cover'
-            ></Image>
-          </View>
+          {renderSlides()}
         </Swiper>
       </View>
     {/*=============== Info =====================*/}
@@ -39,15 +65,13 @@ export default function ItemDetailScreen ({navigation}){
         {/* ==============Ten San Pham */}
         <View style={styles.itemNameWrapper}>
           <View style={styles.itemName}>
-            <Text style={{fontSize:25, fontWeight:'bold'}} numberOfLines={1}>Mô hình Jimbei</Text>
-            <Text style={{ fontSize:15, paddingHorizontal:3, color:GREY,}} >Manga/Anime: One Piece</Text>
-            <Text style={{ fontSize:15, paddingHorizontal:3, color:GREY,}} >Nhân vật: Jimbei</Text>
+            <Text style={{fontSize:25, fontWeight:'bold'}} numberOfLines={1}>{sanPham.TenSanPham}</Text>
+            <Text style={{ fontSize:15, paddingHorizontal:3, color:GREY,}} >Manga/Anime: {' ' + tenAnime}</Text>
+            <Text style={{ fontSize:15, paddingHorizontal:3, color:GREY,}} >Nhân vật: {' ' + sanPham.TenNhanVat}</Text>
           </View>
-          <View style={styles.saleTagWrapper}>
             <View style={styles.saleTag}>
-              <Text style={styles.saleTagTxt}> -10%</Text>
+              <Text style={styles.saleTagTxt}> {'-' + sanPham.GiamGia*100 +'%'}</Text>
             </View>
-          </View>
         </View>
 
         {/* ==============Gia San Pham */}
@@ -56,8 +80,8 @@ export default function ItemDetailScreen ({navigation}){
             <Text style={{fontSize:20, fontWeight:'bold', left:17}} > Giá Bán </Text>
           </View>
           <View style={styles.itemPrice}>
-            <Text style={styles.itemSalePriceTxt}> 1,000,000</Text>
-            <Text style={styles.itemPriceTxt}>1,200,000 VNĐ</Text>
+            <Text style={styles.itemSalePriceTxt}> {sanPham.GiaBan}</Text>
+            <Text style={styles.itemPriceTxt}>{sanPham.GiaBan * (1 - sanPham.GiamGia) + ' VNĐ'}</Text>
           </View>
         </View>
 
@@ -66,12 +90,13 @@ export default function ItemDetailScreen ({navigation}){
           <Text style={{fontSize:18, fontWeight:'bold'}}> Thông số kỹ thuật </Text>
           <View style={{flex:1, flexDirection:'row'}}>
           <View style={styles.itemDetail}>
-            <Text style={styles.itemDetailTxt} >Chiều cao: 26 cm</Text>
-            <Text style={styles.itemDetailTxt} >Chiều dài: 17 cm</Text>
+            <Text style={styles.itemDetailTxt} >Chiều Cao: {sanPham.ChieuCao} cm </Text>
+            <Text style={styles.itemDetailTxt} >Chiều Dài: {sanPham.ChieuDai} cm</Text>
+            <Text style={styles.itemDetailTxt} >Chiều Rộng: {sanPham.ChieuRong} cm</Text>
           </View>
           <View style={styles.itemDetail}>
-            <Text style={styles.itemDetailTxt} >Cân nặng: 2.3 kg</Text>
-            <Text style={styles.itemDetailTxt} >Chất liệu: Nhựa PVC </Text>
+            <Text style={styles.itemDetailTxt} >Cân nặng: {sanPham.CanNang} kg</Text>
+            <Text style={styles.itemDetailTxt} >Chất Liệu: {sanPham.ChatLieu} </Text>
           </View>
           </View>
         </View>
@@ -80,14 +105,14 @@ export default function ItemDetailScreen ({navigation}){
         <View style={styles.itemDescriptionWrapper}>
         <Text style={{fontSize:18, fontWeight:'bold'}}> Mô tả </Text>
           <ScrollView style={{height:'100%'}}>
-            <Text style={styles.itemDescriptionTxt} >Ok pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd a Ok pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd a Ok pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd a Ok pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd aOk pro ok ok ok ok asd asd asd asd as dasd w f s da sd asd a </Text>
+            <Text style={styles.itemDescriptionTxt} >{sanPham.MoTa}</Text>
           </ScrollView>
         </View>
       </View>
     {/*============== Buy Button =================*/}
       <View style={styles.buyWrapper}>
         <View style={styles.buyBtn} >
-          <TouchableOpacity style={{color:PRIMARY_COLOR}} title='OK' onPress={()=>{console.log('Mua')}}>
+          <TouchableOpacity style={{color:PRIMARY_COLOR}} title='OK' onPress={()=>{}}>
             <Text style={styles.btnText}>THÊM VÀO GIỎ HÀNG</Text>
           </TouchableOpacity>
         </View>
@@ -124,10 +149,6 @@ const styles = StyleSheet.create({
   itemName:{
     flex:2,
   },
-  saleTagWrapper:{
-    flex:1,
-    justifyContent:'center',
-  },
   saleTag:{
     position:'absolute',
     width:70,
@@ -136,6 +157,7 @@ const styles = StyleSheet.create({
     borderRadius:50,
     alignSelf:'center',
     top:-40,
+    right:30,
     justifyContent:'center',
     elevation:3,
   },
@@ -164,18 +186,21 @@ const styles = StyleSheet.create({
     fontSize:18,
     color:'#fff',
     fontWeight:'bold',
-    left:10
+    left:10,
+    textAlign:'left',
+    flex:1,
   },
   itemSalePriceTxt:{
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',
     fontWeight:'bold',
     color:'#000',
-    fontSize:13
+    fontSize:13,
+    marginLeft:15
   },
   itemDetailWrapper:{
     paddingLeft:18,
-    height:50
+    height:75
   },
   itemDetail:{ //View inside of Item Detail wrapper
     flex:1,
@@ -194,6 +219,7 @@ const styles = StyleSheet.create({
     fontSize:14, 
     paddingHorizontal:3,
     color:GREY,
+    height:'100%'
   },
   buyWrapper:{
     backgroundColor:'#fff',

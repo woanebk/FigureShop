@@ -13,7 +13,6 @@ import Loading from './screens/login/Loading'
 
 // import firebase from './firebaseconfig';
 // //Bottom Tab:
-import firebase from 'firebase/app';
 import { useState } from 'react/cjs/react.development';
 import { firebaseApp } from './firebaseconfig';
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, TouchableHighlightBase, FlatList } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, TouchableHighlightBase, FlatList, Button } from 'react-native';
 import Swiper from 'react-native-swiper/src';
 
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -11,15 +11,17 @@ export default function HomeScreen ({navigation}) {
   const [firstRun,setFirstRun]=useState(0);
 
   const [listAnime, setListAnime] = useState(); //chứa 4 Anime ra màn hình
+  const [listSanPhamSale, setListSanPhamSale] = useState() // chứa 4 item sale
 
   useEffect(()=>{
+    navigation.addListener('focus', () => {getSanPhamsSale()} )
     if(firstRun == 0){
-      getAnimes()
+      getAnimes() //danh muc
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
   }) 
 
-  const getAnimes = () => {
+  const getAnimes = async () => {
     let list=[];
     firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').limitToFirst(4).on('value', (snapshot)=>{
       if( snapshot.exists())
@@ -34,6 +36,46 @@ export default function HomeScreen ({navigation}) {
           })
         })
         setListAnime(list)
+      }
+    })
+  }
+
+  const getSanPhamsSale = async () => {
+    let list=[];
+    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        list = []; //reset list tránh trùng lặp
+        snapshot.forEach((child)=>
+        {
+          if(child.val().SanPham) //day la object
+          {
+            var animename = child.val().TenAnime
+            var idAnime = child.key
+            for (let [key, value] of Object.entries(child.val().SanPham)) {
+              if(value.TrangThai == 'on' && value.GiamGia > 0)
+              {
+                list.push({
+                  IdSanPham : key,
+                  TenAnime: animename,
+                  IdAnime: idAnime,
+                  TenSanPham: value.TenSanPham,
+                  TenNhanVat : value.TenNhanVat,
+                  GiaBan: value.GiaBan,
+                  GiamGia: value.GiamGia,
+                  HinhAnh:value.HinhAnh
+                })
+              }
+            }
+          }
+        })
+
+        if(list.length >= 4){
+          setListSanPhamSale(list.slice(0,4))
+        }
+        else{
+          setListSanPhamSale(list.slice(0, list.length))
+        }
       }
     })
   }
@@ -127,22 +169,21 @@ export default function HomeScreen ({navigation}) {
 
       {/*========= SaleCard */}
       <Text style={styles.subjectsTxt}> Sale đặc biệt</Text>
-      <ScrollView style={styles.saleCardsContainer} centerContent={true} horizontal={true}>
-        <View style={{flexDirection:'row',}}>
-          <TouchableOpacity style={styles.salecardWrapper} onPress={()=>navigation.navigate('ItemDetail')}>
-            <ItemCard></ItemCard>
+      <FlatList
+        style={styles.saleCardsContainer} horizontal={true}
+        data={listSanPhamSale}
+        renderItem = {({item})=>(
+          <TouchableOpacity style={styles.salecardWrapper} onPress={()=>navigation.navigate('ItemDetail', {anime_ID: item.IdAnime, sanpham_ID: item.IdSanPham})}>
+            <ItemCard name = {item.TenSanPham} nhanvat={item.TenNhanVat} 
+              image={{uri: item.HinhAnh?item.HinhAnh[0]:{} }}
+              giamgia={item.GiamGia}
+              giaban={item.GiaBan}
+              ></ItemCard>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.salecardWrapper} onPress={()=>navigation.navigate('ItemDetail')}>
-            <ItemCard></ItemCard>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.salecardWrapper} onPress={()=>navigation.navigate('ItemDetail')}>
-            <ItemCard></ItemCard>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      
+        )}
+        keyExtractor={item=>item.IdSanPham}
+        showsHorizontalScrollIndicator={false}
+      />
       {/* ============ CategoryCard */}
       <Text style={styles.subjectsTxt}> Danh mục Truyện tranh/Anime</Text>
       <FlatList
@@ -175,7 +216,6 @@ export default function HomeScreen ({navigation}) {
           <Card title='Son Goku' description='day la mot san pham chat luong tu nuoc phap cuc ki tinh xao, co nguon goc tu Trung Quoc' itemPrice='120,000 VND' itemImage={require('../assets/banner/dbz_swiper_1.jpg')}></Card>
         </TouchableOpacity>
       </View>
-
     </ScrollView>
     
   );

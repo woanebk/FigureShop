@@ -5,6 +5,7 @@ import { ListItem } from '../items';
 import { MaterialIcons } from '@expo/vector-icons';
 import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
+import { Button } from 'react-native-paper';
 
 export default function ManageCategoryScreen({navigation}) {
 
