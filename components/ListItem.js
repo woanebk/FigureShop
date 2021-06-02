@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Animated, TouchableWithoutFeedback } from 'react-native';
-import { GREY, WHITE } from '../common';
+import { GREY, DARK_PRIMARY_COLOR, WHITE } from '../common';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -38,6 +38,7 @@ function ListItem(props){
                     <View style={styles.textWrapper}>
                         <Text numberOfLines={1} style={styles.nameTxt}>{props.name}</Text>
                         <Text numberOfLines={1} style={styles.descriptionTxt}> {props.description}</Text>
+                        <Text numberOfLines={1} style={styles.priceTxt}>{props.price?props.price + ' VNĐ':'' }</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -75,7 +76,12 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         height:75,
         marginVertical:5
-    }
+    },
+    priceTxt:{
+        color:DARK_PRIMARY_COLOR,
+        marginTop:7,
+        fontWeight:'bold'
+    },
   });
 
 export default ListItem;

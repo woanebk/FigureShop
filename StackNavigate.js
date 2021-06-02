@@ -19,6 +19,7 @@ import { BLACK, PRIMARY_COLOR, WHITE } from "./common";
 import AllCategoryScreen from "./screens/AllCategoryScreen";
 import ManageFiguresScreen from "./screens/ManageFiguresScreen";
 import AddFigureScreen from "./screens/AddFigureScreen";
+import MultiImagePickScreen from "./screens/MultiImagePickScreen";
 
 const Tab = createMaterialBottomTabNavigator();//Bottom Tab:
 
@@ -329,6 +330,13 @@ const ProfileStackNavigator = (navigation)=>{
             headerTransparent:true,
             headerTintColor:'#fff',
             title:'Thêm Sản Phẩm'
+          }}>
+          </ProfileStack.Screen>
+          <ProfileStack.Screen name='MultiImagePick' component={MultiImagePickScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#000',
+            title:'Chọn Ảnh'
           }}>
           </ProfileStack.Screen>
 

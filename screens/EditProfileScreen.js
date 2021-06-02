@@ -9,6 +9,7 @@ import { GREY, PRIMARY_COLOR, SECONDARY_COLOR, WHITE, LIGHT_GREY, DARK_PRIMARY_C
 import UserPFP from '../components/UserPFP';
 import * as ImagePicker from 'expo-image-picker';
 import { ActionInput } from '../items';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function EditProfileScreen({navigation}) {
@@ -104,7 +105,7 @@ export default function EditProfileScreen({navigation}) {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <BottomSheet 
       ref={bottomsheetRef}
@@ -136,7 +137,7 @@ export default function EditProfileScreen({navigation}) {
         ></ActionInput>
 
         <ActionInput title = 'Số Điện Thoại' ionIconName='call'
-          placeholder='Nhập Số Điện Thoại'
+          placeholder='Nhập Số Điện Thoại' keyboardType='numeric'
         ></ActionInput>
 
         <ActionInput title = 'Địa Chỉ' ionIconName='location'
@@ -144,7 +145,7 @@ export default function EditProfileScreen({navigation}) {
         ></ActionInput>
 
         <ActionInput title = 'Email' ionIconName='mail'
-          placeholder='Nhập Email'
+          placeholder='Nhập Email' keyboardType='email-address'
         ></ActionInput>
         
         <TouchableOpacity style={styles.commandBtn}>
@@ -153,7 +154,7 @@ export default function EditProfileScreen({navigation}) {
       </View>
       </Animated.View>
       
-    </View>
+    </ScrollView>
   );
 }
 

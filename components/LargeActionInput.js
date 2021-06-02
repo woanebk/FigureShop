@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TextInput} from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import {GREY, LIGHT_GREY } from '../common';
 
-function ActionInput(props){
+function LargeActionInput(props){
     return(
         <View style={styles.Info}>
-          <View style={{flex:0.5}}>
+          <View style={{flex:0.2}}>
             <Text>{props.title}</Text>
           </View>
           <View style={{flex:1, flexDirection:'row'}}>
@@ -25,7 +25,7 @@ function ActionInput(props){
 
 const styles = StyleSheet.create({
     Info:{
-        height:60,
+        height:160,
         width:'100%',
         alignSelf:'center',
         marginTop:5,
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
       textInput:{
         flex:1,
         paddingLeft:10,
-        color:GREY
+        color:GREY,
       },
   });
 
-export default ActionInput;
+export default LargeActionInput;
