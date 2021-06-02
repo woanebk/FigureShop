@@ -55,7 +55,6 @@ export default function CategoryItemsScreen({route, navigation}) {
             HinhAnh:value.HinhAnh
           })
         }
-        console.log(list)
         setListSanPham(list)
       }
     })
@@ -87,6 +86,7 @@ export default function CategoryItemsScreen({route, navigation}) {
                   image={{uri: item.HinhAnh[0]}}
                   giamgia={item.GiamGia}
                   giaban={item.GiaBan}
+                  onPress = {()=>navigation.navigate('ItemDetail', {anime_ID: animeID, sanpham_ID: item.IdSanPham})}
                   ></BigItemCard>
                 )}
                 keyExtractor={item=>item.IdSanPham}

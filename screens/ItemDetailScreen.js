@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, ScrollView, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { IconButton } from 'react-native-paper';
 import Swiper from 'react-native-swiper/src';
 import { useState } from 'react/cjs/react.development';
 import {PRIMARY_COLOR, SECONDARY_COLOR, GREY} from '../common';
@@ -17,6 +18,14 @@ export default function ItemDetailScreen ({route, navigation}){
   const [hinhAnhs, setHinhAnhs] = useState([])
 
   useEffect (()=>{
+    navigation.setOptions({
+      headerRight:()=>( 
+        <View style={{marginLeft:10}}>
+          <IconButton icon="shopping" onPress = {()=>navigation.navigate('Cart')}
+          color = {PRIMARY_COLOR} size={25}/>
+        </View>
+      ),
+    })
     navigation.addListener('focus', () => {getSanPham() ; getTenAnime()} )
   })
 

@@ -104,23 +104,6 @@ const HomeStackNavigator = ({navigation})=>{
             }}
             />
 
-            <HomeStack.Screen name='ItemDetail' component={ItemDetailScreen}
-            options={{
-              headerTitleStyle:{
-                color:'#fff',
-              },
-              title:'',
-              headerTransparent:true,
-              headerStyle: {
-                backgroundColor: 'transparent',
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-              },
-              headerTintColor: '#fff',
-            }}
-            ></HomeStack.Screen>
-
             <HomeStack.Screen name='CategoryItems' component={CategoryItemsScreen}
             options={{
               headerTitleStyle:{
@@ -236,22 +219,6 @@ const SearchStackNavigator = ({navigation})=>{
             ),
           }}
           />
-
-          <SearchStack.Screen name='ItemDetail' component={ItemDetailScreen}
-          options={{
-            headerTitleStyle:{
-              color:'#fff',
-            },
-            title:'',
-            headerStyle: {
-              backgroundColor: 'transparent',
-              elevation: 0,
-              shadowOpacity: 0,
-              borderBottomWidth: 0,
-            },
-            headerTintColor: '#fff',
-          }}
-          ></SearchStack.Screen>
       </SearchStack.Navigator>
   );
 }
