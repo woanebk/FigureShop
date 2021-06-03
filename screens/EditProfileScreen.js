@@ -10,13 +10,17 @@ import UserPFP from '../components/UserPFP';
 import * as ImagePicker from 'expo-image-picker';
 import { ActionInput } from '../items';
 import { ScrollView } from 'react-native-gesture-handler';
+import { firebaseApp } from '../firebaseconfig';
 
 
 export default function EditProfileScreen({navigation}) {
 
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   const fall= new Animated.Value(1); //blur animation
-  
+  var[user,setuser]=useState(firebaseApp.auth().currentUser);
+  var[name,setname]=useState(user.displayName);
+  var[email,setemail]=useState(user.email);
+  var[photoUrl,setphotoUrl]=useState(user.photoUrl);
   const [image, setImage] = useState(null);
 
   //ASK PERMISSION:
@@ -134,21 +138,37 @@ export default function EditProfileScreen({navigation}) {
 
         <ActionInput title = 'Họ Tên' ionIconName='person'
           placeholder='Nhập Họ Tên'
+          autoFocus='true'
+          value={name}
+          onChangeText={setname}
         ></ActionInput>
 
         <ActionInput title = 'Số Điện Thoại' ionIconName='call'
-          placeholder='Nhập Số Điện Thoại' keyboardType='numeric'
+          placeholder='Nhập Số Điện Thoại'
+           keyboardType='numeric' 
+          // onChangeText={onChangeText} 
+          autoFocus='true'
         ></ActionInput>
 
         <ActionInput title = 'Địa Chỉ' ionIconName='location'
-          placeholder='Nhập Địa Chỉ'
-        ></ActionInput>
+          placeholder='Nhập Địa Chỉ' 
+          autoFocus='true'
+       ></ActionInput>
 
         <ActionInput title = 'Email' ionIconName='mail'
           placeholder='Nhập Email' keyboardType='email-address'
+          autoFocus='true'
+          value={email}
+          onChangeText={setemail}
         ></ActionInput>
         
-        <TouchableOpacity style={styles.commandBtn}>
+        <TouchableOpacity style={styles.commandBtn} onPress={async () =>{
+          update={displayName:name,email:email}
+          console.log(update)
+          console.log("aloaloaloooooooooooooooooooooooooooooo")
+          await firebaseApp.auth().currentUser.updateProfile(update)}
+          // /console.log(firebaseApp)
+          } >
           <Text style={styles.commandTxt}>Xác Nhận</Text>
         </TouchableOpacity>
       </View>

@@ -1,47 +1,44 @@
 import react from 'react';
-import React, { Component, Dimensions, useEffect  } from 'react';
+import React, { Component, Dimensions, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { TouchableRipple, IconButton } from 'react-native-paper';
 import { GREY, LIGHT_GREY, SECONDARY_COLOR } from '../common';
-import {DashBoard, UserPFP, ProfileButton, InfoDisplayer} from '../items'
+import { DashBoard, UserPFP, ProfileButton, InfoDisplayer } from '../items'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react/cjs/react.development';
 import { firebaseApp } from '../firebaseconfig';
 
-export default function ProfileScreen ({navigation}) {
+export default function ProfileScreen({ navigation }) {
   var [logined, setLogined] = useState(true);
-  var [user,setuser]=useState(firebaseApp.auth().currentUser);
-  useEffect(()=>{
+  var [user, setuser] = useState(firebaseApp.auth().currentUser);
+  useEffect(() => {
     // Header Navigate to Edit Profile:
     navigation.setOptions({
-       title: '' ,
-       headerRight:()=>(
+      title: '',
+      headerRight: () => (
         <IconButton icon="account-edit" onPress={() => navigation.navigate('EditProfile')}
-        color = "#FF6347" size={25}/>
-       )
-      })
-   //  setuser( )
+          color="#FF6347" size={25} />
+      )
+    })
+    setuser(firebaseApp.auth().currentUser)
   });
-  
+
   return (
     <ScrollView style={styles.container}>
-      <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent/>
+      <StatusBar backgroundColor='transparent' barStyle='dark-content' translucent />
       <View style={styles.topdock}>
         <View style={styles.pfpHolder}>
           <UserPFP image={require('../assets/banner/op_swiper_1.jpg')}></UserPFP>
         </View>
         <View style={styles.userinfo}>
           <Text style={styles.usernameTxt}>
-            {user.email}
-            {/* ${firebaseApp.auth().currentUser().usernameTxt} */}
-            {'  '}</Text>
-
-          <View style={{height:30}}>
-            <InfoDisplayer ionIconName='call' text='0976712345' ></InfoDisplayer>
+            {user.displayName}
+          </Text>
+          <View style={{ height: 30 }}>
+          <InfoDisplayer ionIconName='call' text='0976712345' ></InfoDisplayer>
           </View>
-
-          <View style={{height:30}}>
-            <InfoDisplayer ionIconName='location' text='229, Trần Hưng Đạo' ></InfoDisplayer>
+          <View style={{ height: 30 }}>
+          <InfoDisplayer ionIconName='location' text='229, Trần Hưng Đạo' ></InfoDisplayer>
           </View>
         </View>
       </View>
@@ -89,59 +86,60 @@ export default function ProfileScreen ({navigation}) {
 
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() =>
-                  console.log(firebaseApp.auth().currentUser.displayName)
-                  //  ,firebaseApp.auth().signOut()
-                  }
-            >
+            //console.log(firebaseApp.auth())
+            //,
+            firebaseApp.auth().signOut()
+          }
+          >
             <ProfileButton iconName='logout' text='Đăng xuất' ></ProfileButton>
           </TouchableRipple>
         </View>
       </View>
-      
-  </ScrollView>
+
+    </ScrollView>
   );
 }
 
 
 var styles = StyleSheet.create({
-  container:{
-    flex:1,
-    backgroundColor:'#fff',
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  topdock:{
-    height:400,
-    backgroundColor:SECONDARY_COLOR,
+  topdock: {
+    height: 400,
+    backgroundColor: SECONDARY_COLOR,
   },
-  pfpHolder:{
-    alignSelf:'center',
-    top:110,
+  pfpHolder: {
+    alignSelf: 'center',
+    top: 110,
   },
-  usernameTxt:{
-    alignSelf:'center',
-    fontSize:27,
-    fontWeight:'bold',
+  usernameTxt: {
+    alignSelf: 'center',
+    fontSize: 27,
+    fontWeight: 'bold',
   },
-  userinfo:{
+  userinfo: {
     //backgroundColor:'#000',
-    height:100,
-    top:120,
-    alignItems:'center'
+    height: 100,
+    top: 120,
+    alignItems: 'center'
   },
-  dashboardHolder:{
-    width:'80%',
-    alignSelf:'center',
-    top:-40,
+  dashboardHolder: {
+    width: '80%',
+    alignSelf: 'center',
+    top: -40,
   },
-  btnsMenuWrapper:{
-    alignItems:'center',
-    backgroundColor:'#fff',
-    flexGrow:1,
+  btnsMenuWrapper: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flexGrow: 1,
   },
-  userBtn:{
-    height:50,
-    width:'80%',
-    marginTop:5,
-    borderBottomWidth:1,
-    borderBottomColor:LIGHT_GREY
+  userBtn: {
+    height: 50,
+    width: '80%',
+    marginTop: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: LIGHT_GREY
   },
 })

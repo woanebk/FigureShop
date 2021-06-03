@@ -19,17 +19,12 @@ class EmailAndPassword extends Component {
           this.setState({
             error:err.message })
         })
-        console.log(firebase.auth().currentUser().displayName())
-
-    
     }
     onBottomPressguest = () =>{
       firebase.auth().signInWithEmailAndPassword("khach@gmail.com","khachdata").then(this.onLoginSuccess)
     }
-  
-    onLoginSuccess =  () =>{
-        console.log(firebase.auth())
 
+    onLoginSuccess =  () =>{
         this.setState({
             error:'',
             loading:false
