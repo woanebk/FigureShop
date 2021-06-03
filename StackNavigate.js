@@ -19,6 +19,7 @@ import { BLACK, PRIMARY_COLOR, WHITE } from "./common";
 import AllCategoryScreen from "./screens/AllCategoryScreen";
 import ManageFiguresScreen from "./screens/ManageFiguresScreen";
 import AddFigureScreen from "./screens/AddFigureScreen";
+import MultiImagePickScreen from "./screens/MultiImagePickScreen";
 
 const Tab = createMaterialBottomTabNavigator();//Bottom Tab:
 
@@ -102,23 +103,6 @@ const HomeStackNavigator = ({navigation})=>{
               ),
             }}
             />
-
-            <HomeStack.Screen name='ItemDetail' component={ItemDetailScreen}
-            options={{
-              headerTitleStyle:{
-                color:'#fff',
-              },
-              title:'',
-              headerTransparent:true,
-              headerStyle: {
-                backgroundColor: 'transparent',
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-              },
-              headerTintColor: '#fff',
-            }}
-            ></HomeStack.Screen>
 
             <HomeStack.Screen name='CategoryItems' component={CategoryItemsScreen}
             options={{
@@ -235,22 +219,6 @@ const SearchStackNavigator = ({navigation})=>{
             ),
           }}
           />
-
-          <SearchStack.Screen name='ItemDetail' component={ItemDetailScreen}
-          options={{
-            headerTitleStyle:{
-              color:'#fff',
-            },
-            title:'',
-            headerStyle: {
-              backgroundColor: 'transparent',
-              elevation: 0,
-              shadowOpacity: 0,
-              borderBottomWidth: 0,
-            },
-            headerTintColor: '#fff',
-          }}
-          ></SearchStack.Screen>
       </SearchStack.Navigator>
   );
 }
@@ -329,6 +297,13 @@ const ProfileStackNavigator = (navigation)=>{
             headerTransparent:true,
             headerTintColor:'#fff',
             title:'Thêm Sản Phẩm'
+          }}>
+          </ProfileStack.Screen>
+          <ProfileStack.Screen name='MultiImagePick' component={MultiImagePickScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#000',
+            title:'Chọn Ảnh'
           }}>
           </ProfileStack.Screen>
 

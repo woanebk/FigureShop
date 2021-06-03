@@ -7,8 +7,10 @@ import InfoDisplayer from './components/InfoDisplayer';
 import CategoryCard from './components/CategoryCard';
 import ListItem from './components/ListItem';
 import ActionInput from './components/ActionInput';
+import LargeActionInput from './components/LargeActionInput';
 import CartItem from './components/CartItem';
 import CategorySmallCard from './components/CategorySmallCard';
+import BigItemCard from './components/BigItemCard'
 
 export {
     Card,
@@ -20,6 +22,8 @@ export {
     CategoryCard,
     ListItem,
     ActionInput,
+    LargeActionInput,
     CartItem,
     CategorySmallCard,
+    BigItemCard
 }

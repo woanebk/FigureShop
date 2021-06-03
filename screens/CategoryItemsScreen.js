@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions , StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions , StyleSheet, Image, StatusBar, TouchableOpacity, Button, FlatList } from 'react-native';
 import { ImageHeaderScrollView, TriggeringView } from 'react-native-image-header-scroll-view';
 import { WHITE } from '../common';
 import { firebaseApp } from '../firebaseconfig';
+import { BigItemCard } from '../items';
 
 export default function CategoryItemsScreen({route, navigation}) {
 
@@ -10,12 +11,13 @@ export default function CategoryItemsScreen({route, navigation}) {
   const {animeID}= route.params; //id of the Anime (must same name with parameter)
 
   const [firstRun,setFirstRun]=useState(0);
-  const window_width = Dimensions.get('window').width
 
   const [bannerImage, setBannerImage] = useState();
   const [bannerName, setBannerName] = useState('');
+  const [listSanPham, setListSanPham] = useState([]);
 
   useEffect(()=>{
+    navigation.addListener('focus', () => {getSanPham()} )
     if(firstRun == 0)
     {
       getBanner()
@@ -36,12 +38,34 @@ export default function CategoryItemsScreen({route, navigation}) {
     })
   }
 
+  const getSanPham = async () => {
+    let list = []
+    firebaseApp.database().ref('Anime/' + animeID + '/SanPham').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        list = [] //reset list tranh loi
+        for (let [key, value] of Object.entries(snapshot.val()))
+        {
+          list.push({
+            IdSanPham: key,
+            TenSanPham: value.TenSanPham,
+            TenNhanVat : value.TenNhanVat,
+            GiaBan: value.GiaBan,
+            GiamGia: value.GiamGia,
+            HinhAnh:value.HinhAnh
+          })
+        }
+        setListSanPham(list)
+      }
+    })
+  }
+
   return (
       <View style={styles.container}>
         <StatusBar barStyle='light-content' translucent></StatusBar>
         <ImageHeaderScrollView
           maxHeight={350}
-          minHeight={100}
+          minHeight={220}
           headerImage={{uri:bannerImage}}
           //Shadow Opacity when scrolling
           maxOverlayOpacity={0.6}
@@ -52,9 +76,21 @@ export default function CategoryItemsScreen({route, navigation}) {
             </View>
           )}
         >
-          <View style={{ height:1000 }}>
-            <TriggeringView onHide={() => console.log("text hidden")}>
-              <Text>Scroll Me ok!</Text>
+          <View style={{ height:550 }}>
+            <TriggeringView>
+              <FlatList style={styles.list}
+                numColumns= {2}
+                data={listSanPham}
+                renderItem = {({item})=>(
+                  <BigItemCard name = {item.TenSanPham} nhanvat= {item.TenNhanVat}
+                  image={{uri: item.HinhAnh[0]}}
+                  giamgia={item.GiamGia}
+                  giaban={item.GiaBan}
+                  onPress = {()=>navigation.navigate('ItemDetail', {anime_ID: animeID, sanpham_ID: item.IdSanPham})}
+                  ></BigItemCard>
+                )}
+                keyExtractor={item=>item.IdSanPham}
+              />
             </TriggeringView>
           </View>
           </ImageHeaderScrollView>
@@ -80,5 +116,10 @@ var styles = StyleSheet.create({
     textAlign:'center',
     marginLeft:20
     //backgroundColor:'#000'
+  },
+  list:{
+    width:'100%',
+    alignSelf:'center',
+    backgroundColor:WHITE
   },
 })

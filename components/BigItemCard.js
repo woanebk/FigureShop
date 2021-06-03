@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback} from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
-import { GREY, RED } from '../common';
+import { GREY, RED, WHITE } from '../common';
 
-function ItemCard(props){
+function BigItemCard(props){
     return(
-        <View style={styles.card}>
-            <Image style={styles.cardImg} source ={props.image} ></Image>
+        <TouchableWithoutFeedback onPress = {props.onPress}>
+            <View style={styles.card}>
+            <Image style={styles.cardImg} source ={props.image} resizeMode={'cover'}></Image>
             <View style={styles.cardInfo}>
                 <View style={styles.itemNameWrapper}>
                     <Text style={styles.itemNameTxt} numberOfLines={2}>{props.name}</Text>
@@ -24,37 +25,38 @@ function ItemCard(props){
 
                     <View style={{flex:1, flexDirection:'row'}}>
                         <Text style={styles.itemSalePriceTxt}>{props.giaban + ' VNĐ'}</Text>
-                        <View style={styles.saleTag}>
-                            <Text style={styles.salePriceTxt}>{'-' + props.giamgia * 100 +'%  '}</Text>
-                        </View>
                     </View>
                 </View>
             </View>
+            <View style={styles.saleTag}>
+                <Text style={styles.salePriceTxt}>{'-' + props.giamgia * 100 +'%  '}</Text>
+            </View>
         </View>
+        </TouchableWithoutFeedback>
     );
 }
 
 const styles = StyleSheet.create({
     card:{
-        width:150,
-        height:'100%',
-        borderRadius:10,
+        width:'50%',
+        height:250,
+        backgroundColor:WHITE,
+        elevation:10,
+        padding:7,
       },
     cardImg:{
         flex:1.2,
         width:'100%',
         height:'100%',
-        borderTopLeftRadius:10,
-        borderTopRightRadius:10,
     },
     cardInfo:{ 
         flex:1,
         },
     itemNameWrapper:{
-        width:'90%',
+        width:'100%',
         flex:2,
-        alignSelf:'center',
         justifyContent:'center',
+        marginLeft:'5%'
         },
     itemNameTxt:{ 
         fontSize:16,
@@ -89,12 +91,11 @@ const styles = StyleSheet.create({
     },
     saleTag:{
         backgroundColor:RED,
-        borderRadius:20,
-        height:'65%',
+        height:20,
         width:50,
-        left:10,
-        alignSelf:'center',
-        justifyContent:'center'
+        right:0,
+        top:5,
+        position:'absolute'
     },
     salePriceTxt:{
         color:'#fff',
@@ -103,4 +104,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default ItemCard;
+export default BigItemCard;

@@ -239,26 +239,28 @@ export default function AddCategoryScreen({route, navigation}) {
       />
       <Animated.View style={{opacity: Animated.add(0.1, Animated.multiply(fall,1.0))}}>
       <View style={styles.topdock}></View>
-      <ActivityIndicator
-        animating={isLoading} color = '#bc2b78' size = "large"></ActivityIndicator>
-      <TouchableOpacity disabled={!editing && readonly} style={styles.imgHolder} onPress={()=>bottomsheetRef.current.snapTo(1)}>
-        <View>
-          <Image style={styles.image} source ={{uri:image}}></Image>
-          <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={BLACK}></Ionicons>
-        </View>
-      </TouchableOpacity>
-
-      <ScrollView style={styles.infoWrapper}>
-
-        <ActionInput title = 'Tên Loại Sản Phẩm' ionIconName='ios-logo-android'
-          placeholder='Nhập Tên Loại Sản Phẩm' value={categoryName} 
-          editable={editing} onChangeText={(text)=>{setCategoryName(text)}}
-        ></ActionInput>
-        
-        <TouchableOpacity style={[styles.commandBtn, readonly && !editing ?styles.hide:{} ]} onPress={Submit}>
-          <Text style={styles.commandTxt}>Xác Nhận</Text>
-        </TouchableOpacity>
+      {
+        isLoading?
+        <ActivityIndicator
+        style={styles.indicator} animating={isLoading} color = '#bc2b78' size = "large"></ActivityIndicator>
+        :
+        <ScrollView style={styles.infoWrapper}>
+          <TouchableOpacity disabled={!editing && readonly} style={styles.imgHolder} onPress={()=>bottomsheetRef.current.snapTo(1)}>
+            <View>
+              <Image style={styles.image} source ={{uri:image}}></Image>
+              <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={BLACK}></Ionicons>
+            </View>
+          </TouchableOpacity>
+          <ActionInput title = 'Tên Loại Sản Phẩm' ionIconName='ios-logo-android'
+            placeholder='Nhập Tên Loại Sản Phẩm' value={categoryName} 
+            editable={editing} onChangeText={(text)=>{setCategoryName(text)}}
+          ></ActionInput>
+          
+          <TouchableOpacity style={[styles.commandBtn, readonly && !editing ?styles.hide:{} ]} onPress={Submit}>
+            <Text style={styles.commandTxt}>Xác Nhận</Text>
+          </TouchableOpacity>
       </ScrollView>
+      }
       </Animated.View>
       
     </View>
@@ -356,5 +358,8 @@ var styles = StyleSheet.create({
     bottom:0,
     backgroundColor:'#000',
     zIndex:100
-  }
+  },
+  indicator:{
+    marginTop:'50%'
+  },
 })
