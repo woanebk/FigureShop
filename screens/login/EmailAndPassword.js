@@ -19,14 +19,17 @@ class EmailAndPassword extends Component {
           this.setState({
             error:err.message })
         })
+        console.log(firebase.auth().currentUser().displayName())
 
     
     }
     onBottomPressguest = () =>{
       firebase.auth().signInWithEmailAndPassword("khach@gmail.com","khachdata").then(this.onLoginSuccess)
-      }
+    }
   
     onLoginSuccess =  () =>{
+        console.log(firebase.auth())
+
         this.setState({
             error:'',
             loading:false
@@ -57,7 +60,7 @@ class EmailAndPassword extends Component {
                      <Text style={styles.buttonText}>Login</Text>
                  </TouchableOpacity>
 
-                 <Text style={styles.errorText,fontSize=14
+                 <Text style={styles.errorText
                 } >
                          {this.state.error}
                      </Text>

@@ -10,7 +10,7 @@ import { firebaseApp } from '../firebaseconfig';
 
 export default function ProfileScreen ({navigation}) {
   var [logined, setLogined] = useState(true);
-  
+  var [user,setuser]=useState(firebaseApp.auth().currentUser);
   useEffect(()=>{
     // Header Navigate to Edit Profile:
     navigation.setOptions({
@@ -20,6 +20,7 @@ export default function ProfileScreen ({navigation}) {
         color = "#FF6347" size={25}/>
        )
       })
+   //  setuser( )
   });
   
   return (
@@ -30,7 +31,10 @@ export default function ProfileScreen ({navigation}) {
           <UserPFP image={require('../assets/banner/op_swiper_1.jpg')}></UserPFP>
         </View>
         <View style={styles.userinfo}>
-          <Text style={styles.usernameTxt}> User Name{'  '}</Text>
+          <Text style={styles.usernameTxt}>
+            {user.email}
+            {/* ${firebaseApp.auth().currentUser().usernameTxt} */}
+            {'  '}</Text>
 
           <View style={{height:30}}>
             <InfoDisplayer ionIconName='call' text='0976712345' ></InfoDisplayer>
@@ -84,7 +88,11 @@ export default function ProfileScreen ({navigation}) {
         </View>
 
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() =>firebaseApp.auth().signOut()}>
+          <TouchableRipple onPress={() =>
+                  console.log(firebaseApp.auth().currentUser.displayName)
+                  //  ,firebaseApp.auth().signOut()
+                  }
+            >
             <ProfileButton iconName='logout' text='Đăng xuất' ></ProfileButton>
           </TouchableRipple>
         </View>

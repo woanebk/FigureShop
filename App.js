@@ -55,8 +55,6 @@ export default function App(navigation) {
               title:''
             }}
           ></MainStack.Screen>
-          {/* <MainStack.Screen name='Login' component={LoginScreen}
-          ></MainStack.Screen> */}
         </MainStack.Navigator>
       </NavigationContainer>
       )
