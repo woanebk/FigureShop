@@ -1,7 +1,6 @@
 import react from 'react';
-import React, { Component, Dimensions, useState, useEffect } from 'react';
+import React, { Component, Dimensions, useState, useEffect,ActivityIndicator } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, TextInput } from 'react-native';
-import { TouchableRipple, IconButton } from 'react-native-paper';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,19 +12,31 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { firebaseApp } from '../firebaseconfig';
 
 
-export default function EditProfileScreen({navigation}) {
-
+export default function EditProfileScreen({ navigation }) {
+  const [firstRun, setFirstRun] = useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
-  const fall= new Animated.Value(1); //blur animation
-  var[user,setuser]=useState(firebaseApp.auth().currentUser);
-  var[name,setname]=useState(user.displayName);
-  var[email,setemail]=useState(user.email);
-  var[photoUrl,setphotoUrl]=useState(user.photoUrl);
+  const fall = new Animated.Value(1); //blur animation
+  var [user, setuser] = useState(firebaseApp.auth().currentUser);
+  var[userid,setuserid]=useState(user.uid)
+  var [name, setname] = useState(user.displayName);
+  var [email, setemail] = useState(user.email);
+  var [phoneNumber, setphoneNumber] = useState(user.phoneNumber);
+  var [location, setlocation] = useState(user.location);
   const [image, setImage] = useState(null);
-
-  //ASK PERMISSION:
+  const [isLoading, setIsLoading]= useState(false);
   var library_status, cam_status;
-
+  navigation.addListener('focus', () => {getuserinfo()})
+  useEffect(() => {
+  });
+  const getuserinfo =() => {
+    firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).on('value', (snapshot) => {
+      if (snapshot.exists()) {
+        setuser(snapshot.val());
+        setlocation(snapshot.val().location);
+        setphoneNumber(snapshot.val().phoneNumber);
+      }
+    })
+  };
   async function askLibraryPermission() {
     if (Platform.OS !== 'web') {
       //ask for library accesss:
@@ -35,7 +46,6 @@ export default function EditProfileScreen({navigation}) {
       }
     }
   }
-
   async function askCameraPermission() {
     if (Platform.OS !== 'web') {
       //ask for library accesss:
@@ -79,14 +89,20 @@ export default function EditProfileScreen({navigation}) {
       setImage(result.uri);
     }
   }
-
+  const uploadImage = async (uri) => {
+    //setIsLoading(true);
+    const respone = await fetch(uri);
+    const blob = await respone.blob();
+    const ref = firebaseApp.storage().ref().child('images/User/' + email + '.jpg');
+    return ref.put(blob);
+  }
   //RENDER BOTTOM SHEET:
-  const renderSheet = ()=>(
+  const renderSheet = () => (
     <View style={styles.bottomsheetWrapper}>
       <Text style={styles.panelTitleTxt}>Upload Photo</Text>
       <Text style={styles.panelSubtitleTxt}>Chọn Ảnh Đại Diện</Text>
-      <View style={{width:'90%'}}>
-      <TouchableOpacity style={styles.commandBtn} onPress={takePhoto}>
+      <View style={{ width: '90%' }}>
+        <TouchableOpacity style={styles.commandBtn} onPress={takePhoto}>
           <Text style={styles.commandTxt}>Chụp Ảnh</Text>
         </TouchableOpacity>
 
@@ -94,16 +110,16 @@ export default function EditProfileScreen({navigation}) {
           <Text style={styles.commandTxt}>Chọn Từ Kho Ảnh</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.commandBtn} 
-        onPress={()=>bottomsheetRef.current.snapTo(0)}>
+        <TouchableOpacity style={styles.commandBtn}
+          onPress={() => bottomsheetRef.current.snapTo(0)}>
           <Text style={styles.commandTxt}>Hủy</Text>
         </TouchableOpacity>
       </View>
     </View>
   )
-  const renderSheetHeader = ()=>(
+  const renderSheetHeader = () => (
     <View style={styles.header}>
-        <View style={styles.panelHandle}></View>
+      <View style={styles.panelHandle}></View>
     </View>
   )
 
@@ -111,174 +127,209 @@ export default function EditProfileScreen({navigation}) {
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
-      <BottomSheet 
-      ref={bottomsheetRef}
-      snapPoints={[0, 300]}
-      initialSnap={0} //0 is 0, 1 is 300
-      callbackNode={fall}
-      enabledGestureInteraction={false}
-      renderContent={renderSheet}
-      renderHeader={renderSheetHeader}
+      <BottomSheet
+        ref={bottomsheetRef}
+        snapPoints={[0, 300]}
+        initialSnap={0} //0 is 0, 1 is 300
+        callbackNode={fall}
+        enabledGestureInteraction={false}
+        renderContent={renderSheet}
+        renderHeader={renderSheetHeader}
       />
-      {/* =======Profile Picture Area */}
       <Animated.View style={{opacity: Animated.add(0.1, Animated.multiply(fall,1.0))}}>
-      <View style={styles.topdock}></View>
-      <TouchableOpacity style={styles.userpfp} onPress={()=>bottomsheetRef.current.snapTo(1)}>
+      {
+      isLoading?
+        <ActivityIndicator
+        style={styles.indicator} animating={isLoading} color = '#bc2b78' size = "large"></ActivityIndicator>
+        :
+      <Animated.View style={{ opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+        <View style={styles.topdock}></View>
+        <TouchableOpacity style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
           <View>
-            <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP>
-            <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={WHITE}></Ionicons>
+              {
+              image == null ?
+                firebaseApp.auth().currentUser.photoURL!=null?      
+                  <UserPFP image={{ uri: firebaseApp.auth().currentUser.photoURL }} ></UserPFP>:
+                  <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP> :
+                  <UserPFP image={{ uri: image }} ></UserPFP>
+              }
+            {/* <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={WHITE}></Ionicons> */}
             <View style={styles.editpfpBtn}>
-              <Ionicons style={{alignSelf:'center'}} name='pencil' color='#fff' size={15} />
+              <Ionicons style={{ alignSelf: 'center' }} name='pencil' color='#fff' size={15} />
             </View>
           </View>
         </TouchableOpacity>
+        <View style={styles.infoWrapper}>
+          <Text style={styles.usernameTxt}>{user.displayName}</Text>
 
-      <View style={styles.infoWrapper}>
-        <Text style={styles.usernameTxt}> UserName</Text>
+          <ActionInput title='Họ Tên' ionIconName='person'
+            placeholder='Nhập Họ Tên'
+            autoFocus='true'
+            value={name}
+            onChangeText={setname}
+          ></ActionInput>
 
-        <ActionInput title = 'Họ Tên' ionIconName='person'
-          placeholder='Nhập Họ Tên'
-          autoFocus='true'
-          value={name}
-          onChangeText={setname}
-        ></ActionInput>
+          <ActionInput title='Số Điện Thoại' ionIconName='call'
+            placeholder='Nhập Số Điện Thoại'
+            keyboardType='numeric'
+            onChangeText={setphoneNumber}
+            value={phoneNumber}
+            autoFocus='true'
+          ></ActionInput>
 
-        <ActionInput title = 'Số Điện Thoại' ionIconName='call'
-          placeholder='Nhập Số Điện Thoại'
-           keyboardType='numeric' 
-          // onChangeText={onChangeText} 
-          autoFocus='true'
-        ></ActionInput>
+          <ActionInput title='Địa Chỉ' ionIconName='location'
+            placeholder='Nhập Địa Chỉ'
+            autoFocus='true'
+            onChangeText={setlocation}
+            value={location}
+          ></ActionInput>
 
-        <ActionInput title = 'Địa Chỉ' ionIconName='location'
-          placeholder='Nhập Địa Chỉ' 
-          autoFocus='true'
-       ></ActionInput>
+          <ActionInput title='Email' ionIconName='mail'
+            placeholder='Nhập Email' keyboardType='email-address'
+            autoFocus='true'
+            value={email}
+            onChangeText={setemail}
+          ></ActionInput>
 
-        <ActionInput title = 'Email' ionIconName='mail'
-          placeholder='Nhập Email' keyboardType='email-address'
-          autoFocus='true'
-          value={email}
-          onChangeText={setemail}
-        ></ActionInput>
-        
-        <TouchableOpacity style={styles.commandBtn} onPress={async () =>{
-          update={displayName:name,email:email}
-          console.log(update)
-          console.log("aloaloaloooooooooooooooooooooooooooooo")
-          await firebaseApp.auth().currentUser.updateProfile(update)}
-          // /console.log(firebaseApp)
-          } >
-          <Text style={styles.commandTxt}>Xác Nhận</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={styles.commandBtn} onPress={async () => {
+            image==null?
+            ()=>{
+              
+              var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location,photoURL:firebaseApp.auth().currentUser.photoURL}
+              console.log(update)
+              firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update)
+              firebaseApp.auth().currentUser.updateProfile(update)
+            }:
+            uploadImage(image).then(() => { 
+              return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL(); })
+              .then((url) => {
+                var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location,photoURL:url}
+                console.log(update)
+                firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update)
+                firebaseApp.auth().currentUser.updateProfile(update)
+              }).then(()=>{
+                setIsLoading(false);
+                console.log('Thay đổi thông tin thành công')
+                alert('Thay đổi thông tin thành công');
+              })
+              .catch((error)=>{
+                setIsLoading(false);
+                alert(error);
+              })
+
+          }} >
+            <Text style={styles.commandTxt}>Xác Nhận</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
-      
+      }
+      </Animated.View>
+
     </ScrollView>
   );
 }
 
 var styles = StyleSheet.create({
-  container:{
-    height:'100%'
+  container: {
+    height: '100%'
   },
-  topdock:{
-    height:180,
-    backgroundColor:PRIMARY_COLOR,
-    borderBottomRightRadius:70
+  topdock: {
+    height: 180,
+    backgroundColor: PRIMARY_COLOR,
+    borderBottomRightRadius: 70
   },
-  userpfp:{
-    position:'absolute',
-    backgroundColor:'#000',
-    borderRadius:60,
-    left:'50%',
-    marginLeft:-60, //margin half the width of PFP Picker
-    top:120,
+  userpfp: {
+    position: 'absolute',
+    backgroundColor: '#000',
+    borderRadius: 60,
+    left: '50%',
+    marginLeft: -60, //margin half the width of PFP Picker
+    top: 120,
   },
-  usernameTxt:{
-    fontSize:25,
-    alignSelf:'center',
-    fontWeight:'bold'
+  usernameTxt: {
+    fontSize: 25,
+    alignSelf: 'center',
+    fontWeight: 'bold'
   },
-  editpfpBtn:{
-    position:'absolute',
-    width:30,
-    height:30,
-    borderRadius:30,
-    borderWidth:2,
-    borderColor:'#fff',
-    backgroundColor:'#000',
-    right:0,
-    top:5,
-    justifyContent:'center'
+  editpfpBtn: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: '#fff',
+    backgroundColor: '#000',
+    right: 0,
+    top: 5,
+    justifyContent: 'center'
   },
-  editpfpIcon:{
-    position:'absolute',
-    left:35,
-    top:35
+  editpfpIcon: {
+    position: 'absolute',
+    left: 35,
+    top: 35
   },
-  infoWrapper:{
-    marginTop:70,
-    width:'90%',
-    alignSelf:'center',
+  infoWrapper: {
+    marginTop: 70,
+    width: '90%',
+    alignSelf: 'center',
     //backgroundColor:SECONDARY_COLOR,
   },
-  userInfo:{
-    height:30,
-    alignSelf:'center',
-    flexDirection:'row',
-    marginTop:10,
-    marginBottom:10,
-    borderBottomWidth:1,
-    borderBottomColor:LIGHT_GREY
+  userInfo: {
+    height: 30,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: LIGHT_GREY
   },
-  textInput:{
-    flex:1,
-    paddingLeft:10,
-    color:GREY
+  textInput: {
+    flex: 1,
+    paddingLeft: 10,
+    color: GREY
   },
-  commandBtn:{
-    padding:15,
-    borderRadius:10,
-    backgroundColor:DARK_PRIMARY_COLOR,
-    alignItems:'center',
-    marginTop:10,
-    height:50,
-    justifyContent:'center'
+  commandBtn: {
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: DARK_PRIMARY_COLOR,
+    alignItems: 'center',
+    marginTop: 10,
+    height: 50,
+    justifyContent: 'center'
   },
-  commandTxt:{
-    color:WHITE, 
-    fontSize:18,
-    fontWeight:'bold'
+  commandTxt: {
+    color: WHITE,
+    fontSize: 18,
+    fontWeight: 'bold'
   },
-  header:{
-    backgroundColor:WHITE,
-    shadowColor:'#333333',
-    shadowOffset:{width:-1, height:-3},
-    shadowRadius:2,
-    shadowOpacity:0.4,
-    paddingTop:20,
-    borderTopLeftRadius:20,
-    borderTopRightRadius:20,
+  header: {
+    backgroundColor: WHITE,
+    shadowColor: '#333333',
+    shadowOffset: { width: -1, height: -3 },
+    shadowRadius: 2,
+    shadowOpacity: 0.4,
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     //elevation:20,
-    alignItems:'center'
+    alignItems: 'center'
   },
-  panelHandle:{
-    width:40,
-    height:8,
-    borderRadius:4,
-    backgroundColor:GREY,
-    marginBottom:10,
+  panelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: GREY,
+    marginBottom: 10,
   },
-  bottomsheetWrapper:{
-    alignItems:'center',
-     backgroundColor:'#fff',
+  bottomsheetWrapper: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
-  panelTitleTxt:{
-    fontSize:25,
+  panelTitleTxt: {
+    fontSize: 25,
   },
-  panelSubtitleTxt:{
-    color:GREY,
-    fontSize:13
+  panelSubtitleTxt: {
+    color: GREY,
+    fontSize: 13
   },
 })

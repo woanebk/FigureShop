@@ -9,7 +9,7 @@ export default function AllCategoryScreen({navigation}) {
   const [listAnime,setListAnime]=useState();
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   
-  useEffect(()=>{
+   useEffect  ( () => {
     if(firstRun == 0){
       getAnimes()
     setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu

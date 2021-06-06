@@ -7,7 +7,7 @@ import { View, Text, StyleSheet,Image } from 'react-native';
 const Logo = () => {
     return (
         <View>
-            <Image source={{uri:'https://uilogos.co/img/logotype/circle.png'}} style={{height:150, width:150}} />
+            <Image source={{uri:'https://img.icons8.com/ios/452/javascript-logo.png'}} style={{height:150, width:150}} />
         </View>
     );
 };

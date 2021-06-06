@@ -9,6 +9,8 @@ import SearchScreen from './screens/SearchScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ItemDetailScreen from './screens/ItemDetailScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
+import AllUserScreen from './screens/AllUserScreen';
+import AddUserScreen from './screens/AddUserScreen';
 import CategoryItemsScreen from './screens/CategoryItemsScreen';
 import AddCategoryScreen from './screens/AddCategoryScreen';
 import ManageCategoryScreen from './screens/ManageCategoryScreen';
@@ -260,14 +262,28 @@ const ProfileStackNavigator = (navigation)=>{
             
           }}
           />
-
+          
           <ProfileStack.Screen name='EditProfile' component={EditProfileScreen}
           options={{
             headerTransparent:true,
             headerTintColor:'#fff'
           }}>
           </ProfileStack.Screen>
-          
+          <ProfileStack.Screen name='AllUser' component={AllUserScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff',
+            title:'Danh Sách Người Dùng'
+          }}>
+          </ProfileStack.Screen>
+
+          <ProfileStack.Screen name='AddUser' component={AddUserScreen}
+          options={{
+            headerTransparent:true,
+            headerTintColor:'#fff',
+            title:'Thêm người dùng'
+          }}>
+          </ProfileStack.Screen>
           <ProfileStack.Screen name='ManageCategory' component={ManageCategoryScreen}
           options={{
             headerTransparent:true,
