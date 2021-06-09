@@ -1,6 +1,6 @@
 import react from 'react';
 import React, { Component, Dimensions, useState, useEffect, ActivityIndicator } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, TextInput, ViewBase } from 'react-native';
+import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity, TextInput, ViewBase, Button, Platform } from 'react-native';
 import Animated, { color } from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { IconButton, RadioButton } from 'react-native-paper';
@@ -11,43 +11,57 @@ import * as ImagePicker from 'expo-image-picker';
 import { ActionInput } from '../items';
 import { ScrollView } from 'react-native-gesture-handler';
 import { firebaseApp } from '../firebaseconfig';
+import firebase from 'firebase/app';
+import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
 
-
-export default function AddUserScreen({ route, navigation }) {
-  const { readonly } = route.params; //true: add , fail: detail và edit !cannot change this!
-  const { userID } = route.params;
-  const [editing, setEditing] = useState(!readonly); //Khi editting: enable input
-  const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
-  const fall = new Animated.Value(1); //blur animation
-  var [user, setuser] = useState(null);
-  const [checked, setChecked] = useState('');
-  var [userid, setuserid] = useState('')
+export default function AddGuestScreen({ route, navigation }) {
+  const recaptchaVerifier = React.useRef(null);
+  const [phoneNumber, setPhoneNumber] = React.useState();
+  const [verificationId, setVerificationId] = React.useState();
+  const [verificationCode, setVerificationCode] = React.useState();
+  const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
+  const [message, showMessage] = React.useState(
+    !firebaseConfig || Platform.OS === 'web'
+      ? {
+        text:
+          'To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device.',
+      }
+      : undefined
+  );
+  const attemptInvisibleVerification = false;
+  const { readonly } = route.params;
+  const { GuestID } = route.params;
+  var [editing, setEditing] = useState(!readonly);
+  const bottomsheetRef = React.createRef();
+  const fall = new Animated.Value(1);
+  var [Guest, setGuest] = useState(null);
+  var [checked, setChecked] = useState('');
+  var [Guestid, setGuestid] = useState('')
   var [name, setname] = useState("");
   var [email, setemail] = useState("");
-  var [phoneNumber, setphoneNumber] = useState("");
   var [location, setlocation] = useState("");
-  const [image, setImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [password, setpassword] = useState('');
-
+  var [image, setImage] = useState(null);
+  var [isLoading, setIsLoading] = useState(false);
+  var [password, setpassword] = useState('');
+  var [xacnhan, setxacnhan] = useState(false);
   var library_status, cam_status;
-  navigation.addListener('focus', () => { if (readonly) getuserinfo() })
+  navigation.addListener('focus', () => { if (readonly) getGuestinfo() })
   useEffect(() => {
     navigation.setOptions({
       headerRight: (!editing) ? () => (<IconButton icon="pencil" onPress={() => setEditing(true)}
         color={WHITE} size={25} />) : null
     })
   });
-  const getuserinfo = () => {
-    console.log(userID)
-    firebaseApp.database().ref('User/' + userID).on('value', (snapshot) => {
+  const getGuestinfo = () => {
+    console.log(GuestID)
+    firebaseApp.database().ref('Guest/' + GuestID).on('value', (snapshot) => {
       if (snapshot.exists()) {
         setname(snapshot.val().displayName)
-        setuser(snapshot.val());
+        setGuest(snapshot.val());
         setemail(snapshot.val().email)
         setlocation(snapshot.val().location);
         setphoneNumber(snapshot.val().phoneNumber);
-        snapshot.val().isAdmin ? setChecked("Admin") : setChecked("User")
+        snapshot.val().isAdmin ? setChecked("Admin") : setChecked("Guest")
       }
     })
   };
@@ -107,7 +121,7 @@ export default function AddUserScreen({ route, navigation }) {
     //setIsLoading(true);
     const respone = await fetch(uri);
     const blob = await respone.blob();
-    const ref = firebaseApp.storage().ref().child('images/User/' + email + '.jpg');
+    const ref = firebaseApp.storage().ref().child('images/Guest/' + email + '.jpg');
     return ref.put(blob);
   }
   //RENDER BOTTOM SHEET:
@@ -136,20 +150,6 @@ export default function AddUserScreen({ route, navigation }) {
       <View style={styles.panelHandle}></View>
     </View>
   )
-  function upnoimage() {
-    console.log("ditmecuocdoiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-      var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location, photoURL: user.photoURL };
-      console.log(update);
-      firebaseApp.database().ref('User/' + user.uid).update(update).then(() => {
-        setIsLoading(false);
-        console.log('Thay đổi thông tin thành công')
-        alert('Thay đổi thông tin thành công');
-      }).catch((error) => {
-        setIsLoading(false);
-        alert(error);
-      })
-    }//firebaseApp.auth().currentUser.updateProfile(update)
-
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
@@ -174,19 +174,18 @@ export default function AddUserScreen({ route, navigation }) {
                 <View>
                   {
                     image == null ?
-                      user != null ?
-                        <UserPFP image={{ uri: user.photoURL }} ></UserPFP> :
+                      Guest != null ?
+                        <UserPFP image={{ uri: Guest.photoURL }} ></UserPFP> :
                         <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP> :
                       <UserPFP image={{ uri: image }} ></UserPFP>
                   }
-                  {/* <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={WHITE}></Ionicons> */}
                   <View style={styles.editpfpBtn}>
                     <Ionicons style={{ alignSelf: 'center' }} name='pencil' color='#fff' size={15} />
                   </View>
                 </View>
               </TouchableOpacity>
               <View style={styles.infoWrapper} disabled={!editing}>
-                {user != null ? <Text style={styles.usernameTxt}>{user.displayName}</Text> : null}
+                {Guest != null ? <Text style={styles.GuestnameTxt}>{Guest.displayName}</Text> : null}
 
                 <ActionInput title='Họ Tên' ionIconName='person'
                   placeholder='Nhập Họ Tên'
@@ -194,113 +193,87 @@ export default function AddUserScreen({ route, navigation }) {
                   value={name}
                   onChangeText={setname}
                 ></ActionInput>
-
-                <ActionInput title='Số Điện Thoại' ionIconName='call'
-                  placeholder='Nhập Số Điện Thoại'
-                  keyboardType='numeric'
-                  onChangeText={setphoneNumber}
+                <ActionInput title='Số Điện Thoại' ionIconName='call'
+                  placeholder='Nhập Số Điện Thoại'
+                  autoFocus
+                  autoCompleteType="tel"
                   value={phoneNumber}
-                  autoFocus='true'
+                  keyboardType="phone-pad"
+                  onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
                 ></ActionInput>
+                {
+                  <View style={{ padding: 0, marginTop: 0 }}>
+                    <FirebaseRecaptchaVerifierModal
+                      ref={recaptchaVerifier}
+                      firebaseConfig={firebaseConfig}
+                      attemptInvisibleVerification={attemptInvisibleVerification}
+                    />
+                    <TouchableOpacity style={[styles.commandBtn,]}
+                      disabled={!phoneNumber}
+                      onPress={async () => {
 
-                <ActionInput title='Địa Chỉ' ionIconName='location'
-                  placeholder='Nhập Địa Chỉ'
-                  autoFocus='true'
-                  onChangeText={setlocation}
-                  value={location}
-                ></ActionInput>
-
-                <ActionInput title='Email' ionIconName='mail'
-                  placeholder='Nhập Email' keyboardType='email-address'
-                  autoFocus='true'
-                  value={email}
-                  onChangeText={setemail}
-                ></ActionInput>
-                  <ActionInput title='Password' ionIconName='mail'
-                  placeholder='Nhập Password' keyboardType='default'
-                  autoFocus='true'
-                  value={password}
-                  onChangeText={setpassword}
-                ></ActionInput>
-                <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
-                  <View>
-                    <Text>Admin</Text>
-                    <RadioButton value="Admin" />
-                  </View>
-                  <View>
-                    <Text>User</Text>
-                    <RadioButton value="User" />
-                  </View>
-                </RadioButton.Group>
-                <TouchableOpacity style={[styles.commandBtn,]} onPress={ () => {
-                  if (user != null) {
-                    image == null ?
-                    upnoimage() :
-                    uploadImage(image).then(() => {
-                      return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
-                    })
-                      .then((url) => {
-                        var update = { displayName: name, email: email,TrangThai:"on", phoneNumber: phoneNumber, location: location, photoURL: url }
-                        console.log(update)
-                        firebaseApp.database().ref('User/' + user.uid).update(update)
-                      }).then(() => {
-                        setIsLoading(false);
-                        console.log('Thay đổi thông tin thành công')
-                        alert('Thay đổi thông tin thành công');
-                      })
-                      .catch((error) => {
-                        setIsLoading(false);
-                        alert(error);
-                      })
-                  }
-                  else {
-                    firebaseApp.auth().createUserWithEmailAndPassword(email, password)
-                      .then(function (response)  {
-                        if (image!=null)
-                        {
-                        uploadImage(image).then(() => {
-                          return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
-                        })
-                          .then((url) => {
-                            var update = { displayName: name, email: email, TrangThai:"on",phoneNumber: phoneNumber, location: location, photoURL: url }
-                            console.log(update)
-                            firebaseApp.database().ref('User/' + response.uid).update(update)
-                            firebaseApp.auth().currentUser.updateProfile(update).then(() => {
-                              setIsLoading(false);
-                              console.log('Thay đổi thông tin thành công')
-                              alert('Tạo người dùng thành công');
-                            });
-                          }).then(() => {
-                            setIsLoading(false);
-                            console.log('Thay đổi thông tin thành công')
-                            alert('Tạo người dùng thành công');
-                          })
-                          .catch((error) => {
-                            setIsLoading(false);
-                            alert(error);
-                          })
+                        try {
+                          const phoneProvider = new firebase.auth.PhoneAuthProvider();
+                          const verificationId = await phoneProvider.verifyPhoneNumber(
+                            phoneNumber,
+                            recaptchaVerifier.current
+                          );
+                          setVerificationId(verificationId);
+                          alert("Gửi mã xác nhận thành công, vui lòng kiểm tra điện thoại của bạn");
+                        } catch (err) {
+                          showMessage({ text: `Error: ${err.message}`, color: 'red' });
                         }
-                        else 
-                        {
-                        var update = { displayName: name, email: email,TrangThai:"on", phoneNumber: phoneNumber, location: location, photoURL: "https://firebasestorage.googleapis.com/v0/b/figureshop-9cdf3.appspot.com/o/images%2FUser%2Fop_swiper_1.jpg?alt=media&token=b1688d8f-80c0-4524-a3c0-a965ef919330" }
-                        console.log(update)
-                        firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update)}
-                        firebaseApp.auth().currentUser.updateProfile(update).then(() => {
-                          setIsLoading(false);
-                          console.log('Thay đổi thông tin thành công')
-                          alert('Tạo người dùng thành công');
-                        });
-                      })
-                      .catch((error) => {
-                        setIsLoading(false);
-                          alert(error);
-                      })
-                    
-                  }
+                      }}>
+                      <Text style={styles.commandTxt}>Gửi mã xác nhận</Text>
+                    </TouchableOpacity>
 
-                }} >
-                  <Text style={styles.commandTxt}>Xác Nhận</Text>
-                </TouchableOpacity>
+                    {
+                      !!verificationId ?
+                        <ActionInput title='Mã Xác Nhận' ionIconName='call'
+                          placeholder='Nhập Mã Xác Nhận'
+                          editable={!!verificationId}
+                          keyboardType="phone-pad"
+                          onChangeText={phoneNumber => setVerificationCode(phoneNumber)}
+                        ></ActionInput>
+                        : null}
+                    {
+                      !!verificationId ?
+                        <TouchableOpacity style={[styles.commandBtn,]}
+                          disabled={!verificationId}
+                          onPress={async () => {
+                            try {
+                              const credential = firebase.auth.PhoneAuthProvider.credential(
+                                verificationId,
+                                verificationCode
+                              );
+                              await firebase.auth().currentUser.updatePhoneNumber(credential);
+                              //await firebase.auth().signInWithCredential(credential);
+                              if (image != null) {
+                                uploadImage(image).then(() => {
+                                  return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
+                                })
+                                  .then((url) => {
+                                    var update = { displayName: name, TrangThai: "on", phoneNumber: phoneNumber, photoURL: url }
+                                    firebaseApp.database().ref('Guest/' + phoneNumber).update(update);
+                                  })
+                                }
+                                else
+                                {
+                                  var update = { displayName: name, TrangThai: "on", phoneNumber: phoneNumber }
+                                  firebaseApp.database().ref('Guest/' + phoneNumber).update(update);
+                                } 
+                                alert("Xác nhận số điện thoại thành công 👍");
+                              
+                            } catch (err) {
+                              alert(`Error: ${err.message}`);
+                            }
+                          }}>
+                          <Text style={styles.commandTxt}>Xác Nhận</Text>
+                        </TouchableOpacity> :
+                        null}
+                    {attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
+                  </View>
+                }
               </View>
             </Animated.View>
         }

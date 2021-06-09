@@ -26,12 +26,15 @@ export default function ProfileScreen({ navigation }) {
       )
     })
   });
-  const getuserinfo = () => {
+  const getuserinfo = async() => {
     firebaseApp.database().ref('User/'+ firebaseApp.auth().currentUser.uid).on('value', (snapshot) => {
       if (snapshot.exists()) {
         setuser(snapshot.val())
+        firebaseApp.auth().currentUser.updateProfile(snapshot.val())
       }
     })
+    console.log(user)
+   await firebaseApp.database().ref('User/'+ firebaseApp.auth().currentUser.uid).update(user);
   }
   if (user.uid=="Pyino4SsfsPXgD8kNYyKBIO3pMd2")
   return (
@@ -112,6 +115,11 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() => navigation.navigate('AllUser')}>
             <ProfileButton iconName='human' text='Quản Lý Nhân Viên' ></ProfileButton>
+          </TouchableRipple>
+        </View>
+        <View style={styles.userBtn}>
+          <TouchableRipple onPress={() => navigation.navigate('AllGuest')}>
+            <ProfileButton iconName='human' text='Quản Lý Khách Hàng' ></ProfileButton>
           </TouchableRipple>
         </View>
   

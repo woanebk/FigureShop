@@ -7,18 +7,18 @@ import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { Button } from 'react-native-paper';
 
-export default function AllUserScreen({navigation}) {
-  const [listUser,setListUser]=useState();
-  const [deleteID, setDeleteID] = useState(''); //id User để xóa
+export default function AllGuestScreen({navigation}) {
+  const [listGuest,setListGuest]=useState();
+  const [deleteID, setDeleteID] = useState(''); //id Guest để xóa
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
-  navigation.addListener('focus', () => {getUsers()})
+  navigation.addListener('focus', () => {getGuests()})
   useEffect(()=>{
     if(deleteID !== '')
       openDialog();
   }) 
-  const getUsers = () => {
+  const getGuests = () => {
     let list=[];
-    firebaseApp.database().ref('User').orderByChild('TrangThai').equalTo('on').on('value', (snapshot)=>{
+    firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').on('value', (snapshot)=>{
       if( snapshot.exists())
       {
         list = []; //reset list tránh trùng lặp
@@ -28,18 +28,17 @@ export default function AllUserScreen({navigation}) {
             key: child.key, 
             displayName:child.val().displayName, 
             photoURL:child.val().photoURL,
-            isAdmin:child.val().isAdmin,
             phoneNumber:child.val().phoneNumber,
           })
         })
-        setListUser(list)
+        setListGuest(list)
       }
     })
   }
-  const deleteUser = async(User_id)=>{
+  const deleteGuest = async(Guest_id)=>{
     try{
       closeDialog();
-      await firebaseApp.database().ref('User/' + User_id).update({
+      await firebaseApp.database().ref('Guest/' + Guest_id).update({
         TrangThai: 'off'
       })
       setDeleteID('')//reset để không mở dialog trong useEffect không cần thiết
@@ -51,7 +50,7 @@ export default function AllUserScreen({navigation}) {
     }
   }
 
-  const onDeleteUserPress = (id)=>{
+  const onDeleteGuestPress = (id)=>{
     setDeleteID(id) //call back useEffect sẽ mở dialog
   }
 
@@ -74,7 +73,7 @@ export default function AllUserScreen({navigation}) {
           />
           <DialogButton
             text="OK"
-            onPress={() => deleteUser(deleteID)}
+            onPress={() => deleteGuest(deleteID)}
           />
         </DialogFooter>
       }
@@ -95,18 +94,17 @@ export default function AllUserScreen({navigation}) {
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <View style={styles.topdock}></View>
       <FlatList style={styles.list}
-        data={listUser}
+        data={listGuest}
         renderItem = {({item})=>(
           <ListItem image={{uri:item.photoURL}} name = {item.displayName}
-           description={item.isAdmin?'Admin':'User'} phoneNumber = {item.phoneNumber}
-            onPress={()=>{ navigation.navigate('AddUser',{readonly:true, userID:item.key}) }}
-            onDeletePress={()=>onDeleteUserPress(item.key)}
+            onPress={()=>{ navigation.navigate('AddGuest',{readonly:true, GuestID:item.key}) }}
+            onDeletePress={()=>onDeleteGuestPress(item.key)}
           ></ListItem>
         )}
         keyExtractor={item=>item.key}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity onPress={()=>{navigation.navigate('AddUser',{readonly:false})}} style={styles.newBtn}>
+      <TouchableOpacity onPress={()=>{navigation.navigate('AddGuest',{readonly:false})}} style={styles.newBtn}>
         <MaterialIcons name='add' size={30} color={WHITE} ></MaterialIcons>
       </TouchableOpacity>
       {renderDialog()}

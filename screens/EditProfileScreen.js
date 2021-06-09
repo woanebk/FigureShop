@@ -122,7 +122,20 @@ export default function EditProfileScreen({ navigation }) {
       <View style={styles.panelHandle}></View>
     </View>
   )
-
+  function upnoimage () 
+    { 
+      console.log("ditmecuocdoiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii") ;   
+      var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location,photoURL:user.photoURL};
+      console.log(update);
+      firebaseApp.database().ref('User/' + user.uid).update(update).then(()=>{
+        setIsLoading(false);
+        console.log('Thay đổi thông tin thành công')
+        alert('Thay đổi thông tin thành công');
+      }).catch((error)=>{
+        setIsLoading(false);
+        alert(error);
+      })
+    }
 
   return (
     <ScrollView style={styles.container}>
@@ -193,13 +206,7 @@ export default function EditProfileScreen({ navigation }) {
 
           <TouchableOpacity style={styles.commandBtn} onPress={async () => {
             image==null?
-            ()=>{
-              
-              var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location,photoURL:firebaseApp.auth().currentUser.photoURL}
-              console.log(update)
-              firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update)
-              firebaseApp.auth().currentUser.updateProfile(update)
-            }:
+            upnoimage():
             uploadImage(image).then(() => { 
               return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL(); })
               .then((url) => {

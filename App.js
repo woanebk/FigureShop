@@ -8,7 +8,7 @@ import CartScreen from './screens/CartScreen';
 import BG from './images/bg.png'
 import LoginForm from './screens/login/LoginForm';
 import Loading from './screens/login/Loading'
-
+import authen from './screens/authen/authen'
 // import firebase from './firebaseconfig';
 // //Bottom Tab:
 import { useState } from 'react/cjs/react.development';
@@ -33,7 +33,7 @@ export default function App(navigation) {
     })
     return () => { }
   })
-
+// return <authen/>
     switch (state) {
     case false:
       return <ImageBackground style={styles.container} source={BG} >
