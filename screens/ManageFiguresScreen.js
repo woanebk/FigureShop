@@ -14,8 +14,8 @@ export default function ManageFiguresScreen({navigation}) {
   const [deleteSanPhamID, setDeleteSanPhamID] = useState(''); //id sản phẩm để xóa
   const [deleteAnimeID, setDeleteAnimeID] = useState(''); //id anime để xóa
   useEffect(()=>{
-    navigation.addListener('focus', () => {getSanPhams()})
     if(firstRun == 0){
+      navigation.addListener('focus', () => {getSanPhams()})
       getSanPhams();
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }

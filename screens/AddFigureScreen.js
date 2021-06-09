@@ -51,9 +51,7 @@ export default function AddFigureScreen({route, navigation}) {
   const fall= new Animated.Value(1); //blur animation
   
   useEffect(()=>{
-
     navigation.addListener('focus', () => {images == undefined?{}:setHinhAnhs(images)}) //Hàm được gọi mỗi khi focus, khi chuyển sang trang chọn ảnh screen bị unfocus chứ ko mất đi 
-
     if( firstRun == 0)
     {
       getAnimes() //dropdownlist

@@ -46,14 +46,15 @@ export default function CategoryItemsScreen({route, navigation}) {
         list = [] //reset list tranh loi
         for (let [key, value] of Object.entries(snapshot.val()))
         {
-          list.push({
-            IdSanPham: key,
-            TenSanPham: value.TenSanPham,
-            TenNhanVat : value.TenNhanVat,
-            GiaBan: value.GiaBan,
-            GiamGia: value.GiamGia,
-            HinhAnh:value.HinhAnh
-          })
+          if(value.SoLuong > 0)
+            list.push({
+              IdSanPham: key,
+              TenSanPham: value.TenSanPham,
+              TenNhanVat : value.TenNhanVat,
+              GiaBan: value.GiaBan,
+              GiamGia: value.GiamGia,
+              HinhAnh:value.HinhAnh
+            })
         }
         setListSanPham(list)
       }

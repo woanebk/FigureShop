@@ -11,6 +11,7 @@ import LargeActionInput from './components/LargeActionInput';
 import CartItem from './components/CartItem';
 import CategorySmallCard from './components/CategorySmallCard';
 import BigItemCard from './components/BigItemCard'
+import CheckOutItem from './components/CheckOutItem'
 
 export {
     Card,
@@ -25,5 +26,6 @@ export {
     LargeActionInput,
     CartItem,
     CategorySmallCard,
-    BigItemCard
+    BigItemCard,
+    CheckOutItem,
 }

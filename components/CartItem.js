@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
-import { GREY, WHITE, DARK_PRIMARY_COLOR } from '../common';
+import { GREY, WHITE, DARK_PRIMARY_COLOR, BLACK } from '../common';
 import { IconButton } from 'react-native-paper';
 
 function CartItem(props){
@@ -9,14 +9,14 @@ function CartItem(props){
         <View style={styles.card}>
             <Image style={styles.img} resizeMode='cover' source ={props.itemImage}></Image>
             <View style={styles.infoWrapper}>
-                <Text style={styles.nameTxt} numberOfLines={1} >{props.itemName}</Text>
+                <Text style={styles.nameTxt} numberOfLines={2} >{props.itemName}</Text>
                 <Text style={styles.descriptionTxt} numberOfLines={1} >{props.itemDescription}</Text>
                 <View style={styles.btnWrapper}>
-                    <TouchableOpacity style={styles.quantityBtn}>
+                    <TouchableOpacity style={styles.quantityBtn} onPress={props.onMinusPress}>
                         <Ionicons name='remove' size={20}></Ionicons>
                     </TouchableOpacity>
                     <Text style={styles.quantityTxt}>{props.value}</Text>
-                    <TouchableOpacity style={styles.quantityBtn} >
+                    <TouchableOpacity style={styles.quantityBtn} onPress={props.onPlusPress}>
                         <Ionicons name='add' size={20}></Ionicons>
                     </TouchableOpacity>
                     <View style={styles.priceWrapper}>
@@ -56,7 +56,10 @@ const styles = StyleSheet.create({
     nameTxt:{
         fontSize:18,
         fontWeight:'bold',
-        marginTop:5
+        marginTop:5,
+        marginRight:35,
+        lineHeight:20,
+        //backgroundColor:BLACK
     },
     descriptionTxt:{
         color:GREY,
@@ -81,7 +84,8 @@ const styles = StyleSheet.create({
         marginHorizontal:5,
         fontSize:15,
         fontWeight:'bold',
-        width:20
+        width:20,
+        textAlign:'center'
     },
     deleteBtn:{
         position:'absolute',
@@ -99,7 +103,8 @@ const styles = StyleSheet.create({
         textDecorationLine:'line-through',
         width:100,
         color:GREY,
-        marginTop:10
+        bottom:25,
+        position:'absolute'
     },
     itemPriceTxt:{
         alignSelf:'center',
@@ -107,7 +112,8 @@ const styles = StyleSheet.create({
         width:130,
         fontWeight:'bold',
         color:DARK_PRIMARY_COLOR,
-        marginTop:2
+        bottom:5,
+        position:'absolute'
     },
   });
 
