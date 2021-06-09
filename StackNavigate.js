@@ -16,7 +16,6 @@ import AddGuestScreen from './screens/AddGuestScreen';
 import CategoryItemsScreen from './screens/CategoryItemsScreen';
 import AddCategoryScreen from './screens/AddCategoryScreen';
 import ManageCategoryScreen from './screens/ManageCategoryScreen';
-import CartScreen from './screens/CartScreen';
 
 import { IconButton } from "react-native-paper";
 import { BLACK, PRIMARY_COLOR, WHITE } from "./common";
