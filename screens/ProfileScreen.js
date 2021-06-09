@@ -33,8 +33,8 @@ export default function ProfileScreen({ navigation }) {
         firebaseApp.auth().currentUser.updateProfile(snapshot.val())
       }
     })
-    console.log(user)
-   await firebaseApp.database().ref('User/'+ firebaseApp.auth().currentUser.uid).update(user);
+  //   console.log(user)
+  //  await firebaseApp.database().ref('User/'+ firebaseApp.auth().currentUser.uid).update(firebaseApp.auth().currentUser.providerData);
   }
   if (user.uid=="Pyino4SsfsPXgD8kNYyKBIO3pMd2")
   return (
