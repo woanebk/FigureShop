@@ -129,12 +129,12 @@ export default function AddUserScreen({ route, navigation }) {
     </View>
   )
   const Updateuser = async () => {
+    if(name==''||email==''||phoneNumber==''||location=='') alert("Vui lòng điền đầy đủ thông tin")
+    else
     if (image == null) {
       var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location };
       console.log(update)
       firebaseApp.database().ref('User/' + userID).update(update).then(() => {
-        //setIsLoading(false);
-        //console.log('Thay đổi thông tin thành công')
         alert('Thay đổi thông tin thành công');
       }).catch((error) => {
         setIsLoading(false);
@@ -160,6 +160,8 @@ export default function AddUserScreen({ route, navigation }) {
         })
   }
   const Adduser = async () => {
+    if(name==''||email==''||phoneNumber==''||location==''||password.length<6) alert("Vui lòng điền đầy đủ thông tin và xem lại mật khẩu")
+    else
     firebaseApp.auth().createUserWithEmailAndPassword(email, password)
       .then(function (response) {
         if (image != null) {
