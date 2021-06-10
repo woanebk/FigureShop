@@ -233,7 +233,7 @@ export default function AddUserScreen({ route, navigation }) {
             :
             <Animated.View style={{ opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
               <View style={styles.topdock}></View>
-              <TouchableOpacity style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
+              <TouchableOpacity disabled={!editing} style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
                 <View>
                   {
                     image == null ?
@@ -242,9 +242,10 @@ export default function AddUserScreen({ route, navigation }) {
                         <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP> :
                       <UserPFP image={{ uri: image }} ></UserPFP>
                   }
-                  <View style={styles.editpfpBtn}>
+                  {editing?
+                    <View style={styles.editpfpBtn}>
                     <Ionicons style={{ alignSelf: 'center' }} name='pencil' color='#fff' size={15} />
-                  </View>
+                  </View>:null}
                 </View>
               </TouchableOpacity>
               <View style={styles.infoWrapper}>
