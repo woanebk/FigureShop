@@ -14,8 +14,9 @@ export default function HomeScreen ({navigation}) {
   const [listSanPhamSale, setListSanPhamSale] = useState() // chứa 4 item sale
 
   useEffect(()=>{
-    navigation.addListener('focus', () => {getSanPhamsSale()} )
+    
     if(firstRun == 0){
+      navigation.addListener('focus', () => {getSanPhamsSale()} )
       getAnimes() //danh muc
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
@@ -53,7 +54,7 @@ export default function HomeScreen ({navigation}) {
             var animename = child.val().TenAnime
             var idAnime = child.key
             for (let [key, value] of Object.entries(child.val().SanPham)) {
-              if(value.TrangThai == 'on' && value.GiamGia > 0)
+              if(value.TrangThai == 'on' && value.GiamGia > 0 && value.SoLuong > 0)
               {
                 list.push({
                   IdSanPham : key,

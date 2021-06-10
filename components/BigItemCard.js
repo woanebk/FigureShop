@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         width:'50%',
         height:250,
         backgroundColor:WHITE,
-        elevation:10,
+        elevation:5,
         padding:7,
       },
     cardImg:{

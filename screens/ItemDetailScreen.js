@@ -1,12 +1,13 @@
 import react from 'react';
 import React, { Component } from 'react';
+import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, ScrollView, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import Swiper from 'react-native-swiper/src';
-import { useState } from 'react/cjs/react.development';
-import {PRIMARY_COLOR, SECONDARY_COLOR, GREY} from '../common';
+import CartContext from '../CartContext';
+import {PRIMARY_COLOR, SECONDARY_COLOR, GREY, BLACK} from '../common';
 import {firebaseApp} from '../firebaseconfig'
 
 export default function ItemDetailScreen ({route, navigation}){
@@ -16,6 +17,8 @@ export default function ItemDetailScreen ({route, navigation}){
   const [sanPham,setSanPham] = useState({}) // initial object tranh loi
   const [tenAnime, setTenAnime] = useState('')
   const [hinhAnhs, setHinhAnhs] = useState([])
+
+  const {cart, setCart} = useContext(CartContext)
 
   useEffect (()=>{
     navigation.setOptions({
@@ -50,14 +53,47 @@ export default function ItemDetailScreen ({route, navigation}){
 
   const renderSlides = () => {
     return hinhAnhs.map(element=>(
-      <View >
+      <View  key = {element}>
           <Image style={styles.swiperImg}
               source ={{uri: element}}
               resizeMode='cover'
-              key = {element}
             />
         </View>
     ))
+    
+  }
+
+  const addToCart = (idSanPham)=>{
+    if(cart.length > 0 && cart.some(item => item.IdSanPham == idSanPham) )
+    {
+      console.log('update')
+      let tmp = cart.slice(0)
+      tmp.map((item)=>{
+        if(item.IdSanPham == idSanPham)
+        {
+          if (item.SoLuongMua >= item.TonKho)
+            alert('Sản phẩm trong kho không đủ để thêm')
+          else
+            item.SoLuongMua += 1
+        }
+      })
+      setCart(tmp)
+    }
+    else
+    {
+      console.log('add')
+      setCart(cart => [...cart, {
+        IdSanPham:idSanPham,
+        SoLuongMua: 1,
+        TenSanPham: sanPham.TenSanPham,
+        TenAnime: tenAnime,
+        TenNhanVat: sanPham.TenNhanVat,
+        GiaBan: sanPham.GiaBan,
+        GiamGia: sanPham.GiamGia,
+        TonKho: sanPham.SoLuong,
+        HinhAnh: sanPham.HinhAnh,
+      }])
+    }
     
   }
 
@@ -73,11 +109,9 @@ export default function ItemDetailScreen ({route, navigation}){
       <View style={styles.itemInfoWrapper}>
         {/* ==============Ten San Pham */}
         <View style={styles.itemNameWrapper}>
-          <View style={styles.itemName}>
-            <Text style={{fontSize:25, fontWeight:'bold'}} numberOfLines={1}>{sanPham.TenSanPham}</Text>
+            <Text style={styles.itemNameTxt} numberOfLines={2}>{sanPham.TenSanPham}</Text>
             <Text style={{ fontSize:15, paddingHorizontal:3, color:GREY,}} >Manga/Anime: {' ' + tenAnime}</Text>
             <Text style={{ fontSize:15, paddingHorizontal:3, color:GREY,}} >Nhân vật: {' ' + sanPham.TenNhanVat}</Text>
-          </View>
             <View style={styles.saleTag}>
               <Text style={styles.saleTagTxt}> {'-' + sanPham.GiamGia*100 +'%'}</Text>
             </View>
@@ -121,7 +155,7 @@ export default function ItemDetailScreen ({route, navigation}){
     {/*============== Buy Button =================*/}
       <View style={styles.buyWrapper}>
         <View style={styles.buyBtn} >
-          <TouchableOpacity style={{color:PRIMARY_COLOR}} title='OK' onPress={()=>{}}>
+          <TouchableOpacity style={{color:PRIMARY_COLOR}} title='OK' onPress={()=>{addToCart(sanpham_ID)}}>
             <Text style={styles.btnText}>THÊM VÀO GIỎ HÀNG</Text>
           </TouchableOpacity>
         </View>
@@ -152,11 +186,14 @@ const styles = StyleSheet.create({
   itemNameWrapper:{
     paddingHorizontal:20,
     marginTop:10,
-    height:70,
-    flexDirection:'row',
+    height:100,
   },
-  itemName:{
-    flex:2,
+  itemNameTxt:{
+    fontSize:25,
+    fontWeight:'bold',
+    width:'75%', 
+    lineHeight:25,
+    //backgroundColor:BLACK
   },
   saleTag:{
     position:'absolute',
@@ -228,7 +265,8 @@ const styles = StyleSheet.create({
     fontSize:14, 
     paddingHorizontal:3,
     color:GREY,
-    height:'100%'
+    height:'100%',
+    //backgroundColor:BLACK
   },
   buyWrapper:{
     backgroundColor:'#fff',
