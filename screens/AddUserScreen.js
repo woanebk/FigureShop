@@ -20,8 +20,6 @@ export default function AddUserScreen({ route, navigation }) {
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   const fall = new Animated.Value(1); //blur animation
   var [user, setuser] = useState(null);
-  const [checked, setChecked] = useState('');
-  var [userid, setuserid] = useState('')
   var [name, setname] = useState("");
   var [email, setemail] = useState("");
   var [phoneNumber, setphoneNumber] = useState("");
@@ -34,12 +32,12 @@ export default function AddUserScreen({ route, navigation }) {
   navigation.addListener('focus', () => { if (readonly) getuserinfo() })
   useEffect(() => {
     navigation.setOptions({
-      headerRight: (!editing) ? () => (<IconButton icon="pencil" onPress={() => setEditing(true)}
+      headerRight: (!editing) ? () => (<IconButton icon="pencil" onPress={() => { console.log("/////////////////////////"); setEditing(true) }}
         color={WHITE} size={25} />) : null
     })
   });
   const getuserinfo = () => {
-    console.log(userID)
+    console.log(editing)
     firebaseApp.database().ref('User/' + userID).on('value', (snapshot) => {
       if (snapshot.exists()) {
         setname(snapshot.val().displayName)
@@ -47,7 +45,6 @@ export default function AddUserScreen({ route, navigation }) {
         setemail(snapshot.val().email)
         setlocation(snapshot.val().location);
         setphoneNumber(snapshot.val().phoneNumber);
-        snapshot.val().isAdmin ? setChecked("Admin") : setChecked("User")
       }
     })
   };
@@ -131,25 +128,93 @@ export default function AddUserScreen({ route, navigation }) {
       </View>
     </View>
   )
-  const renderSheetHeader = () => (
-    <View style={styles.header}>
-      <View style={styles.panelHandle}></View>
-    </View>
-  )
-  function upnoimage() {
-    console.log("ditmecuocdoiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-      var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location, photoURL: user.photoURL };
-      console.log(update);
-      firebaseApp.database().ref('User/' + user.uid).update(update).then(() => {
-        setIsLoading(false);
-        console.log('Thay đổi thông tin thành công')
+  const Updateuser = async () => {
+    if(name==''||email==''||phoneNumber==''||location=='') alert("Vui lòng điền đầy đủ thông tin")
+    else
+    if (image == null) {
+      var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location };
+      console.log(update)
+      firebaseApp.database().ref('User/' + userID).update(update).then(() => {
         alert('Thay đổi thông tin thành công');
       }).catch((error) => {
         setIsLoading(false);
         alert(error);
       })
-    }//firebaseApp.auth().currentUser.updateProfile(update)
-
+    }
+    else
+      uploadImage(image).then(() => {
+        return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
+      })
+        .then((url) => {
+          var update = { displayName: name, email: email, TrangThai: "on", phoneNumber: phoneNumber, location: location, photoURL: url }
+          console.log(update)
+          firebaseApp.database().ref('User/' + userID).update(update)
+        }).then(() => {
+          setIsLoading(false);
+          console.log('Thay đổi thông tin thành công')
+          alert('Thay đổi thông tin thành công');
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          alert(error);
+        })
+  }
+  const Adduser = async () => {
+    if(name==''||email==''||phoneNumber==''||location==''||password.length<6) alert("Vui lòng điền đầy đủ thông tin và xem lại mật khẩu")
+    else
+    firebaseApp.auth().createUserWithEmailAndPassword(email, password)
+      .then(function (response) {
+        if (image != null) {
+          uploadImage(image).then(() => {
+            return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
+          })
+            .then((url) => {
+              var update = { displayName: name, email: email, TrangThai: "on", phoneNumber: phoneNumber, location: location, photoURL: url }
+              console.log(update)
+              firebaseApp.database().ref('User/' + response.uid).update(update)
+              firebaseApp.auth().currentUser.updateProfile(update).then(() => {
+                setIsLoading(false);
+                console.log('Thay đổi thông tin thành công')
+                alert('Tạo người dùng thành công');
+              });
+            }).then(() => {
+              setIsLoading(false);
+              console.log('Thay đổi thông tin thành công')
+              alert('Tạo người dùng thành công');
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              alert(error);
+            })
+        }
+        else {
+          var update = { displayName: name, email: email, TrangThai: "on", phoneNumber: phoneNumber, location: location, photoURL: "https://firebasestorage.googleapis.com/v0/b/figureshop-9cdf3.appspot.com/o/images%2FUser%2Fop_swiper_1.jpg?alt=media&token=b1688d8f-80c0-4524-a3c0-a965ef919330" }
+          console.log(update)
+          firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update)
+        }
+        firebaseApp.auth().currentUser.updateProfile(update).then(() => {
+          setIsLoading(false);
+          alert('Tạo người dùng thành công');
+        });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        alert(error);
+      })
+  }
+  const Upload = async () => {
+    if (user != null) {
+      Updateuser();
+    }
+    else {
+      Adduser();
+    }
+  }
+  const renderSheetHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.panelHandle}></View>
+    </View>
+  )
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
@@ -170,7 +235,7 @@ export default function AddUserScreen({ route, navigation }) {
             :
             <Animated.View style={{ opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
               <View style={styles.topdock}></View>
-              <TouchableOpacity style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
+              <TouchableOpacity disabled={!editing} style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
                 <View>
                   {
                     image == null ?
@@ -179,133 +244,61 @@ export default function AddUserScreen({ route, navigation }) {
                         <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP> :
                       <UserPFP image={{ uri: image }} ></UserPFP>
                   }
-                  {/* <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={WHITE}></Ionicons> */}
-                  <View style={styles.editpfpBtn}>
+                  {editing?
+                    <View style={styles.editpfpBtn}>
                     <Ionicons style={{ alignSelf: 'center' }} name='pencil' color='#fff' size={15} />
-                  </View>
+                  </View>:null}
                 </View>
               </TouchableOpacity>
-              <View style={styles.infoWrapper} disabled={!editing}>
+              <View style={styles.infoWrapper}>
                 {user != null ? <Text style={styles.usernameTxt}>{user.displayName}</Text> : null}
-
                 <ActionInput title='Họ Tên' ionIconName='person'
                   placeholder='Nhập Họ Tên'
                   autoFocus='true'
                   value={name}
+                  editable={editing}
                   onChangeText={setname}
                 ></ActionInput>
-
                 <ActionInput title='Số Điện Thoại' ionIconName='call'
                   placeholder='Nhập Số Điện Thoại'
                   keyboardType='numeric'
                   onChangeText={setphoneNumber}
                   value={phoneNumber}
+                  editable={editing}
                   autoFocus='true'
                 ></ActionInput>
-
                 <ActionInput title='Địa Chỉ' ionIconName='location'
                   placeholder='Nhập Địa Chỉ'
-                  autoFocus='true'
+                  editable={editing}
                   onChangeText={setlocation}
                   value={location}
                 ></ActionInput>
-
                 <ActionInput title='Email' ionIconName='mail'
                   placeholder='Nhập Email' keyboardType='email-address'
-                  autoFocus='true'
+                  editable={editing}  
                   value={email}
                   onChangeText={setemail}
                 ></ActionInput>
-                  <ActionInput title='Password' ionIconName='mail'
-                  placeholder='Nhập Password' keyboardType='default'
-                  autoFocus='true'
-                  value={password}
-                  onChangeText={setpassword}
-                ></ActionInput>
-                <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
-                  <View>
-                    <Text>Admin</Text>
-                    <RadioButton value="Admin" />
-                  </View>
-                  <View>
-                    <Text>User</Text>
-                    <RadioButton value="User" />
-                  </View>
-                </RadioButton.Group>
-                <TouchableOpacity style={[styles.commandBtn,]} onPress={ () => {
-                  if (user != null) {
-                    image == null ?
-                    upnoimage() :
-                    uploadImage(image).then(() => {
-                      return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
-                    })
-                      .then((url) => {
-                        var update = { displayName: name, email: email,TrangThai:"on", phoneNumber: phoneNumber, location: location, photoURL: url }
-                        console.log(update)
-                        firebaseApp.database().ref('User/' + user.uid).update(update)
-                      }).then(() => {
-                        setIsLoading(false);
-                        console.log('Thay đổi thông tin thành công')
-                        alert('Thay đổi thông tin thành công');
-                      })
-                      .catch((error) => {
-                        setIsLoading(false);
-                        alert(error);
-                      })
-                  }
-                  else {
-                    firebaseApp.auth().createUserWithEmailAndPassword(email, password)
-                      .then(function (response)  {
-                        if (image!=null)
-                        {
-                        uploadImage(image).then(() => {
-                          return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
-                        })
-                          .then((url) => {
-                            var update = { displayName: name, email: email, TrangThai:"on",phoneNumber: phoneNumber, location: location, photoURL: url }
-                            console.log(update)
-                            firebaseApp.database().ref('User/' + response.uid).update(update)
-                            firebaseApp.auth().currentUser.updateProfile(update).then(() => {
-                              setIsLoading(false);
-                              console.log('Thay đổi thông tin thành công')
-                              alert('Tạo người dùng thành công');
-                            });
-                          }).then(() => {
-                            setIsLoading(false);
-                            console.log('Thay đổi thông tin thành công')
-                            alert('Tạo người dùng thành công');
-                          })
-                          .catch((error) => {
-                            setIsLoading(false);
-                            alert(error);
-                          })
-                        }
-                        else 
-                        {
-                        var update = { displayName: name, email: email,TrangThai:"on", phoneNumber: phoneNumber, location: location, photoURL: "https://firebasestorage.googleapis.com/v0/b/figureshop-9cdf3.appspot.com/o/images%2FUser%2Fop_swiper_1.jpg?alt=media&token=b1688d8f-80c0-4524-a3c0-a965ef919330" }
-                        console.log(update)
-                        firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update)}
-                        firebaseApp.auth().currentUser.updateProfile(update).then(() => {
-                          setIsLoading(false);
-                          console.log('Thay đổi thông tin thành công')
-                          alert('Tạo người dùng thành công');
-                        });
-                      })
-                      .catch((error) => {
-                        setIsLoading(false);
-                          alert(error);
-                      })
-                    
-                  }
-
+                {
+                  user == null ?
+                    <ActionInput title='Password' ionIconName='mail'
+                      placeholder='Nhập Password' keyboardType='default'
+                      autoFocus='true'
+                      value={password}
+                      onChangeText={setpassword}
+                    ></ActionInput> : null
+                }
+                {
+                  editing?
+                  <TouchableOpacity style={[styles.commandBtn,]} onPress={() => {
+                  Upload();
                 }} >
                   <Text style={styles.commandTxt}>Xác Nhận</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>:null}
               </View>
             </Animated.View>
         }
       </Animated.View>
-
     </ScrollView>
   );
 }
