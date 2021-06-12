@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, TouchableOpacity } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Badge } from 'react-native-paper';
+import CartContext from "./CartContext";
+import { StyleSheet } from "react-native";
 
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
@@ -23,6 +26,10 @@ import AllCategoryScreen from "./screens/AllCategoryScreen";
 import ManageFiguresScreen from "./screens/ManageFiguresScreen";
 import AddFigureScreen from "./screens/AddFigureScreen";
 import MultiImagePickScreen from "./screens/MultiImagePickScreen";
+import ManageOrderScreen from "./screens/ManageOrderScreen";
+import OrderDetailScreen from "./screens/OrderDetailScreen";
+import ManageSoldScreen from "./screens/ManageSoldScreen";
+
 
 const Tab = createMaterialBottomTabNavigator();//Bottom Tab:
 
@@ -32,6 +39,7 @@ const ProfileStack = createStackNavigator();
 const CategoryStack = createStackNavigator();
 
 const TabNavigator = ({ navigation }) => {
+  
   return (
     <Tab.Navigator
       shifting='true'
@@ -70,6 +78,7 @@ const TabNavigator = ({ navigation }) => {
 }
 
 const HomeStackNavigator = ({ navigation }) => {
+  const {cart, setCart} = useContext(CartContext)
   return (
     <HomeStack.Navigator
       screenOptions={{
@@ -89,6 +98,7 @@ const HomeStackNavigator = ({ navigation }) => {
           <View style={{ marginLeft: 10 }}>
             <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
               color='#fff' size={25} />
+            <Badge visible={cart.length > 0} size={15} style={styles.badge}>{cart.length}</Badge>
           </View>
         ),
       }}
@@ -96,16 +106,11 @@ const HomeStackNavigator = ({ navigation }) => {
       <HomeStack.Screen name='Home' component={HomeScreen}
         options={{
           title: 'Figure Shop',
-          headerLeft: () => (
-            <View style={{ marginLeft: 10 }}>
-              <IconButton icon="menu" onPress={() => console.log('Menu Pressed')}
-                color="#FF6347" size={25} />
-            </View>
-          ),
           headerRight: () => ( //Để Cái nút này cho Khác màu với cái nút chung ở các màn hình khác
             <View style={{ marginLeft: 10 }}>
               <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
                 color={PRIMARY_COLOR} size={25} />
+                <Badge visible={cart.length > 0} size={15} style={styles.badge}>{cart.length}</Badge>
             </View>
           ),
         }}
@@ -132,6 +137,7 @@ const HomeStackNavigator = ({ navigation }) => {
 }
 
 const CategoryStackNavigator = ({ navigation }) => {
+  const {cart, setCart} = useContext(CartContext)
   return (
     <CategoryStack.Navigator
       screenOptions={{
@@ -151,6 +157,7 @@ const CategoryStackNavigator = ({ navigation }) => {
           <View style={{ marginLeft: 10 }}>
             <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
               color={BLACK} size={25} />
+              <Badge visible={cart.length > 0} size={15} style={styles.badge}>{cart.length}</Badge>
           </View>
         ),
       }}
@@ -192,6 +199,7 @@ const CategoryStackNavigator = ({ navigation }) => {
 }
 
 const SearchStackNavigator = ({ navigation }) => {
+  const {cart, setCart} = useContext(CartContext)
   return (
     <SearchStack.Navigator
       screenOptions={{
@@ -211,6 +219,7 @@ const SearchStackNavigator = ({ navigation }) => {
           <View style={{ marginLeft: 10 }}>
             <IconButton icon="shopping" onPress={() => navigation.navigate('Cart')}
               color="#FF6347" size={25} />
+              <Badge visible={cart.length > 0} size={15} style={styles.badge}>{cart.length}</Badge>
           </View>
         ),
       }}
@@ -218,12 +227,6 @@ const SearchStackNavigator = ({ navigation }) => {
       <SearchStack.Screen name='Search' component={SearchScreen}
         options={{
           title: 'Figure Shop',
-          headerLeft: () => (
-            <View style={{ marginLeft: 10 }}>
-              <IconButton icon="menu" onPress={() => console.log('Menu Pressed')}
-                color="#FF6347" size={25} />
-            </View>
-          ),
         }}
       />
     </SearchStack.Navigator>
@@ -258,12 +261,6 @@ const ProfileStackNavigator = (navigation) => {
             borderBottomWidth: 0,
           },
           headerTransparent: true,
-          headerLeft: () => (
-            <View style={{ marginLeft: 10 }}>
-              <IconButton icon="menu" onPress={() => console.log('Menu Pressed')}
-                color="#FF6347" size={25} />
-            </View>
-          ),
 
         }}
       />
@@ -343,9 +340,34 @@ const ProfileStackNavigator = (navigation) => {
           title: 'Chọn Ảnh'
         }}>
       </ProfileStack.Screen>
+      <ProfileStack.Screen name='ManageOrder' component={ManageOrderScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          title: 'Danh Sách Đơn Đặt Hàng'
+        }}>
+      </ProfileStack.Screen>
+      <ProfileStack.Screen name='OrderDetail' component={OrderDetailScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          title: 'Chi Tiết Đơn Đặt Hàng'
+        }}>
+      </ProfileStack.Screen>
+      <ProfileStack.Screen name='ManageSold' component={ManageSoldScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          title: 'Danh Sách Đơn Bán Hàng'
+        }}></ProfileStack.Screen>
 
     </ProfileStack.Navigator>
   );
 }
+var styles = StyleSheet.create({
+  badge: {
+    bottom:5, left:5, position:'absolute'
+  },
+})
 
 export { TabNavigator, HomeStackNavigator, SearchStackNavigator, ProfileStackNavigator, CategoryStackNavigator };
