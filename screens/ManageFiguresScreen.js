@@ -47,7 +47,8 @@ export default function ManageFiguresScreen({navigation}) {
                   TenNhanVat : value.TenNhanVat,
                   GiaBan: value.GiaBan,
                   GiamGia: value.GiamGia,
-                  HinhAnh:value.HinhAnh
+                  HinhAnh:value.HinhAnh,
+                  SoLuong:value.SoLuong
                 })
               }
             }
@@ -125,6 +126,7 @@ export default function ManageFiguresScreen({navigation}) {
           <ListItem image={item.HinhAnh?{uri:item.HinhAnh[0]}:{} } 
             name = {item.TenSanPham} 
             description={'Anime: ' + item.TenAnime}
+            phoneNumber = {'Tồn Kho: ' + item.SoLuong}
             price={item.GiaBan * (1 - item.GiamGia)}
             onPress={()=>{ }}
             onDeletePress={()=>{onDeleteSanPhamPress(item.IdAnime, item.IdSanPham)}}

@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { useState } from 'react/cjs/react.development';
+import { Ionicons} from '@expo/vector-icons';
 import CartContext from '../CartContext';
-import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE } from '../common';
+import { BLACK, DARK_PRIMARY_COLOR, GREY, GREY_BORDER, GUEST_UID, OFF_WHITE, PRIMARY_COLOR, WHITE } from '../common';
 import { CartItem } from '../items';
+import { firebaseApp } from '../firebaseconfig';
 
 export default function CartScreen({route, navigation}) {
 
@@ -66,6 +68,38 @@ export default function CartScreen({route, navigation}) {
     setCart(tmp)
   }
 
+  const cartIsEmpty = ()=>{
+    if(cart.length <= 0)
+      return true
+
+      var tongsoluong = 0
+      cart.forEach(item => {
+        tongsoluong += item.SoLuongMua
+      });
+      if(tongsoluong > 0)
+        return false
+      else 
+        return true
+  }
+
+  const renderButton = ()=>{
+    if(firebaseApp.auth().currentUser.uid == GUEST_UID)
+      return(
+      <TouchableOpacity style={[styles.commandBtn, cartIsEmpty() ?{backgroundColor:GREY}:{backgroundColor:DARK_PRIMARY_COLOR} ]} 
+            disabled={cart.length == 0} 
+            onPress={()=>navigation.navigate('CheckOut')}>
+            <Text style={styles.commandTxt}> Tiến Hành Đặt Hàng{'   '}</Text>
+          </TouchableOpacity>
+          )
+    else return (
+      <TouchableOpacity style={[styles.commandBtn, cartIsEmpty() ?{backgroundColor:GREY}:{backgroundColor:DARK_PRIMARY_COLOR} ]} 
+            disabled={cart.length == 0} 
+            onPress={()=>navigation.navigate('CheckOut')}>
+            <Text style={styles.commandTxt}> Tạo Đơn Bán Hàng{'   '}</Text>
+          </TouchableOpacity>
+    )
+  }
+
   return (
       <View style={styles.container}>
         <StatusBar barStyle='light-content' translucent backgroundColor={'transparent'} ></StatusBar>
@@ -75,16 +109,26 @@ export default function CartScreen({route, navigation}) {
           style={styles.scroller}
           data={cart}
           renderItem = {({item})=>(
-            <CartItem 
-            itemImage = {{uri: item.HinhAnh[0]}}
-            itemName={item.TenSanPham}
-            itemDescription={'Anime: ' + item.TenAnime}
-            value={item.SoLuongMua}
-            oldPrice={item.GiaBan}
-            price={item.GiaBan * (1 - item.GiamGia)}
-            onPlusPress = {()=>tangSoLuong(item.IdSanPham)}
-            onMinusPress = {()=>giamSoLuong(item.IdSanPham)}
-            onDeletePress={()=>xoaSanPham(item.IdSanPham)}/>
+            <View>
+              <TouchableWithoutFeedback 
+                onPress={()=>{navigation.navigate('CategoryItems',{animeID:item.IdAnime})}}
+                >
+                <View style={styles.gotoAnimeWrapper}>
+                  <Text style={styles.gotoAnimeTxt}>{'Xem Thêm: ' + item.TenAnime + '      '}</Text>
+                  <Ionicons style={{marginLeft:10}} name='chevron-forward-outline' size={18}></Ionicons>
+                </View>
+              </TouchableWithoutFeedback>
+              <CartItem 
+                itemImage = {{uri: item.HinhAnh[0]}}
+                itemName={item.TenSanPham}
+                itemDescription={'Anime: ' + item.TenAnime}
+                value={item.SoLuongMua}
+                oldPrice={item.GiaBan}
+                price={item.GiaBan * (1 - item.GiamGia)}
+                onPlusPress = {()=>tangSoLuong(item.IdSanPham)}
+                onMinusPress = {()=>giamSoLuong(item.IdSanPham)}
+                onDeletePress={()=>xoaSanPham(item.IdSanPham)}/>
+            </View>
           )}
           keyExtractor={item=>item.IdSanPham}
         />
@@ -92,11 +136,7 @@ export default function CartScreen({route, navigation}) {
           <Text style={styles.totalTxt}>Thành Tiền{'  '}</Text>
           <Text style={styles.totalpriceTxt}>{tongTien + ' '}VND{'  '}</Text>
         </View>
-        <TouchableOpacity style={[styles.commandBtn, cart.length <= 0 ?{backgroundColor:GREY}:{backgroundColor:DARK_PRIMARY_COLOR} ]} 
-          disabled={cart.length == 0} 
-          onPress={()=>navigation.navigate('CheckOut')}>
-          <Text style={styles.commandTxt}> Tiến Hành Đặt Hàng{'   '}</Text>
-        </TouchableOpacity>
+        {renderButton()}
       </View>
   );
 }
@@ -154,6 +194,21 @@ var styles = StyleSheet.create({
   totalpriceTxt:{
     fontSize:20,
     fontWeight:'bold',
-    color:DARK_PRIMARY_COLOR
+    color:DARK_PRIMARY_COLOR,
+    width:200,
+    textAlign:'right'
   },
+  gotoAnimeWrapper:{
+    flexDirection:'row', 
+    marginLeft:'5%',
+    alignItems:'center',
+    marginTop:10,
+    borderTopWidth:1,
+    borderColor:GREY_BORDER,
+    width:'90%'
+  },
+  gotoAnimeTxt:{
+    width:'auto',
+    fontWeight:'bold'
+  }
 })
