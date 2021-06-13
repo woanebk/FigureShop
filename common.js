@@ -1,5 +1,3 @@
-export const GUEST_UID = 'Pyino4SsfsPXgD8kNYyKBIO3pMd2'
-
 export const PRIMARY_COLOR = '#FF6347'
 export const SECONDARY_COLOR = '#f5c4bc'
 export const DARK_PRIMARY_COLOR = '#f74727'
@@ -14,4 +12,3 @@ export const PROFILE_COLOR = '#fdfd96'
 export const PROFILE_DOCK_COLOR = '#fcbf49'
 export const LIGHT_PINK = '#fad9d9'
 export const GREY_BORDER = '#d3d3d360'
-export const GREEN = '#00cc00'

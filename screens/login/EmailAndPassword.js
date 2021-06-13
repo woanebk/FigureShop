@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component, useContext, useState } from 'react';
+import React, { Component } from 'react';
 import firebase from 'firebase'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, LogBox } from 'react-native';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
@@ -13,7 +13,6 @@ class EmailAndPassword extends Component {
         loading: false
     }
     onBottomPress = () => {
-
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
             .then(this.onLoginSuccess)
             .catch(err => {

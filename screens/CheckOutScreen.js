@@ -1,50 +1,31 @@
-import React, { Fragment, useEffect } from 'react';
-import { useContext, useRef } from 'react';
-import { View, Text, ScrollView, StyleSheet, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
+import React, { useEffect } from 'react';
+import { useContext } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, FlatList, TextInput } from 'react-native';
 import { useState } from 'react/cjs/react.development';
 import CartContext from '../CartContext';
-import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GUEST_UID, GOLD, GREEN } from '../common';
-import { ActionInput, CheckOutItem, CodeInput } from '../items';
+import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER } from '../common';
+import { ActionInput, CheckOutItem } from '../items';
 import { Ionicons} from '@expo/vector-icons';
-import { RadioButton, Checkbox } from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { firebaseApp } from '../firebaseconfig';
-import firebase from 'firebase/app';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function CheckOutScreen({route, navigation}) {
-  const [firstRun,setFirstRun]=useState(0);
 
   const {cart, setCart} = useContext(CartContext)
   const [tongTien, setTongTien] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
+
   //ThanhToan:
   const [hoTen, setHoTen] = useState('')
   const [diaChi, setDiaChi] = useState('')
   const [soDienThoai, setSoDienThoai] = useState('')
-  //dropdownlist:
-  const [listSDT, setListSDT]= useState([]);
-  const [openList, setOpenList] = useState(false);
-  const [isUsingDropDown, setIsUsingDropDown]=useState(false)
-
-  //Capcha
-  const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
-  const attemptInvisibleVerification = false;
-  const recaptchaVerifier = useRef(null);
-  const [verificationId, setVerificationId] = useState();
-  const [verificationCode, setVerificationCode] = useState();
 
   //Giao Dien:
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   const fall= new Animated.Value(1); //blur animation
 
   useEffect(()=>{
-    if(firstRun == 0){
-      getSDTs()
-      setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
-    }
     tinhTongTien()
   })
 
@@ -72,29 +53,16 @@ export default function CheckOutScreen({route, navigation}) {
   }
 
   const validate = () =>{
-    var result = true
-    if(firebaseApp.auth().currentUser.uid == GUEST_UID)
-    {
-      if(hoTen == '' || soDienThoai == '' || diaChi =='')
-        result = false
-    }
-    else{
-      if(hoTen == '' || soDienThoai == '')
-          result = false
-    }
-        return result
+    if(hoTen == '' || soDienThoai == '' || diaChi =='')
+      return false
+    else
+      return true
   }
 
-  const getSDTs = ()=>{
-    var list = []
-    firebaseApp.database().ref('Guest').once('value',snapshot=>{
-      for (let [sdt_key, sdt_value] of Object.entries(snapshot.val())){
-        list.push({
-          SoDienThoai: sdt_key
-        })
-      }
-      setListSDT(list)
-    })
+  const onComplete = ()=>{
+    hoTen=''
+    diaChi=''
+    soDienThoai=''
   }
   
   const Submit = async ()=>{
@@ -103,60 +71,10 @@ export default function CheckOutScreen({route, navigation}) {
       alert('Vui Lòng Nhập Đủ Thông Tin !')
       return
     }
-    if(firebaseApp.auth().currentUser.uid == GUEST_UID)
-      onGuiMaPress()
-    else
-      banHang()
-  }
 
-  const convertPhoneNumber = (number)=>{
-    if(number.charAt(0) == '+')
-      return number
-
-    var convertedNumber = '+84' + number.substring(1)
-    return convertedNumber
-  }
-
-  const onGuiMaPress = async ()=>{
-    setIsLoading(true)
-    var phonenumber = convertPhoneNumber(soDienThoai)
-    try {
-      const phoneProvider = new firebase.auth.PhoneAuthProvider();
-      const verificationId = await phoneProvider.verifyPhoneNumber(
-        phonenumber,
-        recaptchaVerifier.current
-      );
-      setVerificationId(verificationId);
-      setIsLoading(false)
-      alert("Gửi mã xác nhận thành công, vui lòng kiểm tra điện thoại của bạn");
-      //bottomsheetRef.current.snapTo(1)
-    } catch (err) {
-      setIsLoading(false)
-      alert(err)
-    }
-  }
-
-  const onXacNhanMaPress = async () => {
-    try{
-      setIsLoading(true)
-      const credential = firebase.auth.PhoneAuthProvider.credential(
-        verificationId,
-        verificationCode
-      );
-      //await firebase.auth().currentUser.updatePhoneNumber(credential);
-      setIsLoading(false)
-      alert('Đặt Hàng Thành Công')
-      navigation.navigate('SuccessOrder',{ten_khach_hang:hoTen, dia_chi: diaChi, so_dien_thoai:soDienThoai, thanh_tien:tongTien})
-    } catch (err)
-    {
-      setIsLoading(false)
-      alert(err)
-      return
-    }
-    
-    //Them Don Hang
     var currentdate = new Date();
-    var ngaydat = currentdate.getDate() + '/' + (currentdate.getMonth() + 1) + '/'+ currentdate.getFullYear() 
+    var ngaydat = currentdate.getDate() + '/' + (currentdate.getMonth() + 1) + '/'+ currentdate.getFullYear() + '@' + currentdate.getHours()+ ':' + currentdate.getMinutes() + ':' + currentdate.getSeconds()
+
     firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
       TrangThai: 'on',
       DaXacNhan: 0,
@@ -170,151 +88,41 @@ export default function CheckOutScreen({route, navigation}) {
     })
   }
 
-  const banHang = async () => {
-    try{
-      setIsLoading(true)
-      setIsLoading(false)
-      alert('Tạo Đơn Bán Hàng Thành Công')
-      navigation.navigate('SuccessOrder',{ten_khach_hang:hoTen, dia_chi: 'Mua tại cửa hàng', so_dien_thoai:soDienThoai, thanh_tien:tongTien})
-    } catch (err)
-    {
-      setIsLoading(false)
-      alert(err)
-      return
-    }
-    
-    //Them Don Hang
-    var currentdate = new Date();
-    var ngaydat = currentdate.getDate() + '/' + (currentdate.getMonth() + 1) + '/'+ currentdate.getFullYear() 
-    firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
-      TrangThai: 'on',
-      DaXacNhan: 1,
-      DiaChi: 'Mua tại cửa hàng',
-      HoTen: hoTen,
-      TongTien: tongTien,
-      SanPhamMua: cart,
-      NgayDat: ngaydat
-    },()=>{
-      firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
-    })
-  }
-
-  const onCheckPress = ()=>{
-    setIsUsingDropDown(!isUsingDropDown)
-    setSoDienThoai('')
-  }
-
   //RENDER BOTTOM SHEET:
-  const renderSheet = ()=>{
-    if(firebaseApp.auth().currentUser.uid == GUEST_UID)
-    {
-      if(!verificationId)
-      return (
-        <View style={styles.bottomsheetWrapper}>
-        <Text style={styles.panelTitleTxt}>Thông Tin Đặt Hàng</Text>
-        <Text style={styles.panelSubtitleTxt}>Nhập Thông Tin Của Bạn</Text>
-        <ScrollView style={{width:'90%', flex:1}}>
-          <ActionInput title = 'Số Điện Thoại' ionIconName='call'
-            placeholder='Nhập Số Điện Thoại'
-            autoFocus='true'
-            require={true}
-            value = {soDienThoai}
-            onChangeText={(text)=>{setSoDienThoai(text)}}
-          ></ActionInput>
-          <ActionInput title = 'Họ Tên' ionIconName='person'
-            placeholder='Nhập Họ Tên'
-            autoFocus='true'
-            require={true}
-            value = {hoTen}
-            onChangeText={(text)=>{setHoTen(text)}}
-          ></ActionInput>
-          <ActionInput title = 'Địa Chỉ' ionIconName='location'
-            placeholder='Nhập Địa Chỉ'
-            autoFocus='true'
-            require={true}
-            value = {diaChi}
-            onChangeText={(text)=>{setDiaChi(text)}}
-          ></ActionInput>
-          <TouchableOpacity style={[styles.commandBtn, {alignSelf:'center', marginTop:10}]}
-            onPress={Submit}
-            >
-            <Text style = {styles.commandTxt}>Đặt Hàng</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    )
-
-    return(
-      <View style={styles.bottomsheetWrapper}>
-        <CodeInput value={verificationCode}
-          onChangeText = {(text)=>setVerificationCode(text)}
-        ></CodeInput>
-        <TouchableOpacity style={[styles.commandBtn, {alignSelf:'center', marginTop:20}]}
-          onPress={onXacNhanMaPress}
-        >
+  const renderSheet = ()=>(
+    <View style={styles.bottomsheetWrapper}>
+      <Text style={styles.panelTitleTxt}>Thông Tin Đặt Hàng</Text>
+      <Text style={styles.panelSubtitleTxt}>Nhập Thông Tin Của Bạn</Text>
+      <ScrollView style={{width:'90%', flex:1}}>
+      <ActionInput title = 'Họ Tên' ionIconName='person'
+          placeholder='Nhập Họ Tên'
+          autoFocus='true'
+          require={true}
+          value = {hoTen}
+          onChangeText={(text)=>{setHoTen(text)}}
+        ></ActionInput>
+        <ActionInput title = 'Địa Chỉ' ionIconName='location'
+          placeholder='Nhập Địa Chỉ'
+          autoFocus='true'
+          require={true}
+          value = {diaChi}
+          onChangeText={(text)=>{setDiaChi(text)}}
+        ></ActionInput>
+        <ActionInput title = 'Số Điện Thoại' ionIconName='call'
+          placeholder='Nhập Số Điện Thoại'
+          autoFocus='true'
+          require={true}
+          value = {soDienThoai}
+          onChangeText={(text)=>{setSoDienThoai(text)}}
+        ></ActionInput>
+        <TouchableOpacity style={[styles.commandBtn, {alignSelf:'center', marginTop:10}]}
+          onPress={Submit}
+          >
           <Text style = {styles.commandTxt}>Xác Nhận</Text>
         </TouchableOpacity>
-      </View>
-    )
-    }
-    else return(
-      <View style={styles.bottomsheetWrapper}>
-        <Text style={styles.panelTitleTxt}>Thông Tin Đơn Hàng</Text>
-        <Text style={styles.panelSubtitleTxt}>Nhập Thông Tin Khách Hàng</Text>
-        <ScrollView style={{width:'90%', flex:1}}>
-          <View style={{flexDirection:'row', marginBottom:5}}>
-            <Checkbox status={isUsingDropDown?'checked':'unchecked'} onPress={onCheckPress}></Checkbox>
-            <Text style={{width:200, alignSelf:'center', color:DARK_PRIMARY_COLOR, fontWeight:'bold'}}>Sử dụng số điện thoại có sẵn</Text>
-          </View>
-          {isUsingDropDown?
-          <DropDownPicker style={{marginBottom:10}}
-          open={openList}
-          value={soDienThoai}
-          items={listSDT}
-          setOpen={setOpenList}
-          setValue={setSoDienThoai}
-          searchable={true}
-          //setItems={setListAnime}
-          schema={{
-            label: 'SoDienThoai',
-            value: 'SoDienThoai',
-          }}
-          placeholder='Chọn SDT'
-          zIndex={100}
-          listMode="SCROLLVIEW"
-          dropDownContainerStyle={{
-            backgroundColor: "#dfdfdf",
-            height:150
-          }}
-        />
-        :
-        <ActionInput title = 'Số Điện Thoại' ionIconName='call'
-            placeholder='Nhập Số Điện Thoại'
-            autoFocus='true'
-            require={true}
-            value = {soDienThoai}
-            onChangeText={(text)=>{setSoDienThoai(text)}}
-          ></ActionInput>
-        }
-        <ActionInput title = 'Họ Tên' ionIconName='person'
-            placeholder='Nhập Họ Tên'
-            autoFocus='true'
-            require={true}
-            value = {hoTen}
-            onChangeText={(text)=>{setHoTen(text)}}
-          ></ActionInput>
-          <TouchableOpacity style={[styles.commandBtn, {alignSelf:'center', marginTop:70}]}
-            onPress={Submit}
-            >
-            <Text style = {styles.commandTxt}>Đặt Hàng</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    )
-    
-    
-  }
-
+      </ScrollView>
+    </View>
+  )
   const renderSheetHeader = ()=>(
     <View style={styles.header}>
         <View style={styles.panelHandle}></View>
@@ -326,12 +134,7 @@ export default function CheckOutScreen({route, navigation}) {
         <View style={{flex:1}}>
           <StatusBar barStyle='light-content' translucent backgroundColor={'transparent'} ></StatusBar>
           <View style={styles.topdock}></View>
-          {
-            isLoading?
-            <ActivityIndicator style={styles.indicator} animating={isLoading} color = '#bc2b78' size = "large"/>
-            :
-            <Fragment>
-            <ScrollView style={{backgroundColor:WHITE, flex:1}}>
+          <ScrollView style={{backgroundColor:WHITE, flex:1}}>
             <View style={styles.itemsWrapper}>
               {renderItems()}
               <View style={styles.tag}>
@@ -344,20 +147,15 @@ export default function CheckOutScreen({route, navigation}) {
               </View>
             </View>
           </ScrollView>
-          {
-            firebaseApp.auth().currentUser.uid == GUEST_UID?
-            <View style = {styles.phuongThucTT}>
+
+          <View style = {styles.phuongThucTT}>
             <Text style={styles.boldTxt}>Phương thức thanh toán</Text>
             <View style={{flexDirection:'row', alignItems:'center', marginLeft:5}}>
               <RadioButton value='Thanh Toán Khi Nhận Hàng' status='checked' color={PRIMARY_COLOR} ></RadioButton>
               <Text>Thanh Toán Khi Nhận Hàng</Text>
             </View>
+            
           </View>
-          :
-          null
-          }
-          
-
           <View style={styles.btnWrapper}>
             <View style={{marginLeft:5}}>
               <Text>Tổng Cộng:</Text>
@@ -367,11 +165,10 @@ export default function CheckOutScreen({route, navigation}) {
               <Text style={styles.commandTxt}> Thanh Toán{'   '}</Text>
             </TouchableOpacity>
           </View>
-          </Fragment>
-          }
+          </View>
           <BottomSheet 
             ref={bottomsheetRef}
-            snapPoints={[0, 420]}
+            snapPoints={[0, 400]}
             initialSnap={0} //0 is 0, 1 is 300
             callbackNode={fall}
             enabledGestureInteraction={true}
@@ -379,14 +176,8 @@ export default function CheckOutScreen({route, navigation}) {
             renderContent={renderSheet}
             renderHeader={renderSheetHeader}
             />
-          </View>
-            <FirebaseRecaptchaVerifierModal
-              ref={recaptchaVerifier}
-              firebaseConfig={firebaseConfig}
-              attemptInvisibleVerification={attemptInvisibleVerification}
-            />
       </View>
-  )
+  );
 }
 
 var styles = StyleSheet.create({
@@ -424,8 +215,6 @@ var styles = StyleSheet.create({
     color:WHITE,
     fontSize:18,
     fontWeight:'bold',
-    width:'100%',
-    textAlign:'center'
   },
   priceTxt:{
     fontSize:20,
@@ -500,7 +289,7 @@ var styles = StyleSheet.create({
   bottomsheetWrapper:{
     alignItems:'center',
     backgroundColor:'#fff',
-    height:380
+    height:360
   },
   panelTitleTxt:{
     fontSize:25,
@@ -509,8 +298,4 @@ var styles = StyleSheet.create({
     color:GREY,
     fontSize:13
   },
-  indicator:{
-    marginTop:100,
-    zIndex:0
-  }
 })

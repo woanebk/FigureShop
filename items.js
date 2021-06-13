@@ -12,8 +12,6 @@ import CartItem from './components/CartItem';
 import CategorySmallCard from './components/CategorySmallCard';
 import BigItemCard from './components/BigItemCard'
 import CheckOutItem from './components/CheckOutItem'
-import CodeInput from './components/CodeInput'
-import OrderListItem from './components/OrderListItem'
 
 export {
     Card,
@@ -30,6 +28,4 @@ export {
     CategorySmallCard,
     BigItemCard,
     CheckOutItem,
-    CodeInput,
-    OrderListItem,
 }
