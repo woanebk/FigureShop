@@ -45,6 +45,7 @@ export default function AddGuestScreen({ route, navigation }) {
   var [password, setpassword] = useState('');
   var [xacnhan, setxacnhan] = useState(false);
   var library_status, cam_status;
+
   navigation.addListener('focus', () => { if (readonly) getGuestinfo() })
   useEffect(() => {
     navigation.setOptions({
@@ -52,6 +53,7 @@ export default function AddGuestScreen({ route, navigation }) {
         color={WHITE} size={25} />) : null
     })
   });
+
   const getGuestinfo = () => {
     console.log(GuestID)
     firebaseApp.database().ref('Guest/' + GuestID).on('value', (snapshot) => {
@@ -60,7 +62,7 @@ export default function AddGuestScreen({ route, navigation }) {
         setGuest(snapshot.val());
         setemail(snapshot.val().email)
         setlocation(snapshot.val().location);
-        setphoneNumber(snapshot.val().phoneNumber);
+        setPhoneNumber(snapshot.val().phoneNumber);
         snapshot.val().isAdmin ? setChecked("Admin") : setChecked("Guest")
       }
     })

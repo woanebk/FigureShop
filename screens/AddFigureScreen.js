@@ -265,31 +265,31 @@ export default function AddFigureScreen({route, navigation}) {
             <ActionInput title= 'Tên Nhân Vật' ionIconName='body-outline' placeholder ='Nhập Tên Nhân Vật'
             value={tenNhanVat} onChangeText={(text)=>{setTenNhanVat(text)}}></ActionInput>
 
-            <ActionInput title= 'Giá Gốc (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Gốc' keyboardType ='number-pad' 
+            <ActionInput title= 'Giá Gốc (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Gốc' keyboardType ='numeric' 
             value={giaGoc} onChangeText={(text)=>{setGiaGoc(text)}}></ActionInput>
 
-            <ActionInput title= 'Giá Bán (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Bán' keyboardType ='number-pad' 
+            <ActionInput title= 'Giá Bán (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Bán' keyboardType ='numeric' 
             value={giaBan} onChangeText={(text)=>{setGiaBan(text)}}></ActionInput>
 
-            <ActionInput title= 'Giảm Giá' ionIconName='pricetag-outline' placeholder ='Nhập % Giảm Giá' keyboardType ='number-pad' 
+            <ActionInput title= 'Giảm Giá' ionIconName='pricetag-outline' placeholder ='Nhập % Giảm Giá' keyboardType ='numeric' 
             value={giamGia} onChangeText={(text)=>{setGiamGia(text)}}></ActionInput>
 
-            <ActionInput title= 'Số Lượng' ionIconName='pricetag-outline' placeholder ='Nhập Số Lượng' keyboardType ='number-pad' 
+            <ActionInput title= 'Số Lượng' ionIconName='pricetag-outline' placeholder ='Nhập Số Lượng' keyboardType ='numeric' 
             value={soLuong} onChangeText={(text)=>{setSoLuong(text)}}></ActionInput>
 
-            <ActionInput title= 'Chiều Cao (cm)' ionIconName='swap-vertical-outline' placeholder ='Nhập Chiều Cao' keyboardType ='number-pad' 
+            <ActionInput title= 'Chiều Cao (cm)' ionIconName='swap-vertical-outline' placeholder ='Nhập Chiều Cao' keyboardType ='numeric' 
             value={chieuCao} onChangeText={(text)=>{setChieuCao(text)}}></ActionInput>
 
-            <ActionInput title= 'Chiều Dài (cm)' ionIconName='swap-horizontal-outline' placeholder ='Nhập Chiều Dài' keyboardType ='number-pad' 
+            <ActionInput title= 'Chiều Dài (cm)' ionIconName='swap-horizontal-outline' placeholder ='Nhập Chiều Dài' keyboardType ='numeric' 
             value={chieuDai} onChangeText={(text)=>{setChieuDai(text)}}></ActionInput>
 
-            <ActionInput title= 'Chiều Rộng (cm)' ionIconName='resize-outline' placeholder ='Nhập Chiều Rộng' keyboardType ='number-pad' 
+            <ActionInput title= 'Chiều Rộng (cm)' ionIconName='resize-outline' placeholder ='Nhập Chiều Rộng' keyboardType ='numeric' 
             value={chieuRong} onChangeText={(text)=>{setChieuRong(text)}}></ActionInput>
 
             <ActionInput title= 'Chất Liệu (kg)' ionIconName='barbell' placeholder ='Nhập Chất Liệu'  
             value={chatLieu} onChangeText={(text)=>{setChatLieu(text)}}></ActionInput>
 
-            <ActionInput title= 'Cân Nặng (kg)' ionIconName='barbell' placeholder ='Nhập Cân Nặng' keyboardType ='number-pad' 
+            <ActionInput title= 'Cân Nặng (kg)' ionIconName='barbell' placeholder ='Nhập Cân Nặng' keyboardType ='numeric' 
             value={canNang} onChangeText={(text)=>{setCanNang(text)}}></ActionInput>
 
             <LargeActionInput title= 'Mô Tả' ionIconName='pencil-outline' placeholder ='Nhập Mô Tả' multiline={true} 

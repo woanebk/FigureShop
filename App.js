@@ -1,5 +1,5 @@
 import React,{state,useEffect} from 'react';
-import { StyleSheet,ImageBackground, } from 'react-native';
+import { StyleSheet,ImageBackground, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {TabNavigator} from './StackNavigate';
 import { PRIMARY_COLOR, WHITE } from './common';
@@ -14,6 +14,7 @@ import { useState } from 'react/cjs/react.development';
 import { firebaseApp } from './firebaseconfig';
 import ItemDetailScreen from './screens/ItemDetailScreen';
 import CheckOutScreen from './screens/CheckOutScreen';
+import SuccessOrderScreen from './screens/SuccessOrderScreen';
 
 const MainStack = createStackNavigator()
 
@@ -36,6 +37,10 @@ export default function App(navigation) {
     })
     return () => { }
   })
+
+  LogBox.ignoreLogs(['Warning: ...']);
+  LogBox.ignoreAllLogs();//ignore warning
+
 // return <authen/>
     switch (state) {
     case false:
@@ -46,7 +51,7 @@ export default function App(navigation) {
       return (
         <CartContext.Provider value = {defaultCartContextValue}>
           <NavigationContainer >
-            <MainStack.Navigator>
+            <MainStack.Navigator initialRouteName='Tab'>
               <MainStack.Screen name='Tab' component={TabNavigator}
               options={{
                 headerShown:false,
@@ -82,6 +87,14 @@ export default function App(navigation) {
                   headerTransparent:true,
                   headerTintColor:WHITE,
                   title:'Thanh Toán',
+                }}
+              ></MainStack.Screen>
+              <MainStack.Screen name='SuccessOrder' component={SuccessOrderScreen}
+                options={{
+                  headerShown:false,
+                  headerTransparent:true,
+                  headerTintColor:WHITE,
+                  title:'Chi Tiết Đơn Hàng',
                 }}
               ></MainStack.Screen>
             </MainStack.Navigator>
