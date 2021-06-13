@@ -24,13 +24,14 @@ export default function App(navigation) {
   const defaultCartContextValue = {cart, setCart} //value của context gồm 1 biến state, 1 setstate của App.js
   
   useEffect(() => {
-    firebaseApp.auth().onAuthStateChanged(user => {
+    firebaseApp.auth().onAuthStateChanged(async(user)  => {
       if(user){
          setState(true
          )
       }else{
-        setState(false
-        )
+        setState(false)
+        console.log("ddawng xuat")
+       // setCart([])
       }
     })
     return () => { }

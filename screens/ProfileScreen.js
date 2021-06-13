@@ -51,7 +51,11 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </View>
       <View style={styles.btnsMenuWrapper}>       
-
+        <View style={styles.userBtn}>
+          <TouchableRipple onPress={() =>{navigation.navigate('LSGD',{phoneNumber:'0962447783'})}}>
+            <ProfileButton iconName='chart-bar' text='Lịch sử giao dịch' ></ProfileButton>
+          </TouchableRipple>
+        </View>
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() =>
             firebaseApp.auth().signOut()

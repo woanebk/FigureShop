@@ -16,7 +16,7 @@ import AddGuestScreen from './screens/AddGuestScreen';
 import CategoryItemsScreen from './screens/CategoryItemsScreen';
 import AddCategoryScreen from './screens/AddCategoryScreen';
 import ManageCategoryScreen from './screens/ManageCategoryScreen';
-
+import LSGDScreen from './screens/LSGD'
 import { IconButton } from "react-native-paper";
 import { BLACK, PRIMARY_COLOR, WHITE } from "./common";
 import AllCategoryScreen from "./screens/AllCategoryScreen";
@@ -232,6 +232,7 @@ const SearchStackNavigator = ({ navigation }) => {
 
 const ProfileStackNavigator = (navigation) => {
   return (
+    
     <ProfileStack.Navigator
       screenOptions={{
         headerStyle: {
@@ -267,7 +268,13 @@ const ProfileStackNavigator = (navigation) => {
 
         }}
       />
-
+       <ProfileStack.Screen name='LSGD' component={LSGDScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#000',
+          title: 'Lịch sử giao dịch'
+        }}>
+        </ProfileStack.Screen>
       <ProfileStack.Screen name='EditProfile' component={EditProfileScreen}
         options={{
           headerTransparent: true,
@@ -343,7 +350,7 @@ const ProfileStackNavigator = (navigation) => {
           title: 'Chọn Ảnh'
         }}>
       </ProfileStack.Screen>
-
+     
     </ProfileStack.Navigator>
   );
 }

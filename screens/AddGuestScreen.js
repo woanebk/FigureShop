@@ -232,8 +232,8 @@ export default function AddGuestScreen({ route, navigation }) {
                         <ActionInput title='Mã Xác Nhận' ionIconName='call'
                           placeholder='Nhập Mã Xác Nhận'
                           editable={!!verificationId}
-                          keyboardType="phone-pad"
-                          onChangeText={phoneNumber => setVerificationCode(phoneNumber)}
+                          // keyboardType="phone-pad"
+                          onChangeText={Verification => setVerificationCode(Verification)}
                         ></ActionInput>
                         : null}
                     {
@@ -246,8 +246,10 @@ export default function AddGuestScreen({ route, navigation }) {
                                 verificationId,
                                 verificationCode
                               );
-                              await firebase.auth().currentUser.updatePhoneNumber(credential);
-                              //await firebase.auth().signInWithCredential(credential);
+                              //await firebase.auth().currentUser.updatePhoneNumber(credential);
+                              //await fireabase.auth().signInWithCredential(credential);
+                             // await firebase.auth().currentUser.de
+                             console.log(credential.signInMethod.length)
                               if (image != null) {
                                 uploadImage(image).then(() => {
                                   return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
