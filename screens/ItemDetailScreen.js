@@ -4,11 +4,13 @@ import { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, ScrollView, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { IconButton } from 'react-native-paper';
+import { Badge, IconButton } from 'react-native-paper';
 import Swiper from 'react-native-swiper/src';
 import CartContext from '../CartContext';
-import {PRIMARY_COLOR, SECONDARY_COLOR, GREY, BLACK} from '../common';
+import {PRIMARY_COLOR, DARK_PRIMARY_COLOR, GREY, WHITE, BLACK} from '../common';
 import {firebaseApp} from '../firebaseconfig'
+import BottomSheet from 'reanimated-bottom-sheet';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ItemDetailScreen ({route, navigation}){
   const {anime_ID}= route.params; 
@@ -20,12 +22,14 @@ export default function ItemDetailScreen ({route, navigation}){
 
   const {cart, setCart} = useContext(CartContext)
 
+  const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   useEffect (()=>{
     navigation.setOptions({
       headerRight:()=>( 
         <View style={{marginLeft:10}}>
           <IconButton icon="shopping" onPress = {()=>navigation.navigate('Cart')}
           color = {PRIMARY_COLOR} size={25}/>
+          <Badge visible={cart.length>0} size={15} style={styles.badge}>{cart.length}</Badge>
         </View>
       ),
     })
@@ -60,13 +64,44 @@ export default function ItemDetailScreen ({route, navigation}){
             />
         </View>
     ))
-    
   }
+
+  //RENDER BOTTOM SHEET:
+  const renderSheet = ()=>(
+    <View style={styles.bottomsheetWrapper}>
+      <View style={{width:'90%'}}>
+      <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+          <Ionicons name='checkmark-circle-outline' size={20}></Ionicons>
+          <Text style={{width:270, fontWeight:'bold'}}>Sản phẩm đã được thêm vào giỏ hàng</Text>
+          <IconButton icon = 'close' onPress={()=>bottomsheetRef.current.snapTo(0)}></IconButton>
+        </View>
+        <View style={{flexDirection:'row'}}>
+          <Image style={{width:60, height:60, marginLeft:10}} source={{uri:hinhAnhs[0]}}></Image>
+          <View style={{flex:1, paddingLeft:20}}>
+            <Text numberOfLines={2}>{sanPham.TenSanPham}</Text>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+              <Text style={{color:GREY, fontSize:11}}>{'Anime:  '}</Text>
+              <Text style={{width:300}}>{tenAnime}</Text>
+            </View>
+            
+            <Text style={{fontWeight:'bold'}}>{sanPham.GiaBan*(1 - sanPham.GiamGia) + ' VNĐ'}</Text>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.commandBtn} onPress={()=>navigation.navigate('Cart')}>
+          <Text style={styles.commandTxt}>Xem Giỏ Hàng</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+  const renderSheetHeader = ()=>(
+    <View style={styles.header}>
+        <View style={styles.panelHandle}></View>
+    </View>
+  )
 
   const addToCart = (idSanPham)=>{
     if(cart.length > 0 && cart.some(item => item.IdSanPham == idSanPham) )
     {
-      console.log('update')
       let tmp = cart.slice(0)
       tmp.map((item)=>{
         if(item.IdSanPham == idSanPham)
@@ -74,14 +109,17 @@ export default function ItemDetailScreen ({route, navigation}){
           if (item.SoLuongMua >= item.TonKho)
             alert('Sản phẩm trong kho không đủ để thêm')
           else
+          {
             item.SoLuongMua += 1
+            bottomsheetRef.current.snapTo(1)
+          }
         }
       })
       setCart(tmp)
     }
     else
     {
-      console.log('add')
+      bottomsheetRef.current.snapTo(1)
       setCart(cart => [...cart, {
         IdSanPham:idSanPham,
         SoLuongMua: 1,
@@ -92,6 +130,7 @@ export default function ItemDetailScreen ({route, navigation}){
         GiamGia: sanPham.GiamGia,
         TonKho: sanPham.SoLuong,
         HinhAnh: sanPham.HinhAnh,
+        IdAnime: anime_ID,
       }])
     }
     
@@ -160,6 +199,15 @@ export default function ItemDetailScreen ({route, navigation}){
           </TouchableOpacity>
         </View>
       </View>
+      <BottomSheet 
+      ref={bottomsheetRef}
+      snapPoints={[0, 250]}
+      initialSnap={0} //0 is 0, 1 is 300
+      enabledGestureInteraction={true}
+      enabledContentGestureInteraction={false}
+      renderContent={renderSheet}
+      renderHeader={renderSheetHeader}
+      />
     </View>
   );
 }
@@ -193,7 +241,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     width:'75%', 
     lineHeight:25,
-    //backgroundColor:BLACK
+    backgroundColor:BLACK
   },
   saleTag:{
     position:'absolute',
@@ -287,5 +335,53 @@ const styles = StyleSheet.create({
     color:'#fff',
     fontFamily:'sans-serif',
     alignSelf:'center',
+  },
+  badge: {
+    bottom:5,
+    left:5,
+    position:'absolute'
+  },
+  commandBtn:{
+    padding:15,
+    borderRadius:5,
+    backgroundColor:DARK_PRIMARY_COLOR,
+    alignItems:'center',
+    marginTop:20,
+    marginHorizontal:10,
+    height:50,
+    justifyContent:'center',
+  },
+  commandTxt:{
+    color:WHITE, 
+    fontSize:18,
+    fontWeight:'bold',
+    textAlign:'center',
+    width:'100%'
+  },
+  header:{
+    backgroundColor:WHITE,
+    shadowColor:'#333333',
+    shadowOffset:{width:-1, height:-3},
+    shadowRadius:2,
+    shadowOpacity:0.4,
+    paddingTop:20,
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
+    //elevation:20,
+    alignItems:'center',
+    borderWidth:1,
+    borderBottomWidth:0
+  },
+  panelHandle:{
+    width:40,
+    height:8,
+    borderRadius:4,
+    backgroundColor:GREY,
+    marginBottom:10,
+  },
+  bottomsheetWrapper:{
+    alignItems:'center',
+     backgroundColor:'#fff',
+     height:250
   },
 });

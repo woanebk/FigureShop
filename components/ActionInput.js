@@ -11,8 +11,8 @@ function ActionInput(props){
     return(
         <View style={[styles.Info,{borderBottomColor:color}]}>
           <View style={{flex:0.5, flexDirection:'row'}}>
-            <Text>{props.title}</Text>
-            <Text style={{color:PRIMARY_COLOR, fontSize:17}}>{props.require?'  *':''}</Text>
+            <Text style={{width:'90%'}}>{props.title}</Text>
+            <Text style={{color:PRIMARY_COLOR, fontSize:17, width:20}}>{props.require?'  *':''}</Text>
           </View>
           <View style={{flex:1, flexDirection:'row'}}>
             <Ionicons style={{alignSelf:'center'}} name={props.ionIconName} size={18} color={color}/>

@@ -12,7 +12,7 @@ function CheckOutItem(props){
                 <Text style={styles.nameTxt} numberOfLines={1}> {props.name}</Text>
                 <View style={styles.infoLine}> 
                     <Text style={styles.detailTxt}>SL: {' x' + props.soLuong}</Text>
-                    <Text style={styles.detailTxt}>{props.giaBan + ' '} VND</Text>
+                    <Text style={styles.detailTxt2}>{props.giaBan + ' VND'}</Text>
                 </View>
             </View>
         </View>
@@ -57,7 +57,16 @@ const styles = StyleSheet.create({
     },
     detailTxt:{
         fontWeight:'bold',
-        fontSize:15
+        fontSize:15,
+        width:50,
+        //backgroundColor:BLACK
+    },
+    detailTxt2:{
+        fontWeight:'bold',
+        fontSize:15,
+        width:150,
+        textAlign:'right',
+        //backgroundColor:BLACK
     },
   });
 

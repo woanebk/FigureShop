@@ -1,5 +1,5 @@
 import react from 'react';
-import React, { Component, Dimensions, useEffect } from 'react';
+import React, { Component, Dimensions, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
 import { TouchableRipple, IconButton } from 'react-native-paper';
 import { GREY, LIGHT_GREY, SECONDARY_COLOR } from '../common';
@@ -7,9 +7,12 @@ import { DashBoard, UserPFP, ProfileButton, InfoDisplayer } from '../items'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react/cjs/react.development';
 import { firebaseApp } from '../firebaseconfig';
+import CartContext from '../CartContext'
+
 export default function ProfileScreen({ navigation }) {
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   var [user, setuser] = useState(firebaseApp.auth().currentUser);
+
   navigation.addListener('focus', () => {getuserinfo()})
   useEffect( () => {
     if(firstRun == 0){
@@ -111,8 +114,14 @@ export default function ProfileScreen({ navigation }) {
         </View>
   
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() => console.log('Menu ')}>
+          <TouchableRipple onPress={() => navigation.navigate('ManageOrder')}>
             <ProfileButton iconName='clock' text='Quản Lý Đặt Hàng' ></ProfileButton>
+          </TouchableRipple>
+        </View>
+
+        <View style={styles.userBtn}>
+          <TouchableRipple onPress={() => navigation.navigate('ManageSold')}>
+            <ProfileButton iconName='wallet' text='Quản Lý Bán Hàng' ></ProfileButton>
           </TouchableRipple>
         </View>
   
@@ -140,10 +149,9 @@ export default function ProfileScreen({ navigation }) {
         </View>
   
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() =>
-            //console.log(firebaseApp.auth())
-            //,
+          <TouchableRipple onPress={() =>{
             firebaseApp.auth().signOut()
+          }
           }
           >
             <ProfileButton iconName='logout' text='Đăng xuất' ></ProfileButton>
