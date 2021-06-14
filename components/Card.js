@@ -1,7 +1,7 @@
 import react from 'react';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { GOLD, GREY, WHITE } from '../common';
+import { BLACK, GOLD, GREY, GREY_BORDER, WHITE } from '../common';
 
 function Card(props){
     return(
@@ -11,7 +11,12 @@ function Card(props){
               <View style={{flex:1}}>
                 <Text numberOfLines={1} style={styles.itemName}>{props.title}</Text>
                 <View style = {styles.saleTag}>
-                  <Text style= {styles.salePercentageTxt}>-10%</Text>
+                  {props.giamgia > 0 ?
+                  <Text style= {styles.salePercentageTxt}>{'-'+props.giamgia*100+'%'}</Text>
+                  :
+                  null
+                  }
+                  
                 </View>
               </View>
 
@@ -20,8 +25,8 @@ function Card(props){
               </View>
 
               <View style={{flex:1}}>
-                <Text numberOfLines={1} style={styles.itemPrice}> {props.itemPrice}</Text>
-                <Text numberOfLines={1} style={styles.itemSalePrice}> {props.itemPrice}</Text>
+                <Text numberOfLines={1} style={styles.itemPrice}> {props.giaban}</Text>
+                <Text numberOfLines={1} style={styles.itemSalePrice}>{props.giagoc+' VNĐ'}</Text>
                 
               </View>
             </View>
@@ -40,9 +45,11 @@ const styles = StyleSheet.create({
         shadowOffset:{width:0, height:1},
         shadowOpacity:0.8,
         shadowRadius:2,
-        elevation: 5,
         borderRadius:1,
-        backgroundColor:WHITE
+        backgroundColor:WHITE,
+        paddingBottom:10,
+        borderBottomWidth:2,
+        borderBottomColor:GREY_BORDER
       },
     cardInfo:{ 
         flex:2,
@@ -82,21 +89,25 @@ const styles = StyleSheet.create({
       fontSize:12,
       textDecorationLine: 'line-through',
       textDecorationStyle: 'solid',
+      width:85,
+      textAlign:'center',
     },
     saleTag:{
       backgroundColor:GOLD,
-      width:45,
-      height:45,
-      borderRadius:50,
-      position:'absolute',
-      top:'-30%',
-      right:'-6%',
+      width:60,
+      height:25,
+      borderRadius:5,
+      position:'relative',
+      bottom:-45,
+      right:'-70%',
       justifyContent:'center',
       alignItems:'center'
     },
     salePercentageTxt:{
-      fontSize:14,
+      fontSize:12,
       fontWeight:'bold',
+      width:100,
+      textAlign:'center'
     },
   });
 

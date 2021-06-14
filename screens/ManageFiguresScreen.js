@@ -16,7 +16,6 @@ export default function ManageFiguresScreen({navigation}) {
   useEffect(()=>{
     if(firstRun == 0){
       navigation.addListener('focus', () => {getSanPhams()})
-      getSanPhams();
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
     if(deleteAnimeID !== '' || deleteAnimeID !== '')
@@ -128,7 +127,7 @@ export default function ManageFiguresScreen({navigation}) {
             description={'Anime: ' + item.TenAnime}
             phoneNumber = {'Tồn Kho: ' + item.SoLuong}
             price={item.GiaBan * (1 - item.GiamGia)}
-            onPress={()=>{ }}
+            onPress={()=>{ navigation.navigate('AddFigure',{readonly:true, id_san_pham:item.IdSanPham})}}
             onDeletePress={()=>{onDeleteSanPhamPress(item.IdAnime, item.IdSanPham)}}
           ></ListItem>
         )}

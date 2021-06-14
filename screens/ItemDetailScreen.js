@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     width:'75%', 
     lineHeight:25,
-    backgroundColor:BLACK
+    //backgroundColor:BLACK
   },
   saleTag:{
     position:'absolute',

@@ -5,6 +5,8 @@ import Swiper from 'react-native-swiper/src';
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import {ItemCard, CategoryCard, Card} from '../items';
 import { firebaseApp } from '../firebaseconfig';
+import { ActivityIndicator } from 'react-native-paper';
+import { BLACK, WHITE } from '../common';
 
 export default function HomeScreen ({navigation}) {
 
@@ -12,19 +14,23 @@ export default function HomeScreen ({navigation}) {
 
   const [listAnime, setListAnime] = useState(); //chứa 4 Anime ra màn hình
   const [listSanPhamSale, setListSanPhamSale] = useState() // chứa 4 item sale
+  const [listAllSanPham, setListAllSanPham] = useState([]) // chứa 4 item sale
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isLoadMore, setIsLoadMore] = useState(false)
+  const itemsPerPage = 3
 
   useEffect(()=>{
     
     if(firstRun == 0){
-      navigation.addListener('focus', () => {getSanPhamsSale()} )
-      getAnimes() //danh muc
+      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes(); getAllSanPhams() } )
+      
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
   }) 
 
   const getAnimes = async () => {
     let list=[];
-    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').limitToFirst(4).on('value', (snapshot)=>{
+    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').limitToFirst(4).once('value', (snapshot)=>{
       if( snapshot.exists())
       {
         list = []; //reset list tránh trùng lặp
@@ -64,7 +70,7 @@ export default function HomeScreen ({navigation}) {
                   TenNhanVat : value.TenNhanVat,
                   GiaBan: value.GiaBan,
                   GiamGia: value.GiamGia,
-                  HinhAnh:value.HinhAnh
+                  HinhAnh:value.HinhAnh,
                 })
               }
             }
@@ -77,6 +83,44 @@ export default function HomeScreen ({navigation}) {
         else{
           setListSanPhamSale(list.slice(0, list.length))
         }
+      }
+    })
+  }
+
+  const getAllSanPhams = () => {
+    let list=[];
+    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if( snapshot.exists())
+      {
+        list = []; //reset list tránh trùng lặp
+        snapshot.forEach((child)=> //child la anime
+        {
+          if(child.val().SanPham) //day la object
+          {
+            var animename = child.val().TenAnime
+            var idAnime = child.key
+            for (let [key, value] of Object.entries(child.val().SanPham)) {
+              if(value.TrangThai == 'on')
+              {
+                list.push({
+                  IdSanPham : key,
+                  TenAnime: animename,
+                  IdAnime: idAnime,
+                  TenSanPham: value.TenSanPham,
+                  TenNhanVat : value.TenNhanVat,
+                  GiaBan: value.GiaBan,
+                  GiamGia: value.GiamGia,
+                  HinhAnh:value.HinhAnh,
+                  SoLuong:value.SoLuong,
+                  MoTa: value.MoTa,
+                  GiaGoc:value.giaGoc
+                })
+              }
+            }
+          }
+        })
+        setListAllSanPham(list.slice(0, currentPage * itemsPerPage ))
+        setIsLoadMore(false)
       }
     })
   }
@@ -107,15 +151,37 @@ export default function HomeScreen ({navigation}) {
       </Swiper>
       </View>
   )
+  const renderFooter = ()=>{
+    if(isLoadMore) return(
+      <ActivityIndicator style={{height:40}} animating={true} size='large'></ActivityIndicator>
+    )
+    else return(
+      null)
+  }
+
+  const handleLoadMore= () => {
+      setIsLoadMore(true)
+      setCurrentPage(currentPage=>currentPage += 1)
+      getAllSanPhams()
+      console.log(currentPage)
+   
+  }
   
   return (
     <ScrollView style = {styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'}></StatusBar>
       {renderSwiper()}
       {/* ============ character categories ========== */}
-      <Text style={styles.subjectsTxt}> Nhân Vật Nổi Bật</Text>
+      <Text style={styles.subjectsTxt}>Giới Thiêu Cửa Hàng</Text>
       <View style={styles.categoryContainer}>
-        <TouchableOpacity onPress = {()=>{navigation.navigate('CategoryItems',{categoryName:'Dragon Ball'})}}>
+        <Image resizeMode='stretch' style={{height:150, width:'100%',  backgroundColor:BLACK, opacity:0.6,}}
+          source ={require('../assets/banner/mainbanner.jpg')}>
+        </Image>
+        <View style={{position:'absolute', left:10,width:230, height: 120, paddingLeft:5, top:10, borderRadius:5}}>
+          <Text style={{color:WHITE, fontSize:17, fontWeight:'bold'}}>Sản phẩm chính hãng từ Nhật Bản</Text>
+          <Text style={{color:WHITE, fontSize:13, height:100}}>Figure Shop là thiên đường với những tín đồ theo đuổi thật sự, đam mê vẻ đẹp cao cấp đầy mê hoặc của Nhật Bản</Text>
+        </View>
+        {/* <TouchableOpacity onPress = {()=>{navigation.navigate('CategoryItems',{categoryName:'Dragon Ball'})}}>
           <View style={styles.categoryIcon}>
             <Ionicons name='sad' size={30} color='#FF6347'></Ionicons>
           </View>
@@ -141,32 +207,9 @@ export default function HomeScreen ({navigation}) {
             <Ionicons name='scan' size={30} color='#FF6347'></Ionicons>
           </View>
           <Text style={styles.categoryText}> Sasuke</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
       </View>
-      {/* ============ 2nd categories ==========
-      <View style={styles.categoryContainer}>
-        <TouchableOpacity onPress = {()=>{}}>
-          <View style={styles.categoryIcon}>
-            <Ionicons name='eye' size={30} color='#FF6347'></Ionicons>
-          </View>
-          <Text style={styles.categoryText}> Bleach</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress = {()=>{}}>
-          <View style={styles.categoryIcon}>
-            <Ionicons name='navigate' size={30} color='#FF6347'></Ionicons>
-          </View>
-          <Text style={styles.categoryText}> Pokemon </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress = {()=>{}}>
-          <View style={styles.categoryIcon}>
-            <MaterialIcons name='expand-more' size={30} color='#FF6347'></MaterialIcons>
-          </View>
-          <Text style={styles.categoryText}> More</Text>
-        </TouchableOpacity>
-      </View> */}
 
       {/*========= SaleCard */}
       <Text style={styles.subjectsTxt}> Sale đặc biệt</Text>
@@ -203,20 +246,24 @@ export default function HomeScreen ({navigation}) {
       {/*========== Best Seller Cards */}
       
       <Text style={styles.subjectsTxt}> Best Seller</Text>
-      <View style={styles.cardContainer}>
-        <TouchableOpacity onPress={()=>navigation.navigate('ItemDetail')}>
-          <Card title='Son Goku' description='day la mot san pham chat luong tu nuoc phap cuc ki tinh xao, co nguon goc tu Trung Quoc' itemPrice='120,000 VND' itemImage={require('../assets/banner/dbz_swiper_1.jpg')}></Card>
-        </TouchableOpacity>
-        
-        
-        <TouchableOpacity onPress={()=>navigation.navigate('ItemDetail')}>
-          <Card title='Son Goku' description='day la mot san pham chat luong tu nuoc phap cuc ki tinh xao, co nguon goc tu Trung Quoc' itemPrice='120,000 VND' itemImage={require('../assets/banner/dbz_swiper_1.jpg')}></Card>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={()=>navigation.navigate('ItemDetail')}>
-          <Card title='Son Goku' description='day la mot san pham chat luong tu nuoc phap cuc ki tinh xao, co nguon goc tu Trung Quoc' itemPrice='120,000 VND' itemImage={require('../assets/banner/dbz_swiper_1.jpg')}></Card>
-        </TouchableOpacity>
-      </View>
+      <FlatList
+        style={styles.cardContainer}
+        data={listAllSanPham}
+        renderItem = {({item})=>(
+          <TouchableOpacity onPress={()=>navigation.navigate('ItemDetail')}>
+            <Card title={item.TenSanPham} description={item.MoTa}
+             giaban={item.GiaBan*(1-item.GiamGia)+' VND'}
+             giagoc={item.GiaGoc}
+             itemSalePrice='23'
+             giamgia={item.GiamGia}
+             itemImage={{uri:item.HinhAnh[0]}}></Card>
+          </TouchableOpacity>
+        )}
+        ListFooterComponent={renderFooter}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={10}
+        keyExtractor={item=>item.IdSanPham}
+      />
     </ScrollView>
     
   );
@@ -257,7 +304,7 @@ var styles = StyleSheet.create({
   },
   categoryContainer:{
     flexDirection:'row',
-    width:'90%',
+    width:'100%',
     alignSelf:'center',
     justifyContent:'space-around',
     marginTop:15,
@@ -282,7 +329,7 @@ var styles = StyleSheet.create({
   cardContainer:{
     width:'90%',
     alignSelf:'center',
-    justifyContent:'center',
+    flex:1
   },
   subjectsTxt:{
     fontSize:17, 

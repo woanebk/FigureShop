@@ -17,16 +17,16 @@ export default function CategoryItemsScreen({route, navigation}) {
   const [listSanPham, setListSanPham] = useState([]);
 
   useEffect(()=>{
-    navigation.addListener('focus', () => {getSanPham()} )
     if(firstRun == 0)
     {
-      getBanner()
+      navigation.addListener('focus', () => {getSanPham(); getBanner()} )
+      
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
   })
 
   const getBanner = ()=>{
-    firebaseApp.database().ref('Anime').orderByKey().equalTo(animeID).limitToFirst(1).on('value', (snapshot)=>{
+    firebaseApp.database().ref('Anime').orderByKey().equalTo(animeID).limitToFirst(1).once('value', (snapshot)=>{
       if( snapshot.exists())
       {
         snapshot.forEach((child)=>
