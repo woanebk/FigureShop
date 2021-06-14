@@ -300,13 +300,13 @@ const ProfileStackNavigator = (navigation) => {
           title: 'Thông tin người dùng'
         }}>
       </ProfileStack.Screen>
-      {/* <ProfileStack.Screen name='Guestinfo' component={Guestinfo}
+      <ProfileStack.Screen name='Guestinfo' component={Guestinfo}
         options={{
           headerTransparent: true,
           headerTintColor: '#fff',
           title: 'Thông tin khách hàng'
         }}>
-      </ProfileStack.Screen> */}
+      </ProfileStack.Screen>
 
       <ProfileStack.Screen name='ManageCategory' component={ManageCategoryScreen}
         options={{
