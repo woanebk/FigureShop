@@ -14,6 +14,7 @@ import BigItemCard from './components/BigItemCard'
 import CheckOutItem from './components/CheckOutItem'
 import CodeInput from './components/CodeInput'
 import OrderListItem from './components/OrderListItem'
+import GuestListItem from './components/GuestListItem'
 
 export {
     Card,
@@ -32,4 +33,5 @@ export {
     CheckOutItem,
     CodeInput,
     OrderListItem,
+    GuestListItem,
 }

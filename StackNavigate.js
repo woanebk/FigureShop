@@ -15,7 +15,7 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import AllUserScreen from './screens/AllUserScreen';
 import AddUserScreen from './screens/AddUserScreen';
 import AllGuestScreen from './screens/AllGuestScreen';
-import AddGuestScreen from './screens/AddGuestScreen';
+import Guestinfo from './screens/Guestinfo';
 import CategoryItemsScreen from './screens/CategoryItemsScreen';
 import AddCategoryScreen from './screens/AddCategoryScreen';
 import ManageCategoryScreen from './screens/ManageCategoryScreen';
@@ -284,14 +284,7 @@ const ProfileStackNavigator = (navigation) => {
           headerTintColor: '#fff',
           title: 'Danh Sách Người Dùng'
         }}>
-      </ProfileStack.Screen>
-
-      <ProfileStack.Screen name='AddUser' component={AddUserScreen}
-        options={{
-          headerTransparent: true,
-          headerTintColor: '#fff',
-          title: 'Thông tin người dùng'
-        }}>
+          
       </ProfileStack.Screen>
       <ProfileStack.Screen name='AllGuest' component={AllGuestScreen}
         options={{
@@ -300,14 +293,20 @@ const ProfileStackNavigator = (navigation) => {
           title: 'Danh Sách Khách hàng'
         }}>
       </ProfileStack.Screen>
-
-      <ProfileStack.Screen name='AddGuest' component={AddGuestScreen}
+      <ProfileStack.Screen name='AddUser' component={AddUserScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          title: 'Thông tin người dùng'
+        }}>
+      </ProfileStack.Screen>
+      {/* <ProfileStack.Screen name='Guestinfo' component={Guestinfo}
         options={{
           headerTransparent: true,
           headerTintColor: '#fff',
           title: 'Thông tin khách hàng'
         }}>
-      </ProfileStack.Screen>
+      </ProfileStack.Screen> */}
 
       <ProfileStack.Screen name='ManageCategory' component={ManageCategoryScreen}
         options={{

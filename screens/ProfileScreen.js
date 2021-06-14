@@ -150,7 +150,8 @@ export default function ProfileScreen({ navigation }) {
   
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() =>{
-            firebaseApp.auth().signOut()
+            firebaseApp.auth().currentUser.updatePhoneNumber({phoneCredential:null}).then(
+            firebaseApp.auth().signOut())
           }
           }
           >
