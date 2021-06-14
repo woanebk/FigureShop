@@ -154,7 +154,7 @@ export default function ManageSaleScreen({navigation}) {
             renderItem = {({item})=>(
               <OrderListItem name = {item.TenKhachHang} maDonHang={item.IdDonDatHang}
               phoneNumber = {item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua) }
-              canConfirm ={canConfirmDatHang(item.SoDienThoai, item.IdDonDatHang) }
+              canConfirm ={true}
               tongtien={item.TongTien}
               onPress={()=>navigation.navigate('OrderDetail',{so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang})}
               ngayDat = {item.NgayDat}

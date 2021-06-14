@@ -11,14 +11,15 @@ export default function AllCategoryScreen({navigation}) {
   
    useEffect  ( () => {
     if(firstRun == 0){
-      getAnimes()
+      navigation.addListener('focus', () => {getAnimes()})
+      
     setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
       }
   }) 
 
   const getAnimes = () => {
     let list=[];
-    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').on('value', (snapshot)=>{
+    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
       if( snapshot.exists())
       {
         list = []; //reset list tránh trùng lặp
