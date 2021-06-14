@@ -112,7 +112,7 @@ export default function AddCategoryScreen({ route, navigation }) {
   //Data:
 
   const GetAnime = async () => {
-    await firebaseApp.database().ref('Anime/' + itemID).on('value', (snapshot) => {
+    await firebaseApp.database().ref('Anime/' + itemID).once('value', (snapshot) => {
       console.log('on')
       if (snapshot.exists()) {
         setCategoryName(snapshot.val().TenAnime)

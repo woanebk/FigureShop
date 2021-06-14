@@ -7,6 +7,8 @@ import { Ionicons } from '@expo/vector-icons'
 
 export default function MultiImagePickScreen({route, navigation}) {
 
+  const {useImagestoEdit}=route.params //Quay ve man hinh truoc la true:edit hay false:add
+  const {id_san_pham}=route.params
   useEffect(()=>{
 
   })
@@ -14,7 +16,11 @@ export default function MultiImagePickScreen({route, navigation}) {
   const onDone = (data)=>{
     if(data)
     {
-      navigation.navigate('AddFigure',{readonly:false, images:data})
+      var list = []
+      data.forEach(item => {
+        list.push(item.uri)
+      });
+      navigation.navigate('AddFigure',{readonly:useImagestoEdit, images:list, id_san_pham:id_san_pham})
     }
   }
 

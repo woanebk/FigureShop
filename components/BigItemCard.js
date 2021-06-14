@@ -28,9 +28,13 @@ function BigItemCard(props){
                     </View>
                 </View>
             </View>
+            {props.giamgia > 0?
             <View style={styles.saleTag}>
                 <Text style={styles.salePriceTxt}>{'-' + props.giamgia * 100 +'%  '}</Text>
             </View>
+            :
+            null
+            }
         </View>
         </TouchableWithoutFeedback>
     );

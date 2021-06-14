@@ -156,7 +156,11 @@ export default function CheckOutScreen({route, navigation}) {
     
     //Them Don Hang
     var currentdate = new Date();
-    var ngaydat = currentdate.getDate() + '/' + (currentdate.getMonth() + 1) + '/'+ currentdate.getFullYear() 
+    var ngay = currentdate.getDate().toString()
+    var thang =(currentdate.getMonth()+1).toString()
+    if(ngay.length < 2) ngay='0'+ ngay
+    if(thang.length < 2) thang='0'+ thang
+    var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
     firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
       TrangThai: 'on',
       DaXacNhan: 0,
@@ -185,7 +189,12 @@ export default function CheckOutScreen({route, navigation}) {
     
     //Them Don Hang
     var currentdate = new Date();
-    var ngaydat = currentdate.getDate() + '/' + (currentdate.getMonth() + 1) + '/'+ currentdate.getFullYear() 
+    var ngay = currentdate.getDate().toString()
+    var thang =(currentdate.getMonth()+1).toString()
+    if(ngay.length < 2) ngay='0'+ ngay
+    if(thang.length < 2) thang='0'+ thang
+    var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
+    
     firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
       TrangThai: 'on',
       DaXacNhan: 1,
