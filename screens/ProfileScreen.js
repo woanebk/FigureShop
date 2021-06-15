@@ -137,13 +137,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
   
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() => console.log('Menu ')}>
-            <ProfileButton iconName='chart-bar' text='Báo Cáo Doanh Thu' ></ProfileButton>
-          </TouchableRipple>
-        </View>
-  
-        <View style={styles.userBtn}>
-          <TouchableRipple onPress={() => console.log('Menu ')}>
+          <TouchableRipple onPress={() => navigation.navigate('Report')}>
             <ProfileButton iconName='chart-bar' text='Báo Cáo Doanh Thu' ></ProfileButton>
           </TouchableRipple>
         </View>

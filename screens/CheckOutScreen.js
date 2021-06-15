@@ -154,7 +154,7 @@ export default function CheckOutScreen({route, navigation}) {
       return
     }
     
-    //Them Don Hang
+    //Them Don Dat Hang
     var currentdate = new Date();
     var ngay = currentdate.getDate().toString()
     var thang =(currentdate.getMonth()+1).toString()
@@ -177,6 +177,25 @@ export default function CheckOutScreen({route, navigation}) {
   const banHang = async () => {
     try{
       setIsLoading(true)
+      //Them Don Ban Hang
+      var currentdate = new Date();
+      var ngay = currentdate.getDate().toString()
+      var thang =(currentdate.getMonth()+1).toString()
+      if(ngay.length < 2) ngay='0'+ ngay
+      if(thang.length < 2) thang='0'+ thang
+      var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
+      
+      await firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
+        TrangThai: 'on',
+        DaXacNhan: 1,
+        DiaChi: 'Mua tại cửa hàng',
+        HoTen: hoTen,
+        TongTien: tongTien,
+        SanPhamMua: cart,
+        NgayDat: ngaydat
+      },()=>{
+        firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
+      })
       setIsLoading(false)
       alert('Tạo Đơn Bán Hàng Thành Công')
       navigation.navigate('SuccessOrder',{ten_khach_hang:hoTen, dia_chi: 'Mua tại cửa hàng', so_dien_thoai:soDienThoai, thanh_tien:tongTien})
@@ -187,25 +206,7 @@ export default function CheckOutScreen({route, navigation}) {
       return
     }
     
-    //Them Don Hang
-    var currentdate = new Date();
-    var ngay = currentdate.getDate().toString()
-    var thang =(currentdate.getMonth()+1).toString()
-    if(ngay.length < 2) ngay='0'+ ngay
-    if(thang.length < 2) thang='0'+ thang
-    var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
     
-    firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
-      TrangThai: 'on',
-      DaXacNhan: 1,
-      DiaChi: 'Mua tại cửa hàng',
-      HoTen: hoTen,
-      TongTien: tongTien,
-      SanPhamMua: cart,
-      NgayDat: ngaydat
-    },()=>{
-      firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
-    })
   }
 
   const onCheckPress = ()=>{

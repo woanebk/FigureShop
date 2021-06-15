@@ -260,8 +260,8 @@ export default function HomeScreen ({navigation}) {
           </TouchableOpacity>
         )}
         ListFooterComponent={renderFooter}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={10}
+        //onEndReached={handleLoadMore}
+        onEndReachedThreshold={0}
         keyExtractor={item=>item.IdSanPham}
       />
     </ScrollView>

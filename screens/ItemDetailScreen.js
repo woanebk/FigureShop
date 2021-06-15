@@ -131,6 +131,7 @@ export default function ItemDetailScreen ({route, navigation}){
         TonKho: sanPham.SoLuong,
         HinhAnh: sanPham.HinhAnh,
         IdAnime: anime_ID,
+        GiaGoc:sanPham.giaGoc
       }])
     }
     
