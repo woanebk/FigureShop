@@ -38,7 +38,7 @@ function ListItemmforsearch(props) {
                     <View style={styles.textWrapper}>
                         <Text numberOfLines={1} style={styles.nameTxt}>{props.name}</Text>
                         <Text numberOfLines={1} style={styles.descriptionTxt}> {props.description}</Text>
-                        {/* <Text numberOfLines={1} style={styles.descriptionTxt}> {props.phoneNumber}</Text> */}
+                        <Text numberOfLines={1} style={styles.descriptionTxt}> {props.phoneNumber}</Text>
                         <Text numberOfLines={1} style={styles.priceTxt}>{props.price ? props.price + ' VNĐ' : ''}</Text>
                     </View>
                 </View>

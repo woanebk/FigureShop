@@ -1,5 +1,5 @@
 import React,{state,useEffect} from 'react';
-import { StyleSheet,ImageBackground, LogBox } from 'react-native';
+import { StyleSheet,ImageBackground, LogBox, View,StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {TabNavigator} from './StackNavigate';
 import { PRIMARY_COLOR, WHITE } from './common';
@@ -31,7 +31,6 @@ export default function App(navigation) {
          )
       }else{
         setState(false)
-        console.log("ddawng xuat")
        // setCart([])
       }
     })
@@ -44,9 +43,12 @@ export default function App(navigation) {
 // return <authen/>
     switch (state) {
     case false:
-      return <ImageBackground style={styles.container} source={BG} >
+      return(
+        <View style={{flex:1}}>
+   
+      <ImageBackground style={styles.container} source={BG} >
         <LoginForm />
-      </ImageBackground>
+      </ImageBackground></View>);
     case true:
       return (
         <CartContext.Provider value = {defaultCartContextValue}>

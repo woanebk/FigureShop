@@ -10,6 +10,7 @@ import { firebaseApp } from '../firebaseconfig';
 import CartContext from '../CartContext'
 
 export default function ProfileScreen({ navigation }) {
+  const { cart, setCart } = useContext(CartContext)
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   var [user, setuser] = useState(firebaseApp.auth().currentUser);
 
@@ -144,8 +145,9 @@ export default function ProfileScreen({ navigation }) {
   
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() =>{
-            firebaseApp.auth().currentUser.updatePhoneNumber({phoneCredential:null}).then(
-            firebaseApp.auth().signOut())
+            setCart([])
+            setTimeout(function(){firebaseApp.auth().signOut(); alert("Đăng xuất"); }, 100);
+          //  firebaseApp.auth().signOut()
           }
           }
           >

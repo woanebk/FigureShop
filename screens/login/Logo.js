@@ -7,7 +7,7 @@ import { View, Text, StyleSheet,Image } from 'react-native';
 const Logo = () => {
     return (
         <View>
-            <Image source={{uri:'https://img.icons8.com/ios/452/javascript-logo.png'}} style={{height:150, width:150}} />
+            <Image resizeMode='center' source={{uri:'https://c35222m1aga1x3ztf1lczpkf-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/FIGURE_Logo.png'}} style={{height:150, width:150}} />
         </View>
     );
 };
