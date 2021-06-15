@@ -29,6 +29,7 @@ import MultiImagePickScreen from "./screens/MultiImagePickScreen";
 import ManageOrderScreen from "./screens/ManageOrderScreen";
 import OrderDetailScreen from "./screens/OrderDetailScreen";
 import ManageSoldScreen from "./screens/ManageSoldScreen";
+import ReportScreen from "./screens/ReportScreen";
 
 
 const Tab = createMaterialBottomTabNavigator();//Bottom Tab:
@@ -365,6 +366,13 @@ const ProfileStackNavigator = (navigation) => {
           headerTransparent: true,
           headerTintColor: '#fff',
           title: 'Danh Sách Đơn Bán Hàng'
+        }}></ProfileStack.Screen>
+
+      <ProfileStack.Screen name='Report' component={ReportScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          title: 'Báo Cáo Doanh Thu'
         }}></ProfileStack.Screen>
 
     </ProfileStack.Navigator>
