@@ -123,7 +123,7 @@ export default function AllGuestScreen({ navigation }) {
                   onPress={() => navigation.navigate('Guestinfo', { phoneNumber: item.phoneNumber})}
                 ></GuestListItem>
               )}
-              keyExtractor={item => item.IdDonDatHang}
+              keyExtractor={item => item.phoneNumber}
               showsVerticalScrollIndicator={false}
             />
             {renderDialog()}
