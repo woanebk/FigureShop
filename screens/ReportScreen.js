@@ -214,10 +214,11 @@ export default function ReportScreen({navigation}) {
                 if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua )
                 {
                     for (let [sanphammua_key, sanphammua_value] of Object.entries(donhang_value.SanPhamMua )){
-                        const vitri = checkSanPhamExistInArr(tk, sanphammua_value.TenSanPham)
+                        const vitri = checkSanPhamExistInArr(tk, sanphammua_value.IdSanPham)
                         if(vitri == -1)
                         {
                             tk.push({TenSanPham: sanphammua_value.TenSanPham,
+                                    IdSanPham:sanphammua_value.IdSanPham,
                                      SoLuong: sanphammua_value.SoLuongMua,
                                      HinhAnh:sanphammua_value.HinhAnh[0],
                                      TenAnime:sanphammua_value.TenAnime,
@@ -248,10 +249,10 @@ export default function ReportScreen({navigation}) {
     return found
   }
 
-  const checkSanPhamExistInArr = (arr, tensp)=>{ //Neu tim ra return vi tri trong array, ko tim ra return -1
+  const checkSanPhamExistInArr = (arr, idsp)=>{ //Neu tim ra return vi tri trong array, ko tim ra return -1
     var found = -1 ; 
     for(var i = 0; i < arr.length; i++) {
-        if (arr[i].TenSanPham == tensp) {
+        if (arr[i].IdSanPham == idsp) {
             found = i;
             break;
         }
