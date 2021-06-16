@@ -29,7 +29,6 @@ export default function CartScreen({route, navigation}) {
   }
 
   const giamSoLuong = (id) =>{
-    console.log('giam')
     let tmp = cart.slice(0)
     tmp.map((item)=>{
       if(item.IdSanPham == id)
@@ -42,7 +41,6 @@ export default function CartScreen({route, navigation}) {
   }
 
   const tangSoLuong = (id) =>{
-    console.log('tang')
     let tmp = cart.slice(0)
     tmp.map((item)=>{
       if(item.IdSanPham == id)

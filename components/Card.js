@@ -15,11 +15,11 @@ function Card(props){
 
               <View style={styles.descriptionContainer}>
                 <View style={{flexDirection:'row', alignItems:'center'}}>
-                  <Text numberOfLines={1} style={styles.itemDescripton}> Nhân vật: </Text>
+                  <Text style={styles.itemDescripton}> Nhân vật:  </Text>
                   <Text numberOfLines={1} style={styles.itemDescripton2}> {props.nhanvat}</Text>
                 </View>
                 <View style={{flexDirection:'row', alignItems:'center'}}>
-                  <Text numberOfLines={1} style={styles.itemDescripton}> Anime: </Text>
+                  <Text style={styles.itemDescripton}> Anime: </Text>
                   <Text numberOfLines={1} style={styles.itemDescripton2}> {props.anime}</Text>
                 </View>
                 
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
       fontSize:14,
       color:'#000',
       fontWeight:'bold',
+      width:'70%', 
     },
     itemPrice:{
       color:'#FF0000',

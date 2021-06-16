@@ -168,10 +168,19 @@ export default function CheckOutScreen({route, navigation}) {
       HoTen: hoTen,
       TongTien: tongTien,
       SanPhamMua: cart,
-      NgayDat: ngaydat
+      NgayDat: ngaydat,
+      TongSoLuongMua: tinhTongSoLuong(cart)
     },()=>{
       firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
     })
+  }
+
+  const tinhTongSoLuong=(arr)=>{
+    var tongsoluong = 0
+    arr.forEach(item => {
+        tongsoluong += item.SoLuongMua
+      });
+      return tongsoluong
   }
 
   const banHang = async () => {
@@ -192,7 +201,8 @@ export default function CheckOutScreen({route, navigation}) {
         HoTen: hoTen,
         TongTien: tongTien,
         SanPhamMua: cart,
-        NgayDat: ngaydat
+        NgayDat: ngaydat,
+        TongSoLuongMua: tinhTongSoLuong(cart)
       },()=>{
         firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
       })
