@@ -73,7 +73,7 @@ export default function SearchScreen({ navigation }) {
                   GiaGoc:value.giaGoc,
                   MoTa:value.MoTa,
                 })
-              console.log(value.giaGoc)}
+              }
               }
             }
           }
@@ -166,7 +166,7 @@ export default function SearchScreen({ navigation }) {
             giaban={item.GiaBan*(1-item.GiamGia)+' VND'}
             giagoc={item.GiaBan}
            itemSalePrice='23'
-           soluongton={item.SoLuong}
+          //  soluongton={item.SoLuong}
             giamgia={item.GiamGia}
             itemImage={{uri:item.HinhAnh[0]}}
               onPress={() => navigation.navigate('ItemDetail', { anime_ID: item.IdAnime, sanpham_ID: item.IdSanPham })}
