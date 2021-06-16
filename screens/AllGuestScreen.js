@@ -6,15 +6,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { Button } from 'react-native-paper';
-//import { isObject } from 'core-js/fn/object';
+import { SearchBar } from 'react-native-elements';
 
 export default function AllGuestScreen({ navigation }) {
+  const [listGuesttam, setListGuesttam] = useState();
+  const [search, setsearch] = useState(null)
   const [listGuest, setListGuest] = useState();
   const [deleteID, setDeleteID] = useState(''); //id Guest để xóa
   const [isLoading, setIsLoading] = useState(true);
   const [soluongdon, setsoluongdon] = useState(0);
   const [dialogVisable, setDialogVisable] = useState(false); // true thì hiện dialog, false thì ẩn
-  navigation.addListener('focus', () => { getGuests(); setIsLoading(false) })
+  navigation.addListener('focus', () => { getGuests();setsearch(''); setIsLoading(false) })
   useEffect(() => {
     if (deleteID !== '')
       openDialog();
@@ -30,9 +32,8 @@ export default function AllGuestScreen({ navigation }) {
             DonHang: child.val().DonHang,
             SoLuongDon:child.val().DonHang.length,
           })
-         // console.log(child.val().DonHang.asArray().length)
         })
-        
+        setListGuesttam(list)
         setListGuest(list)
       }
     })
@@ -104,6 +105,14 @@ export default function AllGuestScreen({ navigation }) {
     };
     return tongsoluong
   }
+  const searchlist = (s) => {
+    var list = [];
+    for (var item in listGuest) {
+      if (listGuest[item].phoneNumber.toLowerCase().includes(s))
+        list.push(listGuest[item]);
+    }
+    setListGuesttam(list)
+  }
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
@@ -113,8 +122,18 @@ export default function AllGuestScreen({ navigation }) {
           <ActivityIndicator style={styles.indicator} animating={isLoading} color='#bc2b78' size="large" />
           :
           <Fragment>
+            <SearchBar
+              placeholder="Nhập số điện thoại người dùng"
+              lightTheme={true}
+              platform="android"
+              round={10}
+              onChangeText={search => {
+                searchlist(search); setsearch(search);
+              }}
+              value={search}
+            />
             <FlatList style={styles.list}
-              data={listGuest}
+              data={listGuesttam}
               renderItem={({ item }) => (
                 <GuestListItem
                   phoneNumber={item.phoneNumber} 

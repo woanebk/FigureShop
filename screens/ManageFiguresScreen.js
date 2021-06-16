@@ -5,17 +5,19 @@ import { ListItem } from '../items';
 import { MaterialIcons } from '@expo/vector-icons';
 import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
+import { SearchBar } from 'react-native-elements';
 
 export default function ManageFiguresScreen({navigation}) {
-
+  const [listSanPhamtam,setListSanPhamtam]=useState();
   const [listSanPham,setListSanPham]=useState();
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
   const [deleteSanPhamID, setDeleteSanPhamID] = useState(''); //id sản phẩm để xóa
   const [deleteAnimeID, setDeleteAnimeID] = useState(''); //id anime để xóa
+  const [search, setsearch] = useState(null)
   useEffect(()=>{
     if(firstRun == 0){
-      navigation.addListener('focus', () => {getSanPhams()})
+      navigation.addListener('focus', () => {getSanPhams();setsearch('')})
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
     if(deleteAnimeID !== '' || deleteAnimeID !== '')
@@ -54,6 +56,7 @@ export default function ManageFiguresScreen({navigation}) {
           }
         })
         setListSanPham(list)
+        setListSanPhamtam(list)
       }
     })
   }
@@ -113,14 +116,31 @@ export default function ManageFiguresScreen({navigation}) {
         </DialogContent>
       </Dialog>
     )
-
+    const searchlist = (s) => {
+      var list=[];
+      for(var item in listSanPham)
+        {
+          if(listSanPham[item].TenSanPham.toLowerCase().includes(s))
+        list.push(listSanPham[item]);}
+    setListSanPhamtam(list)
+    }
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <View style={styles.topdock}></View>
-
+      <View style={styles.searchbarWrapper}>
+        <SearchBar style={styles.searchbarWrapper}
+          placeholder="Nhập tên sản phẩm cần tìm"
+          lightTheme={true}
+          platform="android"
+          round={10}
+          onChangeText={search =>{searchlist(search); setsearch(search)  ;     
+          }}
+          value={search}
+        />
+      </View>
       <FlatList style={styles.list}
-        data={listSanPham}
+        data={listSanPhamtam}
         renderItem = {({item})=>(
           <ListItem image={item.HinhAnh?{uri:item.HinhAnh[0]}:{} } 
             name = {item.TenSanPham} 

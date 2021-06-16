@@ -60,7 +60,7 @@ export default function SearchScreen({ navigation }) {
             for (let [key, value] of Object.entries(child.val().SanPham)) {
               if (value.TrangThai == 'on') {
                 if(value.SoLuong>0)
-                list.push({
+                {list.push({
                   IdSanPham: key,
                   TenAnime: animename,
                   IdAnime: idAnime,
@@ -69,8 +69,11 @@ export default function SearchScreen({ navigation }) {
                   GiaBan: value.GiaBan,
                   GiamGia: value.GiamGia,
                   HinhAnh: value.HinhAnh,
-                  SoLuong: value.SoLuong
+                  SoLuong: value.SoLuong,
+                  GiaGoc:value.giaGoc,
+                  MoTa:value.MoTa,
                 })
+              console.log(value.giaGoc)}
               }
             }
           }
@@ -109,7 +112,7 @@ export default function SearchScreen({ navigation }) {
         TonKho: sanpham.SoLuong,
         HinhAnh: sanpham.HinhAnh,
         IdAnime: sanpham.IdAnime,
-        GiaGoc: sanpham.giaGoc
+        GiaGoc: sanpham.GiaGoc
       }])
     }
 
@@ -158,11 +161,14 @@ export default function SearchScreen({ navigation }) {
         <FlatList style={styles.list}
           data={listSanPhamtam}
           renderItem={({ item }) => (
-            <ListItemmforsearch image={item.HinhAnh ? { uri: item.HinhAnh[0] } : {}}
-              name={item.TenSanPham}
-              description={'Anime: ' + item.TenAnime}
-              phoneNumber={'Tồn Kho: ' + item.SoLuong}
-              price={item.GiaBan * (1 - item.GiamGia)}
+            <ListItemmforsearch title={item.TenSanPham} 
+            description={item.MoTa}
+            giaban={item.GiaBan*(1-item.GiamGia)+' VND'}
+            giagoc={item.GiaBan}
+           itemSalePrice='23'
+           soluongton={item.SoLuong}
+            giamgia={item.GiamGia}
+            itemImage={{uri:item.HinhAnh[0]}}
               onPress={() => navigation.navigate('ItemDetail', { anime_ID: item.IdAnime, sanpham_ID: item.IdSanPham })}
               onADDTOCARTpress={() => { setSanPham(item); addToCart(item.IdSanPham, item) }}
             ></ListItemmforsearch>
@@ -188,11 +194,7 @@ export default function SearchScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   searchbarWrapper: {
-  //  marginTop: 10,
-    // searchBoxBorderRadius:8,  
     width: '100%',
-   // height: 20,
-    // alignItems:'center',
     alignSelf: 'center',
   },
   searchItemWrapper: {

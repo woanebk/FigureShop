@@ -104,7 +104,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={styles.btnsMenuWrapper}>
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() => navigation.navigate('ManageCategory')}>
-            <ProfileButton iconName='robot' text='Quản Lý Loai Sản Phẩm - Anime' ></ProfileButton>
+            <ProfileButton iconName='robot' text='Quản Lý Loại Sản Phẩm - Anime' ></ProfileButton>
           </TouchableRipple>
         </View>
       

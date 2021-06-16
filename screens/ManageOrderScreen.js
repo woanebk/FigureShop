@@ -7,20 +7,21 @@ import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { Button } from 'react-native-paper';
 import ItemDetailScreen from './ItemDetailScreen';
+import { SearchBar } from 'react-native-elements';
 
 export default function ManageOrderScreen({navigation}) {
-
+  const [listDonDatHangtam,setListDonDatHangtam]=useState();
   const [listDonDatHang,setListDonDatHang]=useState();
   const [firstRun,setFirstRun]=useState(0); 
   const [deleteID, setDeleteID] = useState(''); //id  để xóa
   const [soDienThoaitoDelete, setSoDienThoaitoDelete] = useState(''); //sdt  để xóa
-
+  const [search, setsearch] = useState(null)
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(()=>{
     if(firstRun == 0){
-    navigation.addListener('focus', () => { getDonDatHang() })
+    navigation.addListener('focus', () => { getDonDatHang();setsearch('') })
     setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
 
@@ -54,6 +55,7 @@ export default function ManageOrderScreen({navigation}) {
         }
       }
        setListDonDatHang(list)  
+       setListDonDatHangtam(list)  
        setIsLoading(false)
     })
   }
@@ -139,7 +141,14 @@ export default function ManageOrderScreen({navigation}) {
       </DialogContent>
     </Dialog>
   )
-
+  const searchlist = (s) => {
+    var list=[];
+    for(var item in listDonDatHang)
+      {
+        if(listDonDatHang[item].SoDienThoai.toLowerCase().includes(s))
+      list.push(listDonDatHang[item]);}
+  setListDonDatHangtam(list)
+  }
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
@@ -149,8 +158,17 @@ export default function ManageOrderScreen({navigation}) {
         <ActivityIndicator style={styles.indicator} animating={isLoading} color = '#bc2b78' size = "large"/>
         :
         <Fragment>
+           <SearchBar 
+          placeholder="Nhập số điện thoại đơn hàng"
+          lightTheme={true}
+          platform="android"
+          round={10}
+          onChangeText={search =>{searchlist(search); setsearch(search)  ;         
+          }}
+          value={search}
+        />
           <FlatList style={styles.list}
-            data={listDonDatHang}
+            data={listDonDatHangtam}
             renderItem = {({item})=>(
               <OrderListItem name = {item.TenKhachHang} maDonHang={item.IdDonDatHang}
               phoneNumber = {item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua) }

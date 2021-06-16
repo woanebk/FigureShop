@@ -6,12 +6,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { Button } from 'react-native-paper';
+import { SearchBar } from 'react-native-elements';
 
 export default function AllUserScreen({navigation}) {
+  const [listUsertam,setListUsertam]=useState();
   const [listUser,setListUser]=useState();
+  const [search, setsearch] = useState(null)
   const [deleteID, setDeleteID] = useState(''); //id User để xóa
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
-  navigation.addListener('focus', () => {getUsers()})
+  navigation.addListener('focus', () => {getUsers();setsearch('')})
   useEffect(()=>{
     if(deleteID !== '')
       openDialog();
@@ -33,6 +36,8 @@ export default function AllUserScreen({navigation}) {
           })
         })
         setListUser(list)
+        setListUsertam(list)
+
       }
     })
   }
@@ -89,13 +94,30 @@ export default function AllUserScreen({navigation}) {
       </DialogContent>
     </Dialog>
   )
-
+  const searchlist = (s) => {
+    var list = [];
+    for (var item in listUser) {
+      if (listUser[item].displayName.toLowerCase().includes(s))
+        list.push(listUser[item]);
+    }
+    setListUsertam(list)
+  }
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <View style={styles.topdock}></View>
+      <SearchBar
+              placeholder="Nhập tên người dùng"
+              lightTheme={true}
+              platform="android"
+              round={10}
+              onChangeText={search => {
+                searchlist(search); setsearch(search);
+              }}
+              value={search}
+            />
       <FlatList style={styles.list}
-        data={listUser}
+        data={listUsertam}
         renderItem = {({item})=>(
           <ListItem image={{uri:item.photoURL}} name = {item.displayName}
            description={item.isAdmin?'Admin':'User'} phoneNumber = {item.phoneNumber}

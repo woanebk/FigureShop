@@ -6,17 +6,19 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { Button } from 'react-native-paper';
+import { SearchBar } from 'react-native-elements';
 
 export default function ManageCategoryScreen({navigation}) {
-
+  const [search, setsearch] = useState(null)
   const [listAnime,setListAnime]=useState();
+  const [listAnimetam,setListAnimetam]=useState()
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const [deleteID, setDeleteID] = useState(''); //id anime để xóa
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
 
   useEffect(()=>{
     if(firstRun == 0){
-      navigation.addListener('focus', () => {getAnimes()})
+      navigation.addListener('focus', () => {getAnimes(),setsearch('')})
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
 
@@ -39,6 +41,7 @@ export default function ManageCategoryScreen({navigation}) {
           })
         })
         setListAnime(list)
+        setListAnimetam(list)
       }
     })
   }
@@ -96,13 +99,31 @@ export default function ManageCategoryScreen({navigation}) {
       </DialogContent>
     </Dialog>
   )
-
+  const searchlist = (s) => {
+    var list=[];
+    for(var item in listAnime)
+      {
+        if(listAnime[item].TenAnime.toLowerCase().includes(s))
+      list.push(listAnime[item]);}
+      setListAnimetam(list)
+  }
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <View style={styles.topdock}></View>
+      <View style={styles.searchbarWrapper}>
+        <SearchBar style={styles.searchbarWrapper}
+          placeholder="Nhập tên loại sản phẩm cần tìm"
+          lightTheme={true}
+          platform="android"
+          round={10}
+          onChangeText={search =>{searchlist(search); setsearch(search)  ;  
+          }}
+          value={search}
+        />
+      </View>
       <FlatList style={styles.list}
-        data={listAnime}
+        data={listAnimetam}
         renderItem = {({item})=>(
           <ListItem image={{uri:item.HinhAnh}} name = {item.TenAnime} 
             onPress={()=>{ navigation.navigate('AddCategory',{readonly:true, itemID:item.key}) }}
@@ -121,6 +142,10 @@ export default function ManageCategoryScreen({navigation}) {
 }
 
 var styles = StyleSheet.create({
+  searchbarWrapper: {
+    width: '100%',
+    alignSelf: 'center',
+  },
   container:{
     height:'100%',
     backgroundColor:WHITE
