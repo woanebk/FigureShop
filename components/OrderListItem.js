@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Animated, TouchableWithoutFeedback } from 'react-native';
-import { GREY, DARK_PRIMARY_COLOR, WHITE, GREY_BORDER, GREEN, BLACK, GOLD } from '../common';
+import { GREY, DARK_PRIMARY_COLOR, WHITE, GREY_BORDER, GREEN, BLACK, GOLD, PRIMARY_COLOR } from '../common';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -14,12 +14,22 @@ function OrderListItem(props) {
             inputRange: [0, 50, 100, 101],
             outputRange: [-20, 0, 0, 1],
         })
-
+        if(props.canDelete)
         return (
             <View style={{ flexDirection: 'row', width: 190 }}>
                 <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
                     <RectButton onPress={props.onDeletePress} style={[styles.rightAction, { backgroundColor: '#dd2c00' }]}>
                         <MaterialIcons name='delete' size={25} color={WHITE}></MaterialIcons>
+                    </RectButton>
+                </Animated.View>
+            </View>
+        )
+        else return(
+            <View style={{ flexDirection: 'row', width: 190 }}>
+                <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
+                    <RectButton  style={[styles.rightAction, { backgroundColor: '#dd2c00' }]}>
+                        <MaterialIcons name='do-not-disturb-alt' size={25} color={WHITE}></MaterialIcons>
+                        <Text style={{color:WHITE, alignSelf:'center', textAlign:'center', marginTop:5, width:120}}>Không Được Xóa </Text>
                     </RectButton>
                 </Animated.View>
             </View>

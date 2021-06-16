@@ -92,6 +92,7 @@ export default function LSGDScreen({route, navigation}) {
   return (
       <View style={styles.container}>
         <StatusBar barStyle='dark-content' translucent  ></StatusBar>
+        <View style={styles.topdock}></View>
         <FlatList
           style={styles.scroller}
           data={cart}
