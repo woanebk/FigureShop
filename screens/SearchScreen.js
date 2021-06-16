@@ -147,6 +147,7 @@ export default function SearchScreen({ navigation }) {
         <SearchBar style={styles.searchbarWrapper}
           placeholder="Nhập tên sản phẩm cần tìm"
           lightTheme={true}
+          platform="android"
           round={10}
           onChangeText={search =>{searchlist(search); setsearch(search)  ;           bottomsheetRef.current.snapTo(0)
           }}
@@ -187,15 +188,15 @@ export default function SearchScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   searchbarWrapper: {
-    marginTop: 10,
+  //  marginTop: 10,
     // searchBoxBorderRadius:8,  
     width: '100%',
-    height: 20,
+   // height: 20,
     // alignItems:'center',
     alignSelf: 'center',
   },
   searchItemWrapper: {
-    marginTop: 60,
+    //marginTop: 10,
     width: '90%',
     alignSelf: 'center',
     //marginBottom: 60,
