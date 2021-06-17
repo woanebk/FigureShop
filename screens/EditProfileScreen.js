@@ -16,6 +16,7 @@ export default function EditProfileScreen({ navigation }) {
   const [firstRun, setFirstRun] = useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   const fall = new Animated.Value(1); //blur animation
+  const [verificationId, setVerificationId] = useState();
   var [user, setuser] = useState(firebaseApp.auth().currentUser);
   var[userid,setuserid]=useState(user.uid)
   var [name, setname] = useState(user.displayName);
@@ -25,7 +26,8 @@ export default function EditProfileScreen({ navigation }) {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading]= useState(false);
   var library_status, cam_status;
-  navigation.addListener('focus', () => {getuserinfo()})
+  navigation.addListener('focus', () => {getuserinfo();bottomsheetRef.current.snapTo(1)
+  })
   useEffect(() => {
   });
   const getuserinfo =() => {
@@ -124,10 +126,9 @@ export default function EditProfileScreen({ navigation }) {
   )
   function upnoimage () 
     { 
-      console.log("ditmecuocdoiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii") ;   
       var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location,photoURL:user.photoURL};
       console.log(update);
-      firebaseApp.database().ref('User/' + user.uid).update(update).then(()=>{
+      firebaseApp.database().ref('User/' + firebaseApp.auth().currentUser.uid).update(update).then(()=>{
         setIsLoading(false);
         console.log('Thay đổi thông tin thành công')
         alert('Thay đổi thông tin thành công');

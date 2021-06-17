@@ -146,8 +146,7 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() =>{
             setCart([])
-            setTimeout(function(){firebaseApp.auth().signOut(); alert("Đăng xuất"); }, 100);
-          //  firebaseApp.auth().signOut()
+            setTimeout(function(){firebaseApp.auth().signOut();}, 200);
           }
           }
           >

@@ -37,7 +37,6 @@ export default function AllUserScreen({navigation}) {
         })
         setListUser(list)
         setListUsertam(list)
-
       }
     })
   }

@@ -172,7 +172,7 @@ export default function HomeScreen ({navigation}) {
       <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'}></StatusBar>
       {renderSwiper()}
       {/* ============ character categories ========== */}
-      <Text style={styles.subjectsTxt}>Giới Thiêu Cửa Hàng</Text>
+      <Text style={styles.subjectsTxt}>Giới Thiệu Cửa Hàng</Text>
       <View style={styles.categoryContainer}>
         <Image resizeMode='stretch' style={{height:150, width:'100%',  backgroundColor:BLACK, opacity:0.6,}}
           source ={require('../assets/banner/mainbanner.jpg')}>

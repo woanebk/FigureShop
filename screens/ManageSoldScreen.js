@@ -55,6 +55,7 @@ export default function ManageSaleScreen({navigation}) {
         }
       }
        setListDonDatHang(list)  
+       setListDonDatHangtam(list)  
        setIsLoading(false)
     })
   }

@@ -1,7 +1,7 @@
 import react from 'react';
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { ListItemmforsearch } from '../items';
-import { View, Text, Image, StyleSheet, TouchableOpacity, StatusBar, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, StatusBar, FlatList, ActivityIndicator } from 'react-native';
 import { AwesomeTextInput } from 'react-native-awesome-text-input';
 import { firebaseApp } from '../firebaseconfig';
 import { SearchBar } from 'react-native-elements';
@@ -19,7 +19,7 @@ export default function SearchScreen({ navigation }) {
   const bottomsheetRef = React.createRef();
   const [listSanPham, setListSanPham] = useState();
   const [listSanPhamtam, setListSanPhamtam] = useState();
-
+  const [isLoading, setisLoading] = useState(true)
   const [firstRun, setFirstRun] = useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const [dialogVisable, setDialogVisable] = useState(false); // true thì hiện dialog, false thì ẩn
   const [deleteAnimeID, setDeleteAnimeID] = useState(''); //id anime để xóa
@@ -27,7 +27,8 @@ export default function SearchScreen({ navigation }) {
   const [tenAnime, setTenAnime] = useState('')
   useEffect(() => {
     if (firstRun == 0) {
-      navigation.addListener('focus', () => {setsearch(''); getSanPhams()})
+      navigation.addListener('focus', () => { setisLoading(true);
+        setsearch(''); getSanPhams() })
       setFirstRun((firstRun) => firstRun += 1) //đánh dấu lần chạy đầu
     }
     if (deleteAnimeID !== '' || deleteAnimeID !== '')
@@ -39,12 +40,12 @@ export default function SearchScreen({ navigation }) {
     </View>
   )
   const searchlist = (s) => {
-    var list=[];
-    for(var item in listSanPham)
-      {
-        if(listSanPham[item].TenSanPham.toLowerCase().includes(s))
-      list.push(listSanPham[item]);}
-  setListSanPhamtam(list)
+    var list = [];
+    for (var item in listSanPham) {
+      if (listSanPham[item].TenSanPham.toLowerCase().includes(s))
+        list.push(listSanPham[item]);
+    }
+    setListSanPhamtam(list)
   }
   const getSanPhams = () => {
     let list = [];
@@ -59,29 +60,31 @@ export default function SearchScreen({ navigation }) {
             var idAnime = child.key
             for (let [key, value] of Object.entries(child.val().SanPham)) {
               if (value.TrangThai == 'on') {
-                if(value.SoLuong>0)
-                {list.push({
-                  IdSanPham: key,
-                  TenAnime: animename,
-                  IdAnime: idAnime,
-                  TenSanPham: value.TenSanPham,
-                  TenNhanVat: value.TenNhanVat,
-                  GiaBan: value.GiaBan,
-                  GiamGia: value.GiamGia,
-                  HinhAnh: value.HinhAnh,
-                  SoLuong: value.SoLuong,
-                  GiaGoc:value.giaGoc,
-                  MoTa:value.MoTa,
-                })
-              console.log(value.giaGoc)}
+                if (value.SoLuong > 0) {
+                  list.push({
+                    IdSanPham: key,
+                    TenAnime: animename,
+                    IdAnime: idAnime,
+                    TenSanPham: value.TenSanPham,
+                    TenNhanVat: value.TenNhanVat,
+                    GiaBan: value.GiaBan,
+                    GiamGia: value.GiamGia,
+                    HinhAnh: value.HinhAnh,
+                    SoLuong: value.SoLuong,
+                    GiaGoc: value.giaGoc,
+                    MoTa: value.MoTa,
+                  })
+                }
               }
             }
           }
         })
+
         setListSanPham(list)
         setListSanPhamtam(list)
       }
     })
+    setisLoading(false);
   }
   const addToCart = (idSanPham, sanpham) => {
     if (cart.length > 0 && cart.some(item => item.IdSanPham == idSanPham)) {
@@ -144,7 +147,7 @@ export default function SearchScreen({ navigation }) {
     </View>
   )
   return (
-    <View style={{ backgroundColor: '#fff', height:'100%' }} >
+    <View style={{ backgroundColor: '#fff', height: '100%' }} >
       <StatusBar barStyle='dark-content'></StatusBar>
       <View style={styles.searchbarWrapper}>
         <SearchBar style={styles.searchbarWrapper}
@@ -152,31 +155,36 @@ export default function SearchScreen({ navigation }) {
           lightTheme={true}
           platform="android"
           round={10}
-          onChangeText={search =>{searchlist(search); setsearch(search)  ;           bottomsheetRef.current.snapTo(0)
+          onChangeText={search => {
+            searchlist(search); setsearch(search); bottomsheetRef.current.snapTo(0)
           }}
           value={search}
         />
       </View>
-      <View style={styles.searchItemWrapper}>
-        <FlatList style={styles.list}
-          data={listSanPhamtam}
-          renderItem={({ item }) => (
-            <ListItemmforsearch title={item.TenSanPham} 
-            description={item.MoTa}
-            giaban={item.GiaBan*(1-item.GiamGia)+' VND'}
-            giagoc={item.GiaBan}
-           itemSalePrice='23'
-           soluongton={item.SoLuong}
-            giamgia={item.GiamGia}
-            itemImage={{uri:item.HinhAnh[0]}}
-              onPress={() => navigation.navigate('ItemDetail', { anime_ID: item.IdAnime, sanpham_ID: item.IdSanPham })}
-              onADDTOCARTpress={() => { setSanPham(item); addToCart(item.IdSanPham, item) }}
-            ></ListItemmforsearch>
-          )}
-          keyExtractor={item => item.IdSanPham}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      {
+        isLoading ?
+          <ActivityIndicator style={styles.indicator} animating={isLoading} color='#bc2b78' size="large" />
+          :
+          <View style={styles.searchItemWrapper}>
+            <FlatList style={styles.list}
+              data={listSanPhamtam}
+              renderItem={({ item }) => (
+                <ListItemmforsearch title={item.TenSanPham}
+                  description={item.MoTa}
+                  giaban={item.GiaBan * (1 - item.GiamGia) + ' VND'}
+                  giagoc={item.GiaBan}
+                  itemSalePrice='23'
+                  soluongton={item.SoLuong}
+                  giamgia={item.GiamGia}
+                  itemImage={{ uri: item.HinhAnh[0] }}
+                  onPress={() => navigation.navigate('ItemDetail', { anime_ID: item.IdAnime, sanpham_ID: item.IdSanPham })}
+                  onADDTOCARTpress={() => { setSanPham(item); addToCart(item.IdSanPham, item) }}
+                ></ListItemmforsearch>
+              )}
+              keyExtractor={item => item.IdSanPham}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>}
       <BottomSheet
         ref={bottomsheetRef}
         snapPoints={[0, 250]}
@@ -202,7 +210,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     //marginBottom: 60,
-    flex:1,
+    flex: 1,
   },
   bottomsheetWrapper: {
     alignItems: 'center',

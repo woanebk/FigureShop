@@ -143,6 +143,23 @@ export default function CheckOutScreen({route, navigation}) {
         verificationId,
         verificationCode
       );
+      var currentdate = new Date();
+      var ngay = currentdate.getDate().toString()
+      var thang =(currentdate.getMonth()+1).toString()
+      if(ngay.length < 2) ngay='0'+ ngay
+      if(thang.length < 2) thang='0'+ thang
+      var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
+      firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
+        TrangThai: 'on',
+        DaXacNhan: 0,
+        DiaChi: diaChi,
+        HoTen: hoTen,
+        TongTien: tongTien,
+        SanPhamMua: cart,
+        NgayDat: ngaydat
+      },()=>{
+        firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
+      })
       //await firebase.auth().currentUser.updatePhoneNumber(credential);
       setIsLoading(false)
       alert('Đặt Hàng Thành Công')
@@ -154,24 +171,7 @@ export default function CheckOutScreen({route, navigation}) {
       return
     }
     
-    //Them Don Dat Hang
-    var currentdate = new Date();
-    var ngay = currentdate.getDate().toString()
-    var thang =(currentdate.getMonth()+1).toString()
-    if(ngay.length < 2) ngay='0'+ ngay
-    if(thang.length < 2) thang='0'+ thang
-    var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
-    firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
-      TrangThai: 'on',
-      DaXacNhan: 0,
-      DiaChi: diaChi,
-      HoTen: hoTen,
-      TongTien: tongTien,
-      SanPhamMua: cart,
-      NgayDat: ngaydat
-    },()=>{
-      firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
-    })
+    //Them Don Dat Han
   }
 
   const banHang = async () => {
