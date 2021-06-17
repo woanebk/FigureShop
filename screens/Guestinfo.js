@@ -150,6 +150,7 @@ export default function Guestinfo({ route, navigation }) {
                                 <OrderListItem name={item.TenKhachHang} maDonHang={item.IdDonDatHang}
                                     phoneNumber={item.SoDienThoai} soLuongSanPham={item.TongSoLuongMua}
                                     canConfirm={true}
+                                    canConfirm1={item.DaXacNhan?false:true}
                                     tongtien={item.TongTien}
                                     onPress={() => navigation.navigate('OrderDetail', { so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang })}
                                     ngayDat={item.NgayDat}
