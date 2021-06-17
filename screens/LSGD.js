@@ -134,10 +134,12 @@ export default function LSGD({ navigation }) {
         verificationId,
         verificationCode
       );
-      console.log(verificationId)
-      console.log(verificationCode)
-      setFirstRun(0)
-      bottomsheetRef.current.snapTo(0)
+      if (firebase.auth().currentUser.phoneNumber!=soDienThoai)
+      await firebase.auth().currentUser.updatePhoneNumber(credential);
+      else 
+      await firebase.auth().signInWithPhoneNumber(credential);
+      setFirstRun(0);
+      bottomsheetRef.current.snapTo(0);
       setphoneNumber(soDienThoai)
       alert('Xác Nhận Thành Công')
     } catch (err)

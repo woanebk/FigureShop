@@ -160,7 +160,10 @@ export default function CheckOutScreen({route, navigation}) {
       },()=>{
         firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
       })
-      //await firebase.auth().currentUser.updatePhoneNumber(credential);
+      if (firebase.auth().currentUser.phoneNumber!=soDienThoai)
+      await firebase.auth().currentUser.updatePhoneNumber(credential);
+      else 
+      await firebase.auth().signInWithPhoneNumber(credential);
       setIsLoading(false)
       alert('Đặt Hàng Thành Công')
       navigation.navigate('SuccessOrder',{ten_khach_hang:hoTen, dia_chi: diaChi, so_dien_thoai:soDienThoai, thanh_tien:tongTien})
