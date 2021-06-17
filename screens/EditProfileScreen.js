@@ -16,7 +16,6 @@ export default function EditProfileScreen({ navigation }) {
   const [firstRun, setFirstRun] = useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   const fall = new Animated.Value(1); //blur animation
-  const [verificationId, setVerificationId] = useState();
   var [user, setuser] = useState(firebaseApp.auth().currentUser);
   var[userid,setuserid]=useState(user.uid)
   var [name, setname] = useState(user.displayName);
@@ -26,7 +25,7 @@ export default function EditProfileScreen({ navigation }) {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading]= useState(false);
   var library_status, cam_status;
-  navigation.addListener('focus', () => {getuserinfo();bottomsheetRef.current.snapTo(1)
+  navigation.addListener('focus', () => {getuserinfo();
   })
   useEffect(() => {
   });

@@ -11,7 +11,7 @@ import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-fi
 import { useContext, useRef } from 'react';
 
 export default function LSGD({ navigation }) {
-  const [phoneNumber, setphoneNumber] = useState(null);
+  const [phoneNumber, setphoneNumber] = useState('');
   //const{GUEST_UID}=""
   const fall = new Animated.Value(1); //blur animation
   const [listDonDatHang, setListDonDatHang] = useState();
@@ -27,15 +27,14 @@ export default function LSGD({ navigation }) {
   navigation.addListener('focus', () => { setFirstRun(0) })
   useEffect(() => {
     if (firstRun == 0) {
-      console.log(phoneNumber)
-      if (phoneNumber != null)
+      console.log(phoneNumber+'444444444444')
+      if (phoneNumber != '')
       {
       getDonDatHang()
       setFirstRun((firstRun) => firstRun += 1)
         } 
         else
         bottomsheetRef.current.snapTo(1)
-        
         setFirstRun((firstRun) => firstRun += 1)
        ;
         }
@@ -47,12 +46,9 @@ export default function LSGD({ navigation }) {
     return convertedNumber
   }
   const getDonDatHang = () => {
-    console.log("startttttt")
     let list = [];
     firebaseApp.database().ref('Guest/' + phoneNumber + '/DonHang').orderByChild('TrangThai').equalTo('on').on('value', (snapshot) => {
-      console.log('Guest/' + phoneNumber + '/DonHang')
       if (snapshot.exists()) {
-        console.log('Guest/' + phoneNumber + '/DonHang')
         list = [];
         snapshot.forEach((child) => {
           list.push({
@@ -138,9 +134,9 @@ export default function LSGD({ navigation }) {
       await firebase.auth().currentUser.updatePhoneNumber(credential);
       else 
       await firebase.auth().signInWithPhoneNumber(credential);
-      setFirstRun(0);
       bottomsheetRef.current.snapTo(0);
-      setphoneNumber(soDienThoai)
+      setphoneNumber(soDienThoai);
+      setFirstRun(0);
       alert('Xác Nhận Thành Công')
     } catch (err)
     {
@@ -272,6 +268,8 @@ export default function LSGD({ navigation }) {
                 <OrderListItem name={item.TenKhachHang} maDonHang={item.IdDonDatHang}
                   phoneNumber={item.SoDienThoai} soLuongSanPham={item.TongSoLuongMua}
                   canConfirm={true}
+                  canConfirm1={item.DaXacNhan?false:true}
+                  canDelete={false}
                   tongtien={item.TongTien}
                   onPress={() => navigation.navigate('OrderDetail', { so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang })}
                   ngayDat={item.NgayDat}
@@ -371,7 +369,7 @@ var styles = StyleSheet.create({
     backgroundColor:DARK_PRIMARY_COLOR,
     alignItems:'center',
     height:50,
-    width:150,
+    width:300,
     marginTop:20,
     marginBottom:20,
     justifyContent:'center',

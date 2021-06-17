@@ -3,7 +3,7 @@ import { useContext, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
 import { useState } from 'react/cjs/react.development';
 import CartContext from '../CartContext';
-import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GREEN, GOLD } from '../common';
+import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GREEN, GOLD,GUEST_UID } from '../common';
 import { ActionInput, CheckOutItem, CodeInput } from '../items';
 import { Ionicons} from '@expo/vector-icons';
 import { firebaseApp } from '../firebaseconfig';
@@ -132,7 +132,7 @@ export default function OrderDetailScreen({route, navigation}) {
   }
 
   const renderButton = ()=>{
-    if(trangThai == 0 && canConfirmDatHang(so_dien_thoai, id_don_dat_hang))
+    if(trangThai == 0 && canConfirmDatHang(so_dien_thoai, id_don_dat_hang)&&firebaseApp.auth().currentUser.uid!=GUEST_UID)
     return(
     <TouchableOpacity style={styles.commandBtn} onPress={()=>xacNhanDonDathang(so_dien_thoai, id_don_dat_hang)}>
       <Text style={styles.commandTxt}> Xác Nhận Đơn Hàng</Text>

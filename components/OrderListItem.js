@@ -71,6 +71,19 @@ function OrderListItem(props) {
                         <View style={styles.confirm}>
                             <Text style={styles.confirmTxt}>Không đủ hàng</Text>
                         </View>
+                       
+                    }
+                    {
+                         props.canConfirm1==true?
+                         <View style={styles.confirm}>
+                             <Text style={styles.confirmTxt}>Chưa xác nhận</Text>
+                         </View>:null
+                    }
+                    {
+                         props.canConfirm1==false?
+                         <View style={styles.confirm1}>
+                             <Text style={styles.confirmTxt}>Đã xác nhận</Text>
+                         </View>:null
                     }
                     
                 </View>
@@ -157,6 +170,15 @@ const styles = StyleSheet.create({
     confirm:{
         position:'absolute',
         backgroundColor:DARK_PRIMARY_COLOR,
+        height:20,
+        width:100,
+        borderRadius:10,
+        top:0, 
+        right:10
+    },
+    confirm1:{
+        position:'absolute',
+        backgroundColor:GREEN,
         height:20,
         width:100,
         borderRadius:10,
