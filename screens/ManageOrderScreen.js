@@ -153,37 +153,36 @@ export default function ManageOrderScreen({ navigation }) {
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <View style={styles.topdock}></View>
       {
-        isLoading ?
-          <ActivityIndicator style={styles.indicator} animating={isLoading} color='#bc2b78' size="large" />
-          :
-          <Fragment>
-            <SearchBar
-              placeholder="Nhập số điện thoại đơn hàng"
-              lightTheme={true}
-              platform="android"
-              round={10}
-              onChangeText={search => {
-                searchlist(search); setsearch(search);
-              }}
-              value={search}
-            />
-            <FlatList style={styles.list}
-              data={listDonDatHangtam}
-              renderItem={({ item }) => (
-                <OrderListItem name={item.TenKhachHang} maDonHang={item.IdDonDatHang}
-                  phoneNumber={item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua)}
-                  canConfirm={canConfirmDatHang(item.SoDienThoai, item.IdDonDatHang)}
-                  tongtien={item.TongTien}
-                  onPress={() => navigation.navigate('OrderDetail', { so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang })}
-                  ngayDat={item.NgayDat}
-                  onDeletePress={() => onDeleteDonDatHang(item.SoDienThoai, item.IdDonDatHang)}
-                ></OrderListItem>
-              )}
-              keyExtractor={item => item.IdDonDatHang}
-              showsVerticalScrollIndicator={false}
-            />
-            {renderDialog()}
-          </Fragment>
+        isLoading?
+        <ActivityIndicator style={styles.indicator} animating={isLoading} color = '#bc2b78' size = "large"/>
+        :
+        <Fragment>
+           <SearchBar 
+          placeholder="Nhập số điện thoại đơn hàng"
+          lightTheme={true}
+          platform="android"
+          round={10}
+          onChangeText={search =>{searchlist(search); setsearch(search)  ;         
+          }}
+          value={search}
+        />
+          <FlatList style={styles.list}
+            data={listDonDatHangtam}
+            renderItem = {({item})=>(
+              <OrderListItem name = {item.TenKhachHang} maDonHang={item.IdDonDatHang} canDelete={true}
+              phoneNumber = {item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua) }
+              canConfirm ={canConfirmDatHang(item.SoDienThoai, item.IdDonDatHang) }
+              tongtien={item.TongTien}
+              onPress={()=>navigation.navigate('OrderDetail',{so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang})}
+              ngayDat = {item.NgayDat}
+              onDeletePress={()=>onDeleteDonDatHang(item.SoDienThoai, item.IdDonDatHang)}
+              ></OrderListItem>
+            )}
+            keyExtractor={item=>item.IdDonDatHang}
+            showsVerticalScrollIndicator={false}
+          />
+          {renderDialog()}
+        </Fragment>
       }
 
     </View>

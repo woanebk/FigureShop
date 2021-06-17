@@ -1,34 +1,37 @@
 import react from 'react';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { BLACK, GOLD, GREY, GREY_BORDER, WHITE } from '../common';
-
+import { BLACK, DARK_PRIMARY_COLOR, GOLD, GREY, GREY_BORDER, WHITE } from '../common';
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 function Card(props){
     return(
         <View style={styles.card}>
             <Image style = {styles.cardImg} source ={props.itemImage} resizeMode='cover'></Image>
             <View style={styles.cardInfo}>
-              <View style={{flex:1}}>
+
+              <View style={{}}>
                 <Text numberOfLines={1} style={styles.itemName}>{props.title}</Text>
-                <View style = {styles.saleTag}>
-                  {props.giamgia > 0 ?
-                  <Text style= {styles.salePercentageTxt}>{'-'+props.giamgia*100+'%'}</Text>
-                  :
-                  null
-                  }
-                  
-                </View>
               </View>
 
               <View style={styles.descriptionContainer}>
-                <Text numberOfLines={2} style={styles.itemDescripton}> {props.description}</Text>
-              </View>
-
-              <View style={{flex:1}}>
-                <Text numberOfLines={1} style={styles.itemPrice}> {props.giaban}</Text>
-                <Text numberOfLines={1} style={styles.itemSalePrice}>{props.giagoc+' VNĐ'}</Text>
+                <View style={{flexDirection:'row', alignItems:'center'}}>
+                  <Text style={styles.itemDescripton}> Nhân vật:  </Text>
+                  <Text numberOfLines={1} style={styles.itemDescripton2}> {props.nhanvat}</Text>
+                </View>
+                <View style={{flexDirection:'row', alignItems:'center'}}>
+                  <Text style={styles.itemDescripton}> Anime: </Text>
+                  <Text numberOfLines={1} style={styles.itemDescripton2}> {props.anime}</Text>
+                </View>
                 
               </View>
+              <View style = {styles.hotTag}>
+                  <Text style={styles.hotTxt}>Hot</Text>
+                  <MaterialCommunityIcons size={16} name='fire'></MaterialCommunityIcons>
+                </View>
+              <View style = {styles.saleTag}>
+                  <Text style={styles.salePercentageTxt}>Khám Phá Ngay</Text>
+                  <MaterialCommunityIcons name='arrow-right-thick'></MaterialCommunityIcons>
+                </View>
             </View>
           </View>
     );
@@ -37,7 +40,7 @@ function Card(props){
 const styles = StyleSheet.create({
     card:{
         marginTop:10,
-        height:110,
+        height:100,
         width:'100%',
         marginVertical:10,
         flexDirection: 'row',
@@ -62,20 +65,25 @@ const styles = StyleSheet.create({
         borderRadius:5 ,
     },
     itemName:{ 
-        fontSize:18,
+        fontSize:16,
         marginLeft:15,
-        marginTop:10,
+        marginTop:3,
         fontWeight:'bold',
     },
     descriptionContainer:{
       alignSelf:'center',
       width:'90%',
       marginLeft:5,
-      flex:1,
     },
     itemDescripton:{
       fontSize:12,
       color:'#444'
+    },
+    itemDescripton2:{
+      fontSize:14,
+      color:'#000',
+      fontWeight:'bold',
+      width:'70%', 
     },
     itemPrice:{
       color:'#FF0000',
@@ -92,21 +100,40 @@ const styles = StyleSheet.create({
       width:85,
       textAlign:'center',
     },
+    hotTag:{
+      backgroundColor:DARK_PRIMARY_COLOR,
+      width:60,
+      height:20,
+      borderRadius:5,
+      position:'absolute',
+      bottom:-5,
+      left:20,
+      justifyContent:'center',
+      alignItems:'center',
+      flexDirection:'row'
+    },
     saleTag:{
       backgroundColor:GOLD,
-      width:60,
-      height:25,
+      width:130,
+      height:20,
       borderRadius:5,
-      position:'relative',
-      bottom:-45,
-      right:'-70%',
+      position:'absolute',
+      bottom:-5,
+      left:90,
       justifyContent:'center',
-      alignItems:'center'
+      alignItems:'center',
+      flexDirection:'row'
     },
     salePercentageTxt:{
       fontSize:12,
       fontWeight:'bold',
       width:100,
+      textAlign:'center'
+    },
+    hotTxt:{
+      fontSize:12,
+      fontWeight:'bold',
+      width:30,
       textAlign:'center'
     },
   });

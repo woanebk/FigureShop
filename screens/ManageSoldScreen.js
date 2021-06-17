@@ -170,7 +170,7 @@ export default function ManageSaleScreen({navigation}) {
           <FlatList style={styles.list}
             data={listDonDatHangtam}
             renderItem = {({item})=>(
-              <OrderListItem name = {item.TenKhachHang} maDonHang={item.IdDonDatHang}
+              <OrderListItem name = {item.TenKhachHang} maDonHang={item.IdDonDatHang} canDelete={false}
               phoneNumber = {item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua) }
               canConfirm ={true}
               tongtien={item.TongTien}

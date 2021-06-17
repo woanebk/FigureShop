@@ -14,7 +14,7 @@ export default function HomeScreen ({navigation}) {
 
   const [listAnime, setListAnime] = useState(); //chứa 4 Anime ra màn hình
   const [listSanPhamSale, setListSanPhamSale] = useState() // chứa 4 item sale
-  const [listAllSanPham, setListAllSanPham] = useState([]) // chứa 4 item sale
+  const [listAllSanPham, setListAllSanPham] = useState([]) 
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoadMore, setIsLoadMore] = useState(false)
   const itemsPerPage = 3
@@ -22,7 +22,7 @@ export default function HomeScreen ({navigation}) {
   useEffect(()=>{
     
     if(firstRun == 0){
-      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes(); getAllSanPhams() } )
+      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes(); getBestSeller() } )
       
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
@@ -125,6 +125,54 @@ export default function HomeScreen ({navigation}) {
     })
   }
 
+  const getBestSeller = async ()=>{
+    var tk = []
+    await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if(snapshot.exists())
+      for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
+        if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
+        {
+            for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang )) {
+                if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua )
+                {
+                    for (let [sanphammua_key, sanphammua_value] of Object.entries(donhang_value.SanPhamMua )){
+                      const vitri = checkSanPhamExistInArr(tk, sanphammua_value.IdSanPham);
+                      if(vitri == -1)
+                          {
+                            tk.push({TenSanPham: sanphammua_value.TenSanPham,
+                              IdSanPham:sanphammua_value.IdSanPham,
+                              IdAnime:sanphammua_value.IdAnime,
+                              SoLuong: sanphammua_value.SoLuongMua,
+                              HinhAnh:sanphammua_value.HinhAnh[0],
+                              TenAnime:sanphammua_value.TenAnime,
+                              TenNhanVat: sanphammua_value.TenNhanVat
+                              })
+                          }
+                          else
+                              tk[vitri].SoLuong += sanphammua_value.SoLuongMua
+                      }
+                }
+              }
+        }
+      }
+    })
+    if(tk.length > 1) tk.sort((a, b) => parseFloat(b.SoLuong) - parseFloat(a.SoLuong)); //sap xep tang dan
+    if(tk.length > 5) tk.slice(0,4)
+      setListAllSanPham(tk)
+    
+  }
+
+  const checkSanPhamExistInArr = (arr, idsp)=>{ //Neu tim ra return vi tri trong array, ko tim ra return -1
+    var found = -1 ; 
+    for(var i = 0; i < arr.length; i++) {
+        if (arr[i].IdSanPham == idsp) {
+            found = i;
+            break;
+        }
+    }
+    return found
+  }
+
   const renderSwiper = ()=>(
     <View style={styles.slidercontainer}>
       <Swiper height={200} activeDotColor='#FF6347' autoplay={true} showsButtons={false}>
@@ -181,33 +229,6 @@ export default function HomeScreen ({navigation}) {
           <Text style={{color:WHITE, fontSize:17, fontWeight:'bold'}}>Sản phẩm chính hãng từ Nhật Bản</Text>
           <Text style={{color:WHITE, fontSize:13, height:100}}>Figure Shop là thiên đường với những tín đồ theo đuổi thật sự, đam mê vẻ đẹp cao cấp đầy mê hoặc của Nhật Bản</Text>
         </View>
-        {/* <TouchableOpacity onPress = {()=>{navigation.navigate('CategoryItems',{categoryName:'Dragon Ball'})}}>
-          <View style={styles.categoryIcon}>
-            <Ionicons name='sad' size={30} color='#FF6347'></Ionicons>
-          </View>
-          <Text style={styles.categoryText}> Goku</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress = {()=>{console.log(listAnime)}}>
-          <View style={styles.categoryIcon}>
-            <Ionicons name='happy' size={30} color='#FF6347'></Ionicons>
-          </View>
-          <Text style={styles.categoryText}> Naruto</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress = {()=>{}}>
-          <View style={styles.categoryIcon}>
-            <Ionicons name='scan' size={30} color='#FF6347'></Ionicons>
-          </View>
-          <Text style={styles.categoryText}> Luffy</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress = {()=>{}}>
-          <View style={styles.categoryIcon}>
-            <Ionicons name='scan' size={30} color='#FF6347'></Ionicons>
-          </View>
-          <Text style={styles.categoryText}> Sasuke</Text>
-        </TouchableOpacity> */}
 
       </View>
 
@@ -250,13 +271,11 @@ export default function HomeScreen ({navigation}) {
         style={styles.cardContainer}
         data={listAllSanPham}
         renderItem = {({item})=>(
-          <TouchableOpacity onPress={()=>navigation.navigate('ItemDetail')}>
-            <Card title={item.TenSanPham} description={item.MoTa}
-             giaban={item.GiaBan*(1-item.GiamGia)+' VND'}
-             giagoc={item.GiaGoc}
-             itemSalePrice='23'
-             giamgia={item.GiamGia}
-             itemImage={{uri:item.HinhAnh[0]}}></Card>
+          <TouchableOpacity onPress={()=>navigation.navigate('ItemDetail', {anime_ID: item.IdAnime, sanpham_ID: item.IdSanPham})}>
+            <Card title={item.TenSanPham}
+             nhanvat={item.TenNhanVat}
+             anime={item.TenAnime}
+             itemImage={{uri:item.HinhAnh}}></Card>
           </TouchableOpacity>
         )}
         ListFooterComponent={renderFooter}

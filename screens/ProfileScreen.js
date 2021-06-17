@@ -13,11 +13,24 @@ export default function ProfileScreen({ navigation }) {
   const { cart, setCart } = useContext(CartContext)
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   var [user, setuser] = useState(firebaseApp.auth().currentUser);
+  //thong ke theo thang
+  const [soDonDat, setSoDonDat] = useState(0)
+  const [soDonBan, setSoDonBan] = useState(0)
+  const [doanhThu, setDoanhThu] = useState(0)
 
-  navigation.addListener('focus', () => {getuserinfo()})
+  
   useEffect( () => {
     if(firstRun == 0){
-    getuserinfo()
+    var currentdate = new Date();
+    var currentyear = currentdate.getFullYear()
+    var currentmonth = currentdate.getMonth() + 1
+
+    navigation.addListener('focus', () => {getuserinfo();
+       getSoDonDatHang(currentmonth, currentyear); 
+       getSoDonBanHang(currentmonth, currentyear)
+       getDoanhThuThang(currentmonth, currentyear)
+      })
+    
     setFirstRun((firstRun)=>firstRun += 1
     ) 
   }
@@ -30,6 +43,7 @@ export default function ProfileScreen({ navigation }) {
       )
     })
   });
+
   const getuserinfo = async() => {
     firebaseApp.database().ref('User/'+ firebaseApp.auth().currentUser.uid).on('value', (snapshot) => {
       if (snapshot.exists()) {
@@ -40,6 +54,70 @@ export default function ProfileScreen({ navigation }) {
   //   console.log(user)
   //  await firebaseApp.database().ref('User/'+ firebaseApp.auth().currentUser.uid).update(firebaseApp.auth().currentUser.providerData);
   }
+
+  const getSoDonDatHang = async (thang, nam)=>{
+    var tt = 0
+    await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if(snapshot.exists())
+      for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
+        if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
+        {
+            for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang )) {
+                if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua && donhang_value.DaXacNhan == 0)
+                {
+                    var ngay_dat_san_pham = donhang_value.NgayDat.split('/')
+                    if(ngay_dat_san_pham[2] == nam && ngay_dat_san_pham[1] == thang)
+                        tt += 1
+                }
+              }
+        }
+      }
+    })
+    setSoDonDat(tt)
+  }
+
+  const getSoDonBanHang = async (thang, nam)=>{
+    var tt = 0
+    await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if(snapshot.exists())
+      for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
+        if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
+        {
+            for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang )) {
+                if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua && donhang_value.DaXacNhan == 1)
+                {
+                    var ngay_dat_san_pham = donhang_value.NgayDat.split('/')
+                    if(ngay_dat_san_pham[2] == nam && ngay_dat_san_pham[1] == thang)
+                        tt += 1
+                }
+              }
+        }
+      }
+    })
+    setSoDonBan(tt)
+  }
+
+  const getDoanhThuThang = async (thang, nam)=>{
+    var tt = 0
+    await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+      if(snapshot.exists())
+      for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
+        if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
+        {
+            for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang )) {
+                if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua && donhang_value.DaXacNhan == 1)
+                {
+                    var ngay_dat_san_pham = donhang_value.NgayDat.split('/')
+                    if(ngay_dat_san_pham[2] == nam && ngay_dat_san_pham[1] == thang)
+                        tt += donhang_value.TongTien
+                }
+              }
+        }
+      }
+    })
+    setDoanhThu(tt/1000)
+  }
+
   if (user.uid=="Pyino4SsfsPXgD8kNYyKBIO3pMd2")
   return (
     <ScrollView style={styles.container}>
@@ -99,7 +177,7 @@ export default function ProfileScreen({ navigation }) {
       </View>
   
       <View style={styles.dashboardHolder}>
-        <DashBoard></DashBoard>
+        <DashBoard sodondat = {soDonDat} sodonban={soDonBan} doanhthu={doanhThu+'k'}></DashBoard>
       </View>
       <View style={styles.btnsMenuWrapper}>
         <View style={styles.userBtn}>
