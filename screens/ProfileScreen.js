@@ -185,7 +185,10 @@ export default function ProfileScreen({ navigation }) {
       <View style={styles.dashboardHolder}>
         <DashBoard sodondat = {soDonDat} sodonban={soDonBan} doanhthu={doanhThu+'k'}></DashBoard>
       </View>
-      <View style={styles.btnsMenuWrapper}>
+
+     { firstRun==1?
+        user.isAdmin? 
+     <View style={styles.btnsMenuWrapper}>
         <View style={styles.userBtn}>
           <TouchableRipple onPress={() => navigation.navigate('ManageCategory')}>
             <ProfileButton iconName='robot' text='Quản Lý Loại Sản Phẩm - Anime' ></ProfileButton>
@@ -238,6 +241,37 @@ export default function ProfileScreen({ navigation }) {
           </TouchableRipple>
         </View>
       </View>
+      :
+
+       <View style={styles.btnsMenuWrapper}>
+       <View style={styles.userBtn}>
+         <TouchableRipple onPress={() => navigation.navigate('ManageOrder')}>
+           <ProfileButton iconName='clock' text='Quản Lý Đặt Hàng' ></ProfileButton>
+         </TouchableRipple>
+       </View>
+
+       <View style={styles.userBtn}>
+         <TouchableRipple onPress={() => navigation.navigate('ManageSold')}>
+           <ProfileButton iconName='wallet' text='Quản Lý Bán Hàng' ></ProfileButton>
+         </TouchableRipple>
+       </View>
+       <View style={styles.userBtn}>
+         <TouchableRipple onPress={() => navigation.navigate('AllGuest')}>
+           <ProfileButton iconName='human' text='Quản Lý Khách Hàng' ></ProfileButton>
+         </TouchableRipple>
+       </View>
+       <View style={styles.userBtn}>
+         <TouchableRipple onPress={() =>{
+           setCart([])
+           setTimeout(function(){firebaseApp.auth().signOut();}, 200);
+         }
+         }
+         >
+           <ProfileButton iconName='logout' text='Đăng xuất' ></ProfileButton>
+         </TouchableRipple>
+       </View>
+     </View>:null
+      }
   
     </ScrollView>
   );
