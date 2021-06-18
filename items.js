@@ -16,6 +16,7 @@ import CodeInput from './components/CodeInput'
 import OrderListItem from './components/OrderListItem'
 import GuestListItem from './components/GuestListItem'
 import ListItemmforsearch from './components/ListItemforsearch' 
+import LocationPin from './components/LocationPin';
 export {
     Card,
     UserPFP,
@@ -35,4 +36,5 @@ export {
     OrderListItem,
     GuestListItem,
     ListItemmforsearch,
+    LocationPin,
 }

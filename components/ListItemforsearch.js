@@ -49,8 +49,7 @@ function ListItemforsearch(props) {
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    {/* <Text numberOfLines={1} style={styles.itemton}> {'Số lượng hiện có: '+props.soluongton}</Text> */}
-
+                    <Text numberOfLines={1} style={styles.itemton}> {'Số lượng hiện có: '+props.soluongton}</Text>
                     <Text numberOfLines={1} style={styles.itemPrice}> {props.giaban}</Text>
                     <Text numberOfLines={1} style={styles.itemSalePrice}>{props.giagoc + ' VNĐ'}</Text>
 

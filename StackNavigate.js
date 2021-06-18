@@ -30,7 +30,7 @@ import ManageOrderScreen from "./screens/ManageOrderScreen";
 import OrderDetailScreen from "./screens/OrderDetailScreen";
 import ManageSoldScreen from "./screens/ManageSoldScreen";
 import ReportScreen from "./screens/ReportScreen";
-
+import Contact from "./screens/Contact";
 
 const Tab = createMaterialBottomTabNavigator();//Bottom Tab:
 
@@ -373,6 +373,12 @@ const ProfileStackNavigator = (navigation) => {
           headerTransparent: true,
           headerTintColor: '#fff',
           title: 'Báo Cáo Doanh Thu'
+        }}></ProfileStack.Screen>
+         <ProfileStack.Screen name='Contact' component={Contact}
+        options={{
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          title: 'Liên Hệ'
         }}></ProfileStack.Screen>
 
     </ProfileStack.Navigator>

@@ -170,7 +170,7 @@ export default function CheckOutScreen({route, navigation}) {
     } catch (err)
     {
       setIsLoading(false)
-      alert(err)
+      alert("vui lòng nhập lại mã xác nhận hoặc tiến hành đặt hàng lại")
       return
     }
     

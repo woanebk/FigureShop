@@ -134,13 +134,19 @@ export default function ProfileScreen({ navigation }) {
       </View>
       <View style={styles.btnsMenuWrapper}>       
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() =>{navigation.navigate('LSGD',{phoneNumber:'0962447783'})}}>
+        <TouchableRipple onPress={() =>{navigation.navigate('LSGD')}}>
             <ProfileButton iconName='chart-bar' text='Lịch sử giao dịch' ></ProfileButton>
           </TouchableRipple>
         </View>
         <View style={styles.userBtn}>
-          <TouchableRipple onPress={() =>
-            firebaseApp.auth().signOut()
+          <TouchableRipple onPress={() =>{navigation.navigate('Contact')}}>
+            <ProfileButton iconName='chart-bar' text='Liên hệ' ></ProfileButton>
+          </TouchableRipple>
+        </View>
+        <View style={styles.userBtn}>
+          <TouchableRipple onPress={() =>{ 
+            setCart([]);
+            setTimeout(function(){firebaseApp.auth().signOut();}, 200);}
           }
           >
             <ProfileButton iconName='logout' text='Đăng xuất' ></ProfileButton>
