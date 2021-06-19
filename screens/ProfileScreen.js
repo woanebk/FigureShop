@@ -295,6 +295,8 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 27,
     fontWeight: 'bold',
+    width:250, 
+    textAlign: 'center'
   },
   userinfo: {
     height: 100,

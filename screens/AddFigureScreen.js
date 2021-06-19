@@ -364,38 +364,38 @@ export default function AddFigureScreen({route, navigation}) {
               }}
             />
 
-            <ActionInput title= 'Tên Sản Phẩm' ionIconName='caret-forward-outline' placeholder ='Nhập Tên Sản Phẩm' 
+            <ActionInput require={true} title= 'Tên Sản Phẩm' ionIconName='caret-forward-outline' placeholder ='Nhập Tên Sản Phẩm' 
             value={tenSanPham} onChangeText={(text)=>{setTenSanPham(text)}} editable={editing || !readonly}
             ></ActionInput>
 
-            <ActionInput title= 'Tên Nhân Vật' ionIconName='body-outline' placeholder ='Nhập Tên Nhân Vật'
+            <ActionInput require={true} title= 'Tên Nhân Vật' ionIconName='body-outline' placeholder ='Nhập Tên Nhân Vật'
             value={tenNhanVat} onChangeText={(text)=>{setTenNhanVat(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Giá Gốc (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Gốc' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Giá Gốc (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Gốc' keyboardType ='numeric' 
             value={giaGoc.toString()} onChangeText={(text)=>{setGiaGoc(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Giá Bán (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Bán' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Giá Bán (VNĐ)' ionIconName='cash-outline' placeholder ='Nhập Giá Bán' keyboardType ='numeric' 
             value={giaBan.toString()} onChangeText={(text)=>{setGiaBan(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Giảm Giá' ionIconName='pricetag-outline' placeholder ='Nhập % Giảm Giá' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Giảm Giá' ionIconName='pricetag-outline' placeholder ='Nhập % Giảm Giá' keyboardType ='numeric' 
             value={giamGia.toString()} onChangeText={(text)=>{setGiamGia(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Số Lượng' ionIconName='pricetag-outline' placeholder ='Nhập Số Lượng' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Số Lượng' ionIconName='pricetag-outline' placeholder ='Nhập Số Lượng' keyboardType ='numeric' 
             value={soLuong.toString()} onChangeText={(text)=>{setSoLuong(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Chiều Cao (cm)' ionIconName='swap-vertical-outline' placeholder ='Nhập Chiều Cao' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Chiều Cao (cm)' ionIconName='swap-vertical-outline' placeholder ='Nhập Chiều Cao' keyboardType ='numeric' 
             value={chieuCao.toString()} onChangeText={(text)=>{setChieuCao(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Chiều Dài (cm)' ionIconName='swap-horizontal-outline' placeholder ='Nhập Chiều Dài' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Chiều Dài (cm)' ionIconName='swap-horizontal-outline' placeholder ='Nhập Chiều Dài' keyboardType ='numeric' 
             value={chieuDai.toString()} onChangeText={(text)=>{setChieuDai(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Chiều Rộng (cm)' ionIconName='resize-outline' placeholder ='Nhập Chiều Rộng' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Chiều Rộng (cm)' ionIconName='resize-outline' placeholder ='Nhập Chiều Rộng' keyboardType ='numeric' 
             value={chieuRong.toString()} onChangeText={(text)=>{setChieuRong(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Chất Liệu (kg)' ionIconName='barbell' placeholder ='Nhập Chất Liệu'  
+            <ActionInput require={true} title= 'Chất Liệu (kg)' ionIconName='barbell' placeholder ='Nhập Chất Liệu'  
             value={chatLieu} onChangeText={(text)=>{setChatLieu(text)}} editable={editing || !readonly}></ActionInput>
 
-            <ActionInput title= 'Cân Nặng (kg)' ionIconName='barbell' placeholder ='Nhập Cân Nặng' keyboardType ='numeric' 
+            <ActionInput require={true} title= 'Cân Nặng (kg)' ionIconName='barbell' placeholder ='Nhập Cân Nặng' keyboardType ='numeric' 
             value={canNang.toString()} onChangeText={(text)=>{setCanNang(text)}} editable={editing || !readonly}></ActionInput>
 
             <LargeActionInput title= 'Mô Tả' ionIconName='pencil-outline' placeholder ='Nhập Mô Tả' multiline={true} 
