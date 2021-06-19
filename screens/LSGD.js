@@ -149,8 +149,8 @@ export default function LSGD({ navigation }) {
       if (!verificationId)
         return (
           <View style={styles.bottomsheetWrapper}>
-            <Text style={styles.panelTitleTxt}>Thông Tin</Text>
-            <Text style={styles.panelSubtitleTxt}>Nhập Thông Tin Của Bạn</Text>
+            <Text style={styles.panelTitleTxt}>Thông Tin   </Text>
+            <Text style={styles.panelSubtitleTxt}>Nhập Thông Tin Của Bạn   </Text>
             <ScrollView style={{ width: '90%', flex: 1 }}>
               <ActionInput title='Số Điện Thoại' ionIconName='call'
                 placeholder='Nhập Số Điện Thoại'

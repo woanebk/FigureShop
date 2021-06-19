@@ -113,7 +113,6 @@ export default function AddCategoryScreen({ route, navigation }) {
 
   const GetAnime = async () => {
     await firebaseApp.database().ref('Anime/' + itemID).once('value', (snapshot) => {
-      console.log('on')
       if (snapshot.exists()) {
         setCategoryName(snapshot.val().TenAnime)
         setImageURL(snapshot.val().HinhAnh)
@@ -245,16 +244,16 @@ export default function AddCategoryScreen({ route, navigation }) {
               <TouchableOpacity disabled={!editing && readonly} style={styles.imgHolder} onPress={() => bottomsheetRef.current.snapTo(1)}>
                 <View>
                   <Image style={styles.image} source={{ uri: image }}></Image>
-                  <Ionicons style={styles.editpfpIcon} name='camera-outline' size={50} color={BLACK}></Ionicons>
+                  <Ionicons style={[(editing)?styles.editpfpIcon:styles.hide]} name='camera-outline' size={50} color={BLACK}></Ionicons>
                 </View>
               </TouchableOpacity>
-              <ActionInput title='Tên Loại Sản Phẩm' ionIconName='ios-logo-android'
+              <ActionInput title='Tên Loại Sản Phẩm' ionIconName='ios-logo-android' require={true}
                 placeholder='Nhập Tên Loại Sản Phẩm' value={categoryName}
                 editable={editing} onChangeText={(text) => { setCategoryName(text) }}
               ></ActionInput>
 
               <TouchableOpacity style={[styles.commandBtn, readonly && !editing ? styles.hide : {}]} onPress={Submit}>
-                <Text style={styles.commandTxt}>Xác Nhận</Text>
+                <Text style={styles.commandTxt}>Xác Nhận  </Text>
               </TouchableOpacity>
             </ScrollView>
         }

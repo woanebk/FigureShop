@@ -262,7 +262,7 @@ export default function ReportScreen({navigation}) {
 
   const GenerateColor = ()=>{
     const randomColor = Math.floor(Math.random()*16777215).toString(16);
-    const result = '#'+ randomColor
+    var result = '#'+ randomColor
     if(result.length < 7)
     result += '9' //random number
     return result
@@ -519,6 +519,9 @@ var styles = StyleSheet.create({
       color:WHITE,
       textAlign:'center',
       alignSelf:'center',
+      width:150,
+      textAlign:'left',
+      marginLeft:15
 },
 cardWrapper:{
     height:90,

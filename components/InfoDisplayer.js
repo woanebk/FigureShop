@@ -15,7 +15,7 @@ function InfoDisplayer(props){
 var styles = StyleSheet.create({
   container:{
     height:30,
-    width:120,
+    width:150,
     //backgroundColor:'#000',
     flexDirection:'row',
     alignItems:'center'
@@ -29,7 +29,7 @@ var styles = StyleSheet.create({
     color:GREY,
     marginLeft:15,
     flex:10,
-    alignSelf:'center'
+    alignSelf:'center',
   },
 })
 
