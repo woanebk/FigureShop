@@ -52,23 +52,23 @@ export default function Contact({ navigation }) {
             />
           </MapView>
         </View>
-        <TouchableOpacity style={[styles.commandBtn2, { alignSelf: 'center' }]}
+        <TouchableOpacity style={[styles.commandBtn2, { alignSelf: 'center', marginTop:30 }]}
           onPress={() => { Linking.openURL("tel:0349156877") }
           }
         >
-          <Text style={styles.commandTxt}>HOTLINE:0349156877</Text>
+          <Text style={styles.commandTxt}>HOTLINE: 0349156877</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.commandBtn2, { alignSelf: 'center' }]}
           onPress={() => { Linking.openURL("mailto:18520096@gm.uit.edu.vn") }
           }
         >
-          <Text style={styles.commandTxt}>EMAILSUPORT:18520096@gm.uit.edi.vn</Text>
+          <Text style={styles.commandTxt}>EMAIL SUPPORT: 18520096@gm.uit.edi.vn</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.commandBtn2, { alignSelf: 'center' }]}
+        <TouchableOpacity style={[styles.commandBtn3, { alignSelf: 'center' }]}
           onPress={() => { Linking.openURL("https://www.facebook.com/nam.vs.theworld") }
           }
         >
-          <Text style={styles.commandTxt}>FACEBOOKSUPORT</Text>
+          <Text style={styles.commandTxt}>FACEBOOK SUPPORT</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -129,4 +129,20 @@ var styles = StyleSheet.create({
     padding:10,
     elevation:5,
   },
+  commandBtn3:{
+    borderRadius:5,
+    backgroundColor:'#4267B2',
+    alignItems:'center',
+    height:40,
+    width:300,
+    marginTop:10,
+    marginBottom:10,
+    justifyContent:'center',
+    padding:10,
+    elevation:5,
+  },
+  commandTxt:{
+    fontWeight:'bold',
+    color:WHITE
+  }
 })

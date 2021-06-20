@@ -178,22 +178,22 @@ export default function HomeScreen ({navigation}) {
       <Swiper height={200} activeDotColor='#FF6347' autoplay={true} showsButtons={false}>
         <View style={styles.slide}>
           <Image style={styles.sliderimage}
-          source ={require('../assets/banner/naruto_swiper_1.jpg')}
-          resizeMode='cover'
+          source ={require('../assets/banner/banner3.jpg')}
+          resizeMode='stretch'
           ></Image>
         </View>
 
         <View style={styles.slide}>
           <Image style={styles.sliderimage}
-          source ={require('../assets/banner/op_swiper_1.jpg')}
-          resizeMode='cover'
+          source ={require('../assets/banner/banner2.jpg')}
+          resizeMode='stretch' 
           ></Image>
         </View>
 
         <View style={styles.slide}>
           <Image style={styles.sliderimage}
-          source ={require('../assets/banner/dbz_swiper_1.jpg')}
-          resizeMode='cover'
+          source ={require('../assets/banner/banner4.jpg')}
+          resizeMode='stretch'
           ></Image>
         </View>
       </Swiper>
@@ -297,7 +297,7 @@ var styles = StyleSheet.create({
   },
   slidercontainer:{
     height:180,
-    width:'90%',
+    width:'96%',
     marginTop:10,
     justifyContent:'center',
     alignSelf:'center',
