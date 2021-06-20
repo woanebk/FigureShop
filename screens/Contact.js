@@ -12,6 +12,8 @@ import {Linking} from 'react-native'
 import {  BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GUEST_UID, GOLD, GREEN } from '../common';
 
 export default function Contact({ navigation }) {
+  const[regions]=useState({
+    latitude: 10.881379, longitude: 106.808778,});
   navigation.addListener('focus', () => { })
   var [region, setregion] = useState({
     latitude: 10.881379, longitude: 106.808778,
@@ -41,7 +43,7 @@ export default function Contact({ navigation }) {
             style={styles.list}
             region={region}
             onRegionChangeComplete={region => { setregion(region) }}
-            onLongPress={()=>{Linking.openURL(`geo:${region.latitude},${region.longitude}?center=${region.latitude},${region.longitude}&q=${region.latitude},${region.longitude}&z=16`)}}
+            onLongPress={()=>{Linking.openURL(`geo:${regions.latitude},${regions.longitude}?center=${regions.latitude},${regions.longitude}&q=${regions.latitude},${regions.longitude}&z=16`)}}
           >
             <Marker
               coordinate={marker.latlng}
