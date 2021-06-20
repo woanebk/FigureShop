@@ -156,6 +156,7 @@ export default function LSGD({ navigation }) {
                 placeholder='Nhập Số Điện Thoại'
                 autoFocus='true'
                 require={true}
+                keyboardType='numeric'
                 value={soDienThoai}
                 onChangeText={(text) => { setSoDienThoai(text) }}
               ></ActionInput>

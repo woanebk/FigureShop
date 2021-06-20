@@ -40,7 +40,8 @@ export default function Contact({ navigation }) {
           <MapView
             style={styles.list}
             region={region}
-            onRegionChange={region => { setregion(region) }}
+            onRegionChangeComplete={region => { setregion(region) }}
+            onLongPress={()=>{Linking.openURL(`geo:${region.latitude},${region.longitude}?center=${region.latitude},${region.longitude}&q=${region.latitude},${region.longitude}&z=16`)}}
           >
             <Marker
               coordinate={marker.latlng}
