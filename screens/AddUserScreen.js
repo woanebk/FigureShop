@@ -174,8 +174,8 @@ export default function AddUserScreen({ route, navigation }) {
               firebaseApp.database().ref('User/' + response.uid).update(update)
               firebaseApp.auth().currentUser.updateProfile(update).then(() => {
                 setIsLoading(false);
-                console.log('Thay đổi thông tin thành công')
                 alert('Tạo người dùng thành công');
+                
               });
             }).then(() => {
               setIsLoading(false);

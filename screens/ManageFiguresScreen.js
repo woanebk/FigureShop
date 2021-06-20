@@ -120,7 +120,7 @@ export default function ManageFiguresScreen({navigation}) {
       var list=[];
       for(var item in listSanPham)
         {
-          if(listSanPham[item].TenSanPham.toLowerCase().includes(s))
+          if(listSanPham[item].TenSanPham.toLowerCase().includes(s.toLowerCase()))
         list.push(listSanPham[item]);}
     setListSanPhamtam(list)
     }

@@ -96,7 +96,7 @@ export default function AllUserScreen({navigation}) {
   const searchlist = (s) => {
     var list = [];
     for (var item in listUser) {
-      if (listUser[item].displayName.toLowerCase().includes(s))
+      if (listUser[item].displayName.toLowerCase().includes(s.toLowerCase()))
         list.push(listUser[item]);
     }
     setListUsertam(list)

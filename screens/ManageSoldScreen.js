@@ -145,7 +145,7 @@ export default function ManageSaleScreen({navigation}) {
     var list=[];
     for(var item in listDonDatHang)
       {
-        if(listDonDatHang[item].SoDienThoai.toLowerCase().includes(s))
+        if(listDonDatHang[item].SoDienThoai.toLowerCase().includes(s.toLowerCase()))
       list.push(listDonDatHang[item]);}
   setListDonDatHangtam(list)
   }

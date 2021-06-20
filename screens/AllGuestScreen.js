@@ -108,7 +108,7 @@ export default function AllGuestScreen({ navigation }) {
   const searchlist = (s) => {
     var list = [];
     for (var item in listGuest) {
-      if (listGuest[item].phoneNumber.toLowerCase().includes(s))
+      if (listGuest[item].phoneNumber.toLowerCase().includes(s.toLowerCase()))
         list.push(listGuest[item]);
     }
     setListGuesttam(list)

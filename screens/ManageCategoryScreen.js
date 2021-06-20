@@ -103,7 +103,7 @@ export default function ManageCategoryScreen({navigation}) {
     var list=[];
     for(var item in listAnime)
       {
-        if(listAnime[item].TenAnime.toLowerCase().includes(s))
+        if(listAnime[item].TenAnime.toLowerCase().includes(s.toLowerCase()))
       list.push(listAnime[item]);}
       setListAnimetam(list)
   }
