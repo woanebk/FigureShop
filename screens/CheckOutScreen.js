@@ -79,7 +79,7 @@ export default function CheckOutScreen({route, navigation}) {
         result = false
     }
     else{
-      if(hoTen == '' || soDienThoai == '')
+      if(hoTen == '' || soDienThoai == '' )
           result = false
     }
         return result
@@ -101,6 +101,11 @@ export default function CheckOutScreen({route, navigation}) {
     if(!validate())
     {
       alert('Vui Lòng Nhập Đủ Thông Tin !')
+      return
+    }
+    if(isNaN(soDienThoai) || soDienThoai < 0)
+    {
+      alert('Số điện thoại không hợp lệ !')
       return
     }
     if(firebaseApp.auth().currentUser.uid == GUEST_UID)

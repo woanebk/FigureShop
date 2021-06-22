@@ -358,7 +358,7 @@ const ProfileStackNavigator = (navigation) => {
         options={{
           headerTransparent: true,
           headerTintColor: '#fff',
-          title: 'Chi Tiết Đơn Đặt Hàng'
+          title: 'Chi Tiết Đơn'
         }}>
       </ProfileStack.Screen>
       <ProfileStack.Screen name='ManageSold' component={ManageSoldScreen}

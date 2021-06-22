@@ -12,8 +12,8 @@ export default function HomeScreen ({navigation}) {
 
   const [firstRun,setFirstRun]=useState(0);
 
-  const [listAnime, setListAnime] = useState(); //chứa 4 Anime ra màn hình
-  const [listSanPhamSale, setListSanPhamSale] = useState() // chứa 4 item sale
+  const [listAnime, setListAnime] = useState([]); //chứa 4 Anime ra màn hình
+  const [listSanPhamSale, setListSanPhamSale] = useState([]) // chứa 4 item sale
   const [listAllSanPham, setListAllSanPham] = useState([]) 
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoadMore, setIsLoadMore] = useState(false)
@@ -22,8 +22,8 @@ export default function HomeScreen ({navigation}) {
   useEffect(()=>{
     
     if(firstRun == 0){
-      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes(); getBestSeller() } )
-      
+      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes(); } )
+      getBestSeller()
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
   }) 
@@ -129,6 +129,7 @@ export default function HomeScreen ({navigation}) {
     var tk = []
     await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
       if(snapshot.exists())
+      {
       for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
         if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
         {
@@ -136,30 +137,46 @@ export default function HomeScreen ({navigation}) {
                 if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua )
                 {
                     for (let [sanphammua_key, sanphammua_value] of Object.entries(donhang_value.SanPhamMua )){
-                      const vitri = checkSanPhamExistInArr(tk, sanphammua_value.IdSanPham);
-                      if(vitri == -1)
-                          {
-                            tk.push({TenSanPham: sanphammua_value.TenSanPham,
-                              IdSanPham:sanphammua_value.IdSanPham,
-                              IdAnime:sanphammua_value.IdAnime,
-                              SoLuong: sanphammua_value.SoLuongMua,
-                              HinhAnh:sanphammua_value.HinhAnh[0],
-                              TenAnime:sanphammua_value.TenAnime,
-                              TenNhanVat: sanphammua_value.TenNhanVat
-                              })
-                          }
-                          else
-                              tk[vitri].SoLuong += sanphammua_value.SoLuongMua
-                      }
+                        const vitri = checkSanPhamExistInArr(tk, sanphammua_value.IdSanPham)
+                        if(vitri == -1)
+                        {
+                            tk.push({
+                                    IdSanPham:sanphammua_value.IdSanPham,
+                                    IdAnime: sanphammua_value.IdAnime,
+                                     SoLuong: sanphammua_value.SoLuongMua,
+                                     TenAnime:sanphammua_value.TenAnime,
+                                    })
+                         }
+                        else
+                            tk[vitri].SoLuong += sanphammua_value.SoLuongMua
+
+                    }
                 }
               }
         }
       }
-    })
-    if(tk.length > 1) tk.sort((a, b) => parseFloat(b.SoLuong) - parseFloat(a.SoLuong)); //sap xep tang dan
-    if(tk.length > 5) tk.slice(0,4)
-      setListAllSanPham(tk)
+      if(tk.length > 1) tk.sort((a, b) => parseFloat(b.SoLuong) - parseFloat(a.SoLuong)); //sap xep tang dan
+    if(tk.length > 10) tk.slice(0,9)
     
+  }
+  
+    })
+    
+    tk.forEach(async(item)=>{
+      await firebaseApp.database().ref('Anime/'+item.IdAnime+'/SanPham/'+item.IdSanPham).once('value',spSnapshot=>{
+        if(spSnapshot.exists()){
+          const vt = checkSanPhamExistInArr(tk, item.IdSanPham)
+          if(vt != -1){
+            tk[vt].TenSanPham = spSnapshot.val().TenSanPham
+            tk[vt].HinhAnh = spSnapshot.val().HinhAnh[0]
+            tk[vt].TenNhanVat = spSnapshot.val().TenNhanVat
+            tk[vt].GiaBan = spSnapshot.val().GiaBan
+            tk[vt].GiamGia = spSnapshot.val().GiamGia
+          }
+        }
+      })
+    })
+    setListAllSanPham(tk)
   }
 
   const checkSanPhamExistInArr = (arr, idsp)=>{ //Neu tim ra return vi tri trong array, ko tim ra return -1
@@ -278,9 +295,9 @@ export default function HomeScreen ({navigation}) {
              itemImage={{uri:item.HinhAnh}}></Card>
           </TouchableOpacity>
         )}
-        ListFooterComponent={renderFooter}
+        //ListFooterComponent={renderFooter}
         //onEndReached={handleLoadMore}
-        onEndReachedThreshold={0}
+        //onEndReachedThreshold={0}
         keyExtractor={item=>item.IdSanPham}
       />
     </ScrollView>

@@ -203,10 +203,48 @@ export default function ReportScreen({navigation}) {
     setThongKeAnime(tk)
   }
 
+  // const getThongKeSanPham = async ()=>{
+  //   var tk = []
+  //   await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
+  //     if(snapshot.exists())
+  //     for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
+  //       if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
+  //       {
+  //           for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang )) {
+  //               if(donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua )
+  //               {
+  //                   for (let [sanphammua_key, sanphammua_value] of Object.entries(donhang_value.SanPhamMua )){
+  //                       const vitri = checkSanPhamExistInArr(tk, sanphammua_value.IdSanPham)
+  //                       console.log(sanphammua_value.IdSanPham)
+  //                       if(vitri == -1)
+  //                       {
+  //                           tk.push({TenSanPham: sanphammua_value.TenSanPham,
+  //                                   IdSanPham:sanphammua_value.IdSanPham,
+  //                                    SoLuong: sanphammua_value.SoLuongMua,
+  //                                    HinhAnh:sanphammua_value.HinhAnh[0],
+  //                                    TenAnime:sanphammua_value.TenAnime,
+  //                                   })
+  //                        }
+  //                       else
+  //                           tk[vitri].SoLuong += sanphammua_value.SoLuongMua
+
+  //                   }
+  //               }
+  //             }
+  //       }
+  //     }
+  //   })
+  //   if(tk.length > 1) tk.sort((a, b) => parseFloat(b.SoLuong) - parseFloat(a.SoLuong)); //sap xep tang dan
+  //   if(tk.length > 10) tk.slice(0,9)
+  //   console.log(tk)
+  //   setThongKeSanPham(tk)
+  // }
+
   const getThongKeSanPham = async ()=>{
     var tk = []
     await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
       if(snapshot.exists())
+      {
       for (let [sdt_key, sdt_value] of Object.entries(snapshot.val() )) {
         if(sdt_value.TrangThai == 'on' && sdt_value.DonHang)
         {
@@ -217,10 +255,10 @@ export default function ReportScreen({navigation}) {
                         const vitri = checkSanPhamExistInArr(tk, sanphammua_value.IdSanPham)
                         if(vitri == -1)
                         {
-                            tk.push({TenSanPham: sanphammua_value.TenSanPham,
+                            tk.push({
                                     IdSanPham:sanphammua_value.IdSanPham,
+                                    IdAnime: sanphammua_value.IdAnime,
                                      SoLuong: sanphammua_value.SoLuongMua,
-                                     HinhAnh:sanphammua_value.HinhAnh[0],
                                      TenAnime:sanphammua_value.TenAnime,
                                     })
                          }
@@ -232,9 +270,26 @@ export default function ReportScreen({navigation}) {
               }
         }
       }
-    })
-    if(tk.length > 1) tk.sort((a, b) => parseFloat(b.SoLuong) - parseFloat(a.SoLuong)); //sap xep tang dan
+      if(tk.length > 1) tk.sort((a, b) => parseFloat(b.SoLuong) - parseFloat(a.SoLuong)); //sap xep tang dan
     if(tk.length > 10) tk.slice(0,9)
+    
+  }
+  
+    })
+    
+    tk.forEach(async(item)=>{
+      await firebaseApp.database().ref('Anime/'+item.IdAnime+'/SanPham/'+item.IdSanPham).once('value',spSnapshot=>{
+        if(spSnapshot.exists()){
+          const vt = checkSanPhamExistInArr(tk, item.IdSanPham)
+          console.log(vt)
+          if(vt != -1){
+            console.log(vt)
+            tk[vt].TenSanPham = spSnapshot.val().TenSanPham
+            tk[vt].HinhAnh = spSnapshot.val().HinhAnh[0]
+          }
+        }
+      })
+    })
     setThongKeSanPham(tk)
   }
 
@@ -462,7 +517,7 @@ export default function ReportScreen({navigation}) {
                 <Text style={{fontWeight:'bold', fontSize:16, color:BLACK, marginLeft:20}}>Thống Kê Top Sản Phẩm được chọn mua nhiều</Text>
                 <FlatList style={styles.listSp}
                     data={thongKeSanPham}
-                    keyExtractor={item=>item.HinhAnh}
+                    keyExtractor={item=>item.IdSanPham}
                     renderItem={({item})=>(
                         <View style={styles.itemcard}>
                         <Image style={styles.img} resizeMode='cover' source ={{uri:item.HinhAnh}}></Image>
@@ -500,7 +555,7 @@ var styles = StyleSheet.create({
   dropdownWrapper:{
       width:'100%',
       flexDirection:'row',
-      justifyContent:'space-between',
+      justifyContent:'space-evenly',
       alignItems:'center',
       paddingRight:20,
       paddingLeft:10,

@@ -85,6 +85,12 @@ const styles = StyleSheet.create({
       fontWeight:'bold',
       width:'70%', 
     },
+    itemDescripton3:{
+      fontSize:15,
+      color:DARK_PRIMARY_COLOR,
+      fontWeight:'bold',
+      width:'70%', 
+    },
     itemPrice:{
       color:'#FF0000',
       fontWeight:'bold',

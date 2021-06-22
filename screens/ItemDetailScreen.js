@@ -60,7 +60,7 @@ export default function ItemDetailScreen ({route, navigation}){
       <View  key = {element}>
           <Image style={styles.swiperImg}
               source ={{uri: element}}
-              resizeMode='cover'
+              resizeMode='contain'
             />
         </View>
     ))

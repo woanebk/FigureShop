@@ -77,7 +77,7 @@ export default function AddFigureScreen({route, navigation}) {
       firebaseApp.database().ref('Anime/'+ idAnime + '/SanPham/' + idSanPham ).update({ //thêm ảnh vào sản phẩm đã tạo
         HinhAnh: urlHinhAnhs
       },()=>setIdSanPham('') )//callback stop if nay
-      console.log(urlHinhAnhs !== [])
+      //console.log(urlHinhAnhs !== [])
       
      }, 5000);
     }
@@ -214,6 +214,15 @@ export default function AddFigureScreen({route, navigation}) {
       return;
     }
 
+    if ( isNaN(giaGoc) || giaGoc < 0 || isNaN(giaBan) || giaBan < 0 || isNaN(soLuong) || soLuong < 0
+    || isNaN(giamGia) || giamGia < 0 || isNaN(chieuCao) || chieuCao < 0 || isNaN(chieuDai) || chieuDai < 0
+    || isNaN(chieuRong) || chieuRong < 0 || isNaN(canNang) || canNang < 0
+    )
+    {
+      alert('Các thông số giá, số lượng, kích thước, cân nặng không hợp lệ !');
+      return;
+    }
+
     // ===== ADD:
     if(!readonly)
     {
@@ -305,6 +314,7 @@ export default function AddFigureScreen({route, navigation}) {
     return(
       <FlatList style={styles.slidercontainer} horizontal={true}
         data={HinhAnhs}
+        keyExtractor={item=>item}
         renderItem={({item})=>(
           <View style={styles.slide} >
             <Image style={styles.sliderimage}
