@@ -1,8 +1,7 @@
 import firebase from 'firebase/app';
-// import 'firebase/storage';
-// import 'firebase/database';
-// import 'firebase/auth';
-
+import 'firebase/storage/dist/index.esm';
+import 'firebase/database/dist/index.esm';
+import 'firebase/auth/dist/index.esm';  
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyC9c1G185BnPCkyv7UxL3vfJEtSyaPJjUI",
@@ -12,10 +11,6 @@ var firebaseConfig = {
   messagingSenderId: "1035269537251",
   appId: "1:1035269537251:web:0b3f5398cda9723e68b4d6",
   databaseURL: "https://figureshop-9cdf3-default-rtdb.asia-southeast1.firebasedatabase.app",
-  rules: {
-      ".read": true,
-      ".write": true,
-      } 
 };
 // Initialize Firebase
 if (!firebase.apps.length) {
