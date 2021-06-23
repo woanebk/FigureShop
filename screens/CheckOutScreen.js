@@ -212,6 +212,16 @@ export default function CheckOutScreen({route, navigation}) {
         TongSoLuongMua: tinhTongSoLuong(cart)
       },()=>{
         firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
+        cart.forEach( async(item)=>{
+          let tonkho = 0
+          await firebaseApp.database().ref('Anime/'+item.IdAnime+'/SanPham/'+item.IdSanPham).once('value',snp=>{
+            if(snp.exists())
+            tonkho = snp.val().SoLuong
+          })
+          await firebaseApp.database().ref('Anime/'+item.IdAnime+'/SanPham/'+item.IdSanPham).update({
+            SoLuong: tonkho - item.SoLuongMua
+          })
+        })
       })
       setIsLoading(false)
       alert('Tạo Đơn Bán Hàng Thành Công')
@@ -308,6 +318,7 @@ export default function CheckOutScreen({route, navigation}) {
           }}
           placeholder='Chọn SDT'
           zIndex={100}
+          dropDownDirection='BOTTOM'
           listMode="SCROLLVIEW"
           dropDownContainerStyle={{
             backgroundColor: "#dfdfdf",

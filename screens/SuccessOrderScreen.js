@@ -3,9 +3,10 @@ import { useContext, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
 import { useState } from 'react/cjs/react.development';
 import CartContext from '../CartContext';
-import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER } from '../common';
+import { BLACK, DARK_PRIMARY_COLOR, GUEST_UID, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER } from '../common';
 import { ActionInput, CheckOutItem, CodeInput } from '../items';
 import { Ionicons} from '@expo/vector-icons';
+import { firebaseApp } from '../firebaseconfig';
 
 export default function SuccessOrderScreen({route, navigation}) {
 
@@ -44,7 +45,13 @@ export default function SuccessOrderScreen({route, navigation}) {
               <Ionicons style={styles.icon} name='checkmark' size={50} color={PRIMARY_COLOR}></Ionicons>
           </View>
           <Text style={styles.bigTxt}>Đặt Hàng Thành Công</Text>
+          {firebaseApp .auth().currentUser.uid == GUEST_UID
+          ?
           <Text numberOfLines={10} style={styles.txt}>Vui lòng chuẩn bị { thanh_tien} VND Khi Nhận Hàng</Text>
+            :
+            null
+        }
+          
           <View style={styles.infoWrapper}>
             <Text style={styles.infoTitleTxt}>Thông Tin Khách Hàng</Text>
             <Text style={styles.infoTxt}>Họ Tên:{' ' + ten_khach_hang}</Text>

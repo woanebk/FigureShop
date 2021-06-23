@@ -206,7 +206,8 @@ var styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginTop: 10,
-    borderColor: GREY_BORDER
+    borderColor: GREY_BORDER,
+    marginBottom:10,
   },
   newBtn: {
     position: 'absolute',
