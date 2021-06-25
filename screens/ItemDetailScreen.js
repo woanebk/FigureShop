@@ -100,6 +100,10 @@ export default function ItemDetailScreen ({route, navigation}){
   )
 
   const addToCart = (idSanPham)=>{
+    if(sanPham.SoLuong <= 0){
+      alert('Hết Hàng !')
+    }
+    else
     if(cart.length > 0 && cart.some(item => item.IdSanPham == idSanPham) )
     {
       let tmp = cart.slice(0)
