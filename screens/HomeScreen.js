@@ -17,12 +17,11 @@ export default function HomeScreen ({navigation}) {
   const [listAllSanPham, setListAllSanPham] = useState([]) 
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoadMore, setIsLoadMore] = useState(false)
-  const itemsPerPage = 3
 
   useEffect(()=>{
     
     if(firstRun == 0){
-      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes(); } )
+      navigation.addListener('focus', () => {getSanPhamsSale(); getAnimes();} )
       getBestSeller()
       setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
@@ -87,44 +86,6 @@ export default function HomeScreen ({navigation}) {
     })
   }
 
-  const getAllSanPhams = () => {
-    let list=[];
-    firebaseApp.database().ref('Anime').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
-      if( snapshot.exists())
-      {
-        list = []; //reset list tránh trùng lặp
-        snapshot.forEach((child)=> //child la anime
-        {
-          if(child.val().SanPham) //day la object
-          {
-            var animename = child.val().TenAnime
-            var idAnime = child.key
-            for (let [key, value] of Object.entries(child.val().SanPham)) {
-              if(value.TrangThai == 'on')
-              {
-                list.push({
-                  IdSanPham : key,
-                  TenAnime: animename,
-                  IdAnime: idAnime,
-                  TenSanPham: value.TenSanPham,
-                  TenNhanVat : value.TenNhanVat,
-                  GiaBan: value.GiaBan,
-                  GiamGia: value.GiamGia,
-                  HinhAnh:value.HinhAnh,
-                  SoLuong:value.SoLuong,
-                  MoTa: value.MoTa,
-                  GiaGoc:value.giaGoc
-                })
-              }
-            }
-          }
-        })
-        setListAllSanPham(list.slice(0, currentPage * itemsPerPage ))
-        setIsLoadMore(false)
-      }
-    })
-  }
-
   const getBestSeller = async ()=>{
     var tk = []
     await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot)=>{
@@ -172,6 +133,7 @@ export default function HomeScreen ({navigation}) {
             tk[vt].TenNhanVat = spSnapshot.val().TenNhanVat
             tk[vt].GiaBan = spSnapshot.val().GiaBan
             tk[vt].GiamGia = spSnapshot.val().GiamGia
+            tk[vt].TonKho = spSnapshot.val().SoLuong
           }
         }
       })
@@ -227,7 +189,6 @@ export default function HomeScreen ({navigation}) {
   const handleLoadMore= () => {
       setIsLoadMore(true)
       setCurrentPage(currentPage=>currentPage += 1)
-      getAllSanPhams()
       console.log(currentPage)
    
   }
