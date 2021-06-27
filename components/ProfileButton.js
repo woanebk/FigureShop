@@ -20,10 +20,10 @@ var styles = StyleSheet.create({
   },
   button:{
     height:'100%',
-    borderRadius:10,
+    //borderRadius:10,
     flexDirection:'row',
     //backgroundColor:'#0859c6',
-    shadowOpacity:80,
+    //shadowOpacity:80,
   },
   icon:{
     alignSelf:'center',

@@ -14,16 +14,17 @@ export default function LSGD({ navigation }) {
   const [phoneNumber, setphoneNumber] = useState('');
   //const{GUEST_UID}=""
   const fall = new Animated.Value(1); //blur animation
-  const [listDonDatHang, setListDonDatHang] = useState();
+  const [listDonDatHang, setListDonDatHang] = useState([]);
   const [firstRun, setFirstRun] = useState(0);
   const [soDienThoai, setSoDienThoai] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [verificationId, setVerificationId] = useState();
+  const [verificationId, setVerificationId] = useState('');
   const recaptchaVerifier = useRef(null);
   const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
   const attemptInvisibleVerification = false;
-  const [verificationCode, setVerificationCode] = useState();
+  const [verificationCode, setVerificationCode] = useState('');
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
+  
   navigation.addListener('focus', () => { setFirstRun(0) })
   useEffect(() => {
     if (firstRun == 0) {
@@ -38,6 +39,8 @@ export default function LSGD({ navigation }) {
         setFirstRun((firstRun) => firstRun += 1)
        ;
         }
+    if(!isLoading){      bottomsheetRef.current.snapTo(0);
+    }
   })
   const convertPhoneNumber = (number) => {
     if (number.charAt(0) == '+')
@@ -134,7 +137,6 @@ export default function LSGD({ navigation }) {
       await firebase.auth().currentUser.updatePhoneNumber(credential);
       else 
       await firebase.auth().signInWithPhoneNumber(credential);
-      bottomsheetRef.current.snapTo(0);
       setphoneNumber(soDienThoai);
       setFirstRun(0);
       alert('Xác Nhận Thành Công')
@@ -281,7 +283,7 @@ export default function LSGD({ navigation }) {
               showsVerticalScrollIndicator={false}
             />:<Text style={styles.commandTxt2}>Chưa có đơn hàng nào</Text>}
            <TouchableOpacity style={[styles.commandBtn2, { alignSelf: 'center'}]}
-            onPress={()=>{setVerificationId(null); bottomsheetRef.current.snapTo(1);setIsLoading(true)}
+            onPress={()=>{setVerificationId(''); bottomsheetRef.current.snapTo(1);setIsLoading(true)}
             }
           >
             <Text style={styles.commandTxt}>Đổi Số Điện Thoại</Text>

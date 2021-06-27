@@ -6,7 +6,7 @@ import { firebaseApp } from '../firebaseconfig';
 
 export default function AllCategoryScreen({navigation}) {
 
-  const [listAnime,setListAnime]=useState();
+  const [listAnime,setListAnime]=useState([]);
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   
    useEffect  ( () => {

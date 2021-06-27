@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput} from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import {GREY, LIGHT_GREY, PRIMARY_COLOR } from '../common';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 
 function ActionInput(props){
 

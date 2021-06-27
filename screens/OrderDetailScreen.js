@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useContext, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import CartContext from '../CartContext';
 import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GREEN, GOLD,GUEST_UID } from '../common';
 import { ActionInput, CheckOutItem, CodeInput } from '../items';
@@ -18,16 +18,17 @@ export default function OrderDetailScreen({route, navigation}) {
   const [listSanPham, setListSanPham] =useState([])
   const [trangThai, setTrangThai] =useState(0)
 
+  navigation.addListener('focus', () => {       getDonDatHang(so_dien_thoai, id_don_dat_hang)
+  })
   useEffect(()=>{
     if(firstRun == 0){
-      getDonDatHang(so_dien_thoai, id_don_dat_hang)
+     // getDonDatHang(so_dien_thoai, id_don_dat_hang)
     setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
   }) 
 
-  
-
   const getDonDatHang = async (phonenumber, id) =>{
+    console.log("getdonhang");
     await firebaseApp.database().ref('Guest/' + phonenumber + '/DonHang/' + id).on('value', snapshot=>{
       if(snapshot.exists()){
         setDonDatHang(snapshot.val())
@@ -86,7 +87,6 @@ export default function OrderDetailScreen({route, navigation}) {
         DaXacNhan:1
       })
     }catch(err){
-      console.log(err)
     }
   }
 

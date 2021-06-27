@@ -9,9 +9,9 @@ import { Button } from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
 
 export default function ManageCategoryScreen({navigation}) {
-  const [search, setsearch] = useState(null)
-  const [listAnime,setListAnime]=useState();
-  const [listAnimetam,setListAnimetam]=useState()
+  const [search, setsearch] = useState('')
+  const [listAnime,setListAnime]=useState([]);
+  const [listAnimetam,setListAnimetam]=useState([])
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const [deleteID, setDeleteID] = useState(''); //id anime để xóa
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn

@@ -5,7 +5,7 @@ import { TouchableRipple, IconButton } from 'react-native-paper';
 import { GREY, LIGHT_GREY, SECONDARY_COLOR } from '../common';
 import { DashBoard, UserPFP, ProfileButton, InfoDisplayer } from '../items'
 import { MaterialIcons } from '@expo/vector-icons';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import { firebaseApp } from '../firebaseconfig';
 import CartContext from '../CartContext'
 

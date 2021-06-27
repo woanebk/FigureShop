@@ -10,12 +10,12 @@ import ItemDetailScreen from './ItemDetailScreen';
 import { SearchBar } from 'react-native-elements';
 
 export default function ManageSaleScreen({navigation}) {
-  const [listDonDatHangtam,setListDonDatHangtam]=useState();
-  const [listDonDatHang,setListDonDatHang]=useState();
+  const [listDonDatHangtam,setListDonDatHangtam]=useState([]);
+  const [listDonDatHang,setListDonDatHang]=useState([]);
   const [firstRun,setFirstRun]=useState(0); 
   const [deleteID, setDeleteID] = useState(''); //id  để xóa
   const [soDienThoaitoDelete, setSoDienThoaitoDelete] = useState(''); //sdt  để xóa
-  const [search, setsearch] = useState(null)
+  const [search, setsearch] = useState('')
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
   const [isLoading, setIsLoading] = useState(true)
 
