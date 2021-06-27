@@ -33,7 +33,7 @@ export default function CartScreen({route, navigation}) {
     tmp.map((item)=>{
       if(item.IdSanPham == id)
       {
-        if (item.SoLuongMua <= 0) return
+        if (item.SoLuongMua <= 1) return
         item.SoLuongMua -= 1
       }
     })
