@@ -104,6 +104,10 @@ export default function ItemDetailScreen ({route, navigation}){
       alert('Hết Hàng !')
     }
     else
+    if(sanPham.TrangThai != 'on'){
+      alert('Sản phẩm đã ngừng kinh doanh !')
+    }
+    else
     if(cart.length > 0 && cart.some(item => item.IdSanPham == idSanPham) )
     {
       let tmp = cart.slice(0)

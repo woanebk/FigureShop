@@ -283,32 +283,6 @@ export default function AddFigureScreen({route, navigation}) {
     })
   }
 
-  //RENDER BOTTOM SHEET:
-  const renderSheet = ()=>(
-    <View style={styles.bottomsheetWrapper}>
-      <Text style={styles.panelTitleTxt}>Upload Photo</Text>
-      <Text style={styles.panelSubtitleTxt}>Chọn Ảnh Đại Diện</Text>
-      <View style={{width:'90%'}}>
-      <TouchableOpacity style={styles.commandBtn} onPress={()=>{}}>
-          <Text style={styles.commandTxt}>Chụp Ảnh</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.commandBtn} onPress={()=>{}} >
-          <Text style={styles.commandTxt}>Chọn Từ Kho Ảnh</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.commandBtn} 
-        onPress={()=>bottomsheetRef.current.snapTo(0)}>
-          <Text style={styles.commandTxt}>Hủy</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  )
-  const renderSheetHeader = ()=>(
-    <View style={styles.header}>
-        <View style={styles.panelHandle}></View>
-    </View>
-  )
 
   const renderSwiper = ()=>{
     return(
@@ -331,15 +305,6 @@ export default function AddFigureScreen({route, navigation}) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' translucent></StatusBar>
-      <BottomSheet 
-      ref={bottomsheetRef}
-      snapPoints={[0, 300]}
-      initialSnap={0} //0 is 0, 1 is 300
-      callbackNode={fall}
-      enabledGestureInteraction={false}
-      renderContent={renderSheet}
-      renderHeader={renderSheetHeader}
-      />
       <Animated.View style={{opacity: Animated.add(0.1, Animated.multiply(fall,1.0))}}>
         <View style={styles.topdock}></View>
         {
