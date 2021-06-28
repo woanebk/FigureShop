@@ -30,7 +30,7 @@ export default function OrderDetailScreen({ route, navigation }) {
     }
   })
   const getDonDatHang = async (phonenumber, id) => {
-    await firebaseApp.database().ref('Guest/' + phonenumber + '/DonHang/' + id).on('value', snapshot => {
+      firebaseApp.database().ref('Guest/' + phonenumber + '/DonHang/' + id).on('value', snapshot => {
       if (snapshot.exists()) {
         setDonDatHang(snapshot.val())
         setListSanPham(snapshot.val().SanPhamMua)
@@ -43,8 +43,7 @@ export default function OrderDetailScreen({ route, navigation }) {
             if (snapshot.exists()) { listTonkho.push(snapshot.val().SoLuong); console.log(snapshot.val().SoLuong) }
           })
         }
-        console.log(listTonkho)
-        setlistTonkho(listTonkho)
+        setTimeout(function(){setlistTonkho(listTonkho)}, 60);
         setTrangThai(snapshot.val().DaXacNhan)
       }
       setIsLoading(false)
