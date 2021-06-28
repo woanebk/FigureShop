@@ -13,4 +13,6 @@
 **Các chức năng trong tương lai:**
 
 - Hỗ trợ thanh toán qua các kênh thanh toán như momo
-- Thêm animation đẹp mắt, cải tiến giao diện
+- Thêm animation đẹp mắt, cải tiến giao diện  
+
+Link expo publish có thể truy cập ngay: https://expo.io/@18520096/FigureShop?fbclid=IwAR35KoqqcY9uFi-g5hwgICSQLz31qt3dI391YnTmfWTROm3QTAeVAmcnZ14
