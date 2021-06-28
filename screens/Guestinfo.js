@@ -7,7 +7,7 @@ import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAn
 
 export default function Guestinfo({ route, navigation }) {
     const { phoneNumber } = route.params;
-    const [listDonDatHang, setListDonDatHang] = useState();
+    const [listDonDatHang, setListDonDatHang] = useState([]);
     const [firstRun, setFirstRun] = useState(0);
     const [deleteID, setDeleteID] = useState(''); //id  để xóa
     const [soDienThoaitoDelete, setSoDienThoaitoDelete] = useState(''); //sdt  để xóa

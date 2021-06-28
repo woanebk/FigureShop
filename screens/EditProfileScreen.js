@@ -22,7 +22,7 @@ export default function EditProfileScreen({ navigation }) {
   var [email, setemail] = useState(user.email);
   var [phoneNumber, setphoneNumber] = useState(user.phoneNumber);
   var [location, setlocation] = useState(user.location);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [isLoading, setIsLoading]= useState(false);
   var library_status, cam_status;
   navigation.addListener('focus', () => {getuserinfo();
@@ -160,7 +160,7 @@ export default function EditProfileScreen({ navigation }) {
         <TouchableOpacity style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
           <View>
               {
-              image == null ?
+              image == '' ?
                 firebaseApp.auth().currentUser.photoURL!=null?      
                   <UserPFP image={{ uri: firebaseApp.auth().currentUser.photoURL }} ></UserPFP>:
                   <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP> :
@@ -205,7 +205,7 @@ export default function EditProfileScreen({ navigation }) {
           ></ActionInput>
 
           <TouchableOpacity style={styles.commandBtn} onPress={async () => {
-            image==null?
+            image==''?
             upnoimage():
             uploadImage(image).then(() => { 
               return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL(); })

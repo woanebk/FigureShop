@@ -12,7 +12,7 @@ export default function CategoryItemsScreen({route, navigation}) {
 
   const [firstRun,setFirstRun]=useState(0);
 
-  const [bannerImage, setBannerImage] = useState();
+  const [bannerImage, setBannerImage] = useState('');
   const [bannerName, setBannerName] = useState('');
   const [listSanPham, setListSanPham] = useState([]);
 

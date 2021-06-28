@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useContext, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import CartContext from '../CartContext';
 import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GUEST_UID, GOLD, GREEN } from '../common';
 import { ActionInput, CheckOutItem, CodeInput } from '../items';
@@ -33,8 +33,8 @@ export default function CheckOutScreen({route, navigation}) {
   const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
   const attemptInvisibleVerification = false;
   const recaptchaVerifier = useRef(null);
-  const [verificationId, setVerificationId] = useState();
-  const [verificationCode, setVerificationCode] = useState();
+  const [verificationId, setVerificationId] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
 
   //Giao Dien:
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
@@ -200,7 +200,8 @@ export default function CheckOutScreen({route, navigation}) {
       if(ngay.length < 2) ngay='0'+ ngay
       if(thang.length < 2) thang='0'+ thang
       var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
-      
+      var TongSoLuongMua= tinhTongSoLuong(cart)
+
       await firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
         TrangThai: 'on',
         DaXacNhan: 1,
@@ -209,7 +210,7 @@ export default function CheckOutScreen({route, navigation}) {
         TongTien: tongTien,
         SanPhamMua: cart,
         NgayDat: ngaydat,
-        TongSoLuongMua: tinhTongSoLuong(cart)
+        TongSoLuongMua: TongSoLuongMua
       },()=>{
         firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
         cart.forEach( async(item)=>{

@@ -20,7 +20,7 @@ export default function AddCategoryScreen({ route, navigation }) {
   const [editing, setEditing] = useState(!readonly); //Khi editting: enable input
   const [isLoading, setIsLoading] = useState(false);
 
-  const [image, setImage] = useState(null); //hinh anh hien thi
+  const [image, setImage] = useState(''); //hinh anh hien thi
   const [imageURL, setImageURL] = useState(''); //url hinh anh de luu vao database
   const [categoryName, setCategoryName] = useState(''); // ten anime
 
@@ -139,13 +139,13 @@ export default function AddCategoryScreen({ route, navigation }) {
 
   const clearInput = () => {
     setCategoryName('');
-    setImage(null);
+    setImage('');
     setImageURL('');
   }
 
   const Submit = () => {
     //validate data:
-    if (categoryName == '' || image == null) {
+    if (categoryName == '' || image == '') {
       alert('Vui lòng điển đủ thông tin và hình ảnh');
       return;
     }

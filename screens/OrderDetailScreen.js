@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useContext, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import CartContext from '../CartContext';
 import { BLACK, DARK_PRIMARY_COLOR, GREY, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER, GREEN, GOLD,GUEST_UID } from '../common';
 import { ActionInput, CheckOutItem, CodeInput } from '../items';
@@ -17,31 +17,43 @@ export default function OrderDetailScreen({route, navigation}) {
   const [donDatHang, setDonDatHang] = useState({})
   const [listSanPham, setListSanPham] =useState([])
   const [trangThai, setTrangThai] =useState(0)
+  const [listTonkho,setlistTonkho]=useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
+  navigation.addListener('focus', () => {       getDonDatHang(so_dien_thoai, id_don_dat_hang);
+  })
   useEffect(()=>{
     if(firstRun == 0){
-      getDonDatHang(so_dien_thoai, id_don_dat_hang)
+     // getDonDatHang(so_dien_thoai, id_don_dat_hang)
     setFirstRun((firstRun)=>firstRun += 1) //đánh dấu lần chạy đầu
     }
   }) 
-
-  
 
   const getDonDatHang = async (phonenumber, id) =>{
     await firebaseApp.database().ref('Guest/' + phonenumber + '/DonHang/' + id).on('value', snapshot=>{
       if(snapshot.exists()){
         setDonDatHang(snapshot.val())
         setListSanPham(snapshot.val().SanPhamMua)
+        var listTonkho=[];
+          for(var item in snapshot.val().SanPhamMua)
+          {
+            console.log("starttttttttttttt")
+            listTonkho.push(getTonKho(snapshot.val().SanPhamMua[item].IdAnime,snapshot.val().SanPhamMua[item].IdSanPham))
+          }
+          setlistTonkho(listTonkho)
         setTrangThai(snapshot.val().DaXacNhan)
       }
+      setIsLoading(false)
     })
-  }
-
+  } 
+ 
   const getTonKho = (idanime, idsanpham)=>{
     var tonkho = 0
+    console.log('Anime/'+idanime+'/SanPham/' + idsanpham)
     firebaseApp.database().ref('Anime/'+idanime+'/SanPham/' + idsanpham).on('value',snapshot=>{
       if(snapshot.exists()) {tonkho = snapshot.val().SoLuong}
     })
+    console.log(tonkho+" bao nhieeeeeeeeeeeeeeeeeu")
     return tonkho
   }
 
@@ -86,7 +98,6 @@ export default function OrderDetailScreen({route, navigation}) {
         DaXacNhan:1
       })
     }catch(err){
-      console.log(err)
     }
   }
 
@@ -100,9 +111,9 @@ export default function OrderDetailScreen({route, navigation}) {
           giaBan = {item.GiaBan * (1 - item.GiamGia)}
         ></CheckOutItem>
         <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:-10}}>
-          <Text style={styles.tonKhoTxt}>Tồn Kho: {getTonKho(item.IdAnime,item.IdSanPham)}</Text>
+          <Text style={styles.tonKhoTxt}>Tồn Kho: {listTonkho[index]}</Text>
           {
-            item.SoLuongMua > getTonKho(item.IdAnime,item.IdSanPham) && trangThai == 0 ?
+            item.SoLuongMua > listTonkho[index] && trangThai == 0 ?
             <View style={styles.warningTag}>
             <Ionicons style={{marginHorizontal:5}} name='warning' size={20}></Ionicons>
             <Text style={styles.warningTxt}>Không Đủ Sản Phẩm</Text>
@@ -144,6 +155,10 @@ export default function OrderDetailScreen({route, navigation}) {
       <View style={styles.container}>
           <StatusBar barStyle='light-content' translucent backgroundColor={'transparent'} ></StatusBar>
           <View style={styles.topdock}></View>
+          {
+        isLoading ?
+          <ActivityIndicator style={styles.indicator} animating={isLoading} color='#bc2b78' size="large" />
+          :
           <ScrollView>
             {renderStatus()}
             <View style={styles.infoWrapper}>
@@ -170,7 +185,7 @@ export default function OrderDetailScreen({route, navigation}) {
               </View>
             </View>
             {renderButton()}
-          </ScrollView>
+          </ScrollView>}
       </View>
   )
 }

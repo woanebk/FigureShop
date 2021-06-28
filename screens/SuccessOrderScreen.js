@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useContext, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import CartContext from '../CartContext';
 import { BLACK, DARK_PRIMARY_COLOR, GUEST_UID, OFF_WHITE, PRIMARY_COLOR, WHITE, LIGHT_PINK, GREY_BORDER } from '../common';
 import { ActionInput, CheckOutItem, CodeInput } from '../items';

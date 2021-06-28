@@ -9,9 +9,9 @@ import { Button } from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
 
 export default function AllGuestScreen({ navigation }) {
-  const [listGuesttam, setListGuesttam] = useState();
-  const [search, setsearch] = useState(null)
-  const [listGuest, setListGuest] = useState();
+  const [listGuesttam, setListGuesttam] = useState([]);
+  const [search, setsearch] = useState('')
+  const [listGuest, setListGuest] = useState([]);
   const [deleteID, setDeleteID] = useState(''); //id Guest để xóa
   const [isLoading, setIsLoading] = useState(true);
   const [soluongdon, setsoluongdon] = useState(0);

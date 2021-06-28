@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, StatusBar, TouchableOpacity, FlatList, TouchableWithoutFeedback } from 'react-native';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import { Ionicons} from '@expo/vector-icons';
 import CartContext from '../CartContext';
 import { BLACK, DARK_PRIMARY_COLOR, GREY, GREY_BORDER, GUEST_UID, OFF_WHITE, PRIMARY_COLOR, WHITE } from '../common';

@@ -19,12 +19,12 @@ export default function AddUserScreen({ route, navigation }) {
   const [editing, setEditing] = useState(!readonly); //Khi editting: enable input
   const bottomsheetRef = React.createRef(); //reference attached to bottomsheet
   const fall = new Animated.Value(1); //blur animation
-  var [user, setuser] = useState(null);
+  var [user, setuser] = useState({});
   var [name, setname] = useState("");
   var [email, setemail] = useState("");
   var [phoneNumber, setphoneNumber] = useState("");
   var [location, setlocation] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [password, setpassword] = useState('');
 
@@ -131,7 +131,7 @@ export default function AddUserScreen({ route, navigation }) {
   const Updateuser = async () => {
     if(name==''||email==''||phoneNumber==''||location=='') alert("Vui lòng điền đầy đủ thông tin")
     else
-    if (image == null) {
+    if (image == '') {
       var update = { displayName: name, email: email, phoneNumber: phoneNumber, location: location };
       console.log(update)
       firebaseApp.database().ref('User/' + userID).update(update).then(() => {
@@ -164,7 +164,7 @@ export default function AddUserScreen({ route, navigation }) {
     else
     firebaseApp.auth().createUserWithEmailAndPassword(email, password)
       .then(function (response) {
-        if (image != null) {
+        if (image != '') {
           uploadImage(image).then(() => {
             return firebaseApp.storage().ref().child('images/User/' + email + '.jpg').getDownloadURL();
           })
@@ -203,7 +203,7 @@ export default function AddUserScreen({ route, navigation }) {
       })
   }
   const Upload = async () => {
-    if (user != null) {
+    if (user != {}) {
       Updateuser();
     }
     else {
@@ -238,8 +238,8 @@ export default function AddUserScreen({ route, navigation }) {
               <TouchableOpacity disabled={!editing} style={styles.userpfp} onPress={() => bottomsheetRef.current.snapTo(1)}>
                 <View>
                   {
-                    image == null ?
-                      user != null ?
+                    image == '' ?
+                      user != {} ?
                         <UserPFP image={{ uri: user.photoURL }} ></UserPFP> :
                         <UserPFP image={require('../assets/banner/op_swiper_1.jpg')} ></UserPFP> :
                       <UserPFP image={{ uri: image }} ></UserPFP>
@@ -251,7 +251,7 @@ export default function AddUserScreen({ route, navigation }) {
                 </View>
               </TouchableOpacity>
               <View style={styles.infoWrapper}>
-                {user != null ? <Text style={styles.usernameTxt}>{user.displayName}</Text> : null}
+                {user != {} ? <Text style={styles.usernameTxt}>{user.displayName}</Text> : null}
                 <ActionInput title='Họ Tên' ionIconName='person'
                   placeholder='Nhập Họ Tên'
                   autoFocus='true'
@@ -280,7 +280,7 @@ export default function AddUserScreen({ route, navigation }) {
                   onChangeText={setemail}
                 ></ActionInput>
                 {
-                  user == null ?
+                  user == {} ?
                     <ActionInput title='Password' ionIconName='mail'
                       placeholder='Nhập Password' keyboardType='default'
                       autoFocus='true'

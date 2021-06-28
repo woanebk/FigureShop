@@ -9,9 +9,9 @@ import { Button } from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
 
 export default function AllUserScreen({navigation}) {
-  const [listUsertam,setListUsertam]=useState();
-  const [listUser,setListUser]=useState();
-  const [search, setsearch] = useState(null)
+  const [listUsertam,setListUsertam]=useState([]);
+  const [listUser,setListUser]=useState([]);
+  const [search, setsearch] = useState('')
   const [deleteID, setDeleteID] = useState(''); //id User để xóa
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
   navigation.addListener('focus', () => {getUsers();setsearch('')})

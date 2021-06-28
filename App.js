@@ -10,7 +10,7 @@ import LoginForm from './screens/login/LoginForm';
 import Loading from './screens/login/Loading'
 import CartContext from './CartContext'
 // //Bottom Tab:
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import { firebaseApp } from './firebaseconfig';
 import ItemDetailScreen from './screens/ItemDetailScreen';
 import CheckOutScreen from './screens/CheckOutScreen';
@@ -19,8 +19,7 @@ import SuccessOrderScreen from './screens/SuccessOrderScreen';
 const MainStack = createStackNavigator()
 
 export default function App(navigation) { 
-
-  const [state, setState] = useState(null)
+  const [state, setState] = useState(false)
   const [cart, setCart] = useState([])
   const defaultCartContextValue = {cart, setCart} //value của context gồm 1 biến state, 1 setstate của App.js
   

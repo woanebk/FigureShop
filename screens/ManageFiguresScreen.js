@@ -8,13 +8,13 @@ import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAn
 import { SearchBar } from 'react-native-elements';
 
 export default function ManageFiguresScreen({navigation}) {
-  const [listSanPhamtam,setListSanPhamtam]=useState();
-  const [listSanPham,setListSanPham]=useState();
+  const [listSanPhamtam,setListSanPhamtam]=useState([]);
+  const [listSanPham,setListSanPham]=useState([]);
   const [firstRun,setFirstRun]=useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const [dialogVisable, setDialogVisable]=useState(false); // true thì hiện dialog, false thì ẩn
   const [deleteSanPhamID, setDeleteSanPhamID] = useState(''); //id sản phẩm để xóa
   const [deleteAnimeID, setDeleteAnimeID] = useState(''); //id anime để xóa
-  const [search, setsearch] = useState(null)
+  const [search, setsearch] = useState('')
   useEffect(()=>{
     if(firstRun == 0){
       navigation.addListener('focus', () => {getSanPhams();setsearch('')})

@@ -15,19 +15,31 @@ import { Badge, IconButton } from 'react-native-paper';
 export default function SearchScreen({ navigation }) {
   const [hinhAnhs, setHinhAnhs] = useState([])
   const { cart, setCart } = useContext(CartContext)
-  const [sanPham, setSanPham] = useState(null) // initial object tranh loi
+  const [sanPham, setSanPham] = useState({IdSanPham: '',
+    TenAnime: '',
+    IdAnime: '',
+    TenSanPham:'',
+    TenNhanVat: '',
+    GiaBan: '',
+    GiamGia: '',
+    HinhAnh: '',
+    SoLuong: '',
+    GiaGoc: '',
+    MoTa:'',}) // initial object tranh loi
   const bottomsheetRef = React.createRef();
-  const [listSanPham, setListSanPham] = useState();
-  const [listSanPhamtam, setListSanPhamtam] = useState();
+  const [listSanPham, setListSanPham] = useState([]);
+  const [listSanPhamtam, setListSanPhamtam] = useState([]);
   const [isLoading, setisLoading] = useState(true)
   const [firstRun, setFirstRun] = useState(0); // Lần chạy đầu tiên useEffect sẽ gọi get Anime để đăng kí listenr dữ liệu (Những lần useEffect sau sẽ bỏ qua- tránh lỗi infinite loop)
   const [dialogVisable, setDialogVisable] = useState(false); // true thì hiện dialog, false thì ẩn
   const [deleteAnimeID, setDeleteAnimeID] = useState(''); //id anime để xóa
-  const [search, setsearch] = useState(null)
+  const [search, setsearch] = useState('')
   const [tenAnime, setTenAnime] = useState('')
   useEffect(() => {
     if (firstRun == 0) {
       navigation.addListener('focus', () => { setisLoading(true);
+        console.log(sanPham)
+        console.log("SSSSSSSSSSSSSSSSS")
         setsearch(''); getSanPhams() })
       setFirstRun((firstRun) => firstRun += 1) //đánh dấu lần chạy đầu
     }
@@ -123,7 +135,8 @@ export default function SearchScreen({ navigation }) {
   const renderSheet = () => (
     <View style={styles.bottomsheetWrapper}>
       {
-        sanPham != null ? <View style={{ width: '90%' }}>
+        sanPham != {} ? 
+        <View style={{ width: '90%' }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Ionicons name='checkmark-circle-outline' size={20}></Ionicons>
             <Text style={{ width: 270, fontWeight: 'bold' }}>Sản phẩm đã được thêm vào giỏ hàng</Text>
@@ -143,7 +156,8 @@ export default function SearchScreen({ navigation }) {
           <TouchableOpacity style={styles.commandBtn} onPress={() => navigation.navigate('Cart')}>
             <Text style={styles.commandTxt}>Xem Giỏ Hàng</Text>
           </TouchableOpacity>
-        </View> : null}
+        </View> : null
+        }
     </View>
   )
   return (
