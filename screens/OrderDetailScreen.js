@@ -34,11 +34,15 @@ export default function OrderDetailScreen({route, navigation}) {
       if(snapshot.exists()){
         setDonDatHang(snapshot.val())
         setListSanPham(snapshot.val().SanPhamMua)
+        var sanpham=snapshot.val().SanPhamMua
+        console.log(sanpham)
         var listTonkho=[];
           for(var item in snapshot.val().SanPhamMua)
           {
-            console.log("starttttttttttttt")
-            listTonkho.push(getTonKho(snapshot.val().SanPhamMua[item].IdAnime,snapshot.val().SanPhamMua[item].IdSanPham))
+              console.log('Anime/'+sanpham[item].IdAnime+'/SanPham/' +sanpham[item].IdSanPham)
+             firebaseApp.database().ref('Anime/'+sanpham[item].IdAnime+'/SanPham/' +sanpham[item].IdSanPham).on('value',snapshot=>{
+              if(snapshot.exists()) {listTonkho.push( snapshot.val().SoLuong)}
+            })
           }
           setlistTonkho(listTonkho)
         setTrangThai(snapshot.val().DaXacNhan)
@@ -46,17 +50,6 @@ export default function OrderDetailScreen({route, navigation}) {
       setIsLoading(false)
     })
   } 
- 
-  const getTonKho = (idanime, idsanpham)=>{
-    var tonkho = 0
-    console.log('Anime/'+idanime+'/SanPham/' + idsanpham)
-    firebaseApp.database().ref('Anime/'+idanime+'/SanPham/' + idsanpham).on('value',snapshot=>{
-      if(snapshot.exists()) {tonkho = snapshot.val().SoLuong}
-    })
-    console.log(tonkho+" bao nhieeeeeeeeeeeeeeeeeu")
-    return tonkho
-  }
-
   const canConfirmDatHang = (sdt, iddondathang) => { //Neu du so luong de ban thi true
     var result = true;
       firebaseApp.database().ref('Guest/' + sdt + '/DonHang/' + iddondathang).on('value', snapshot=>{
