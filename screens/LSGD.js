@@ -9,7 +9,8 @@ import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAn
 import firebase from 'firebase/app';
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
 import { useContext, useRef } from 'react';
-
+import { Keyboard } from 'react-native'; 
+ 
 export default function LSGD({ navigation }) {
   const [phoneNumber, setphoneNumber] = useState('');
   //const{GUEST_UID}=""
@@ -27,7 +28,7 @@ export default function LSGD({ navigation }) {
   
   navigation.addListener('focus', () => { setFirstRun(0) })
   useEffect(() => {
-    if (firstRun == 0) {
+    if (firstRun <= 1) {
       console.log(phoneNumber+'444444444444')
       if (phoneNumber != '')
       {
@@ -69,9 +70,10 @@ export default function LSGD({ navigation }) {
       }
     })
     console.log("end")
-    setIsLoading(false)
     console.log(list)
+    Keyboard.dismiss()
     setListDonDatHang(list)
+    setIsLoading(false)
   }
 
   const canCcanConfirmDatHang = (sdt, iddondathang) => { //Neu du so luong de ban thi true
