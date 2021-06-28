@@ -200,7 +200,8 @@ export default function CheckOutScreen({route, navigation}) {
       if(ngay.length < 2) ngay='0'+ ngay
       if(thang.length < 2) thang='0'+ thang
       var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
-      
+      var TongSoLuongMua= tinhTongSoLuong(cart)
+
       await firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
         TrangThai: 'on',
         DaXacNhan: 1,
@@ -209,7 +210,7 @@ export default function CheckOutScreen({route, navigation}) {
         TongTien: tongTien,
         SanPhamMua: cart,
         NgayDat: ngaydat,
-        TongSoLuongMua: tinhTongSoLuong(cart)
+        TongSoLuongMua: TongSoLuongMua
       },()=>{
         firebaseApp.database().ref('Guest/' + soDienThoai).update({TrangThai:'on'})
         cart.forEach( async(item)=>{
