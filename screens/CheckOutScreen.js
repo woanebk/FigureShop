@@ -159,7 +159,7 @@ export default function CheckOutScreen({ route, navigation }) {
         TongTien: tongTien,
         SanPhamMua: cart,
         NgayDat: ngaydat,
-        TongSoLuongMua:TongSoLuongMua
+        TongSoLuongMua:TongSoLuongMua,
       }, () => {
         firebaseApp.database().ref('Guest/' + soDienThoai).update({ TrangThai: 'on' })
       })

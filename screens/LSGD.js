@@ -49,11 +49,10 @@ export default function LSGD({ navigation }) {
     var convertedNumber = '+84' + number.substring(1)
     return convertedNumber
   }
-  const getDonDatHang = () => {
+  const getDonDatHang = async() => {
     let list = [];
-    firebaseApp.database().ref('Guest/' + phoneNumber + '/DonHang').orderByChild('TrangThai').equalTo('on').on('value', (snapshot) => {
+    await firebaseApp.database().ref('Guest/' + phoneNumber + '/DonHang').orderByChild('TrangThai').equalTo('on').on('value', (snapshot) => {
       if (snapshot.exists()) {
-        list = [];
         snapshot.forEach((child) => {
           list.push({
             IdDonDatHang: child.key,
@@ -69,11 +68,12 @@ export default function LSGD({ navigation }) {
         })
       }
     })
-    console.log("end")
     console.log(list)
     Keyboard.dismiss()
     setListDonDatHang(list)
-    setIsLoading(false)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000);
   }
 
   const canCcanConfirmDatHang = (sdt, iddondathang) => { //Neu du so luong de ban thi true

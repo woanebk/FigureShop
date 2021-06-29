@@ -29,10 +29,10 @@ export default function ManageOrderScreen({ navigation }) {
       openDialog(); //callback khi nhấn chọn delete tránh trường hợp deleteid không thay đổi ngay
   })
 
-  const getDonDatHang = () => {
+  const getDonDatHang = async () => {
     let list = [];
     var listconfirm = [];
-    firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot) => {
+    await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot) => {
       if (snapshot.exists())
         for (let [sdt_key, sdt_value] of Object.entries(snapshot.val())) {
           if (sdt_value.TrangThai == 'on' && sdt_value.DonHang) {
@@ -54,36 +54,35 @@ export default function ManageOrderScreen({ navigation }) {
             }
           }
         }
-    }).then(() => {
+    }).then(async () => {
       var listconfirm = []
       list.forEach(async (hoadon) => {
-        {
-          console.log("startttttttttttttttttt")
-          var result = true;
-          await hoadon.SanPhamMua.forEach(async (sanpham) => {
-            var soluong = sanpham.SoLuongMua;
-            var tonkho = 0
-            await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
-              if (DonDatHangsnapshot.exists())
-                tonkho = DonDatHangsnapshot.val().SoLuong
-            }).then(() => {
-              if (soluong > tonkho) {
-                result = false;
-                console.log(";;;;;;;;;;;;;;;;;;;;" + result)
-              }
-            })
+
+        console.log("startttttttttttttttttt")
+        var result = true;
+        await hoadon.SanPhamMua.forEach(async (sanpham) => {
+          var soluong = sanpham.SoLuongMua;
+          var tonkho = 0
+          await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
+            if (DonDatHangsnapshot.exists())
+              tonkho = DonDatHangsnapshot.val().SoLuong
+          }).then(() => {
+            if (soluong > tonkho) {
+              result = false;
+              console.log(";;;;;;;;;;;;;;;;;;;;" + result)
+            }
           })
-          listconfirm.push(result);
-          console.log("//////////////")
-          console.log(result)
-        }
+        })
+        listconfirm.push(result);
+        console.log("//////////////")
+        console.log(result)
+
       })
-      setTimeout(function () {
-        setlistconfirm(listconfirm)
+      setTimeout(() => {
+        setlistconfirm(listconfirm); setIsLoading(false)
       }, 1000);
       setListDonDatHang(list)
       setListDonDatHangtam(list)
-      setIsLoading(false)
     })
   }
   const onDeleteDonDatHang = (sdt, id) => {
