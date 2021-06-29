@@ -3,6 +3,7 @@
 **Thành viên:** Đào Duy Nam MSSV:18521117, Nguyễn Văn Lương MSSV:18520096
 Ứng dụng được phát triển trên nền Expo CLI sử dụng công nghệ React Native, sử dụng Google Firebase  
 **Yêu cầu cần có:** Cài đặt nodejs, expo cli  
+**Yêu cầu thiết bị:** Cài đặt expo go(để chạy app trên nền tảng cloud build:https://expo.io/@18520096/FigureShop), android 8.0 trở lên, ios 10.0 trở lên, Ram 2gb, bộ nhớ 300mb  
 **Các chức năng tiêu biểu của ứng dụng:**
 - Đặt hàng (Khách), bán hàng (Nhân viên)
 - Quản lý sản phẩm, Anime
