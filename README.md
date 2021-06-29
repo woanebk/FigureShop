@@ -19,3 +19,5 @@
 - Thêm animation đẹp mắt, cải tiến giao diện  
 
 Link expo publish có thể truy cập ngay: https://expo.io/@18520096/FigureShop
+Link Download file apk(mail .uit.edu.vn): https://drive.google.com/file/d/1FJ_bJJ8xwV0NOnrV0xJoCso52nx2-0rv/view?usp=sharing
+
