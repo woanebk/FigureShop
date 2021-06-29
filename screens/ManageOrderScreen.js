@@ -60,7 +60,7 @@ export default function ManageOrderScreen({ navigation }) {
         {
           console.log("startttttttttttttttttt")
           var result = true;
-          await hoadon.SanPhamMua.forEach(async(sanpham) => {
+          await hoadon.SanPhamMua.forEach(async (sanpham) => {
             var soluong = sanpham.SoLuongMua;
             var tonkho = 0
             await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
@@ -80,7 +80,7 @@ export default function ManageOrderScreen({ navigation }) {
       })
       setTimeout(function () {
         setlistconfirm(listconfirm)
-      }, 60);
+      }, 1000);
       setListDonDatHang(list)
       setListDonDatHangtam(list)
       setIsLoading(false)

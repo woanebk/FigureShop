@@ -4,6 +4,7 @@ import { GREY, GREY_BORDER, OFF_WHITE, PRIMARY_COLOR, WHITE } from '../common';
 import { ListItem, OrderListItem } from '../items';
 import { firebaseApp } from '../firebaseconfig';
 import Dialog, { DialogFooter, DialogButton, DialogContent, DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
+import ItemDetailScreen from './ItemDetailScreen';
 
 export default function Guestinfo({ route, navigation }) {
     const { phoneNumber } = route.params;
@@ -27,11 +28,11 @@ export default function Guestinfo({ route, navigation }) {
 
     const getDonDatHang = () => {
         let list = [];
-        firebaseApp.database().ref('Guest/' + phoneNumber+'/DonHang').orderByChild('TrangThai').equalTo('on').on('value', (snapshot) => {
+        firebaseApp.database().ref('Guest/' + phoneNumber + '/DonHang').orderByChild('TrangThai').equalTo('on').on('value', (snapshot) => {
             if (snapshot.exists()) {
-                list = []; 
+                list = [];
                 snapshot.forEach((child) => {
-                    
+
                     list.push({
                         IdDonDatHang: child.key,
                         DaXacNhan: child.val().DaXacNhan,
@@ -42,7 +43,7 @@ export default function Guestinfo({ route, navigation }) {
                         TongTien: child.val().TongTien,
                         TrangThai: child.val().TrangThai,
                         SoDienThoai: phoneNumber
-                      })
+                    })
                 })
             }
         })
@@ -150,7 +151,8 @@ export default function Guestinfo({ route, navigation }) {
                                 <OrderListItem name={item.TenKhachHang} maDonHang={item.IdDonDatHang}
                                     phoneNumber={item.SoDienThoai} soLuongSanPham={item.TongSoLuongMua}
                                     canConfirm={true}
-                                    canConfirm1={item.DaXacNhan?false:true}
+                                    canDelete={item.DaXacNhan==1?true:false}
+                                    canConfirm1={item.DaXacNhan ? false : true}
                                     tongtien={item.TongTien}
                                     onPress={() => navigation.navigate('OrderDetail', { so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang })}
                                     ngayDat={item.NgayDat}

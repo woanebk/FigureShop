@@ -200,7 +200,7 @@ export default function CheckOutScreen({route, navigation}) {
       if(ngay.length < 2) ngay='0'+ ngay
       if(thang.length < 2) thang='0'+ thang
       var ngaydat = ngay + '/' + thang + '/'+ currentdate.getFullYear() 
-      var TongSoLuongMua= tinhTongSoLuong(cart)
+      var TongSoLuongMua=await tinhTongSoLuong(cart)
 
       await firebaseApp.database().ref('Guest/' + soDienThoai + '/DonHang').push({
         TrangThai: 'on',
