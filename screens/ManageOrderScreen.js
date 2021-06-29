@@ -18,7 +18,7 @@ export default function ManageOrderScreen({ navigation }) {
   const [search, setsearch] = useState('')
   const [dialogVisable, setDialogVisable] = useState(false); // true thì hiện dialog, false thì ẩn
   const [isLoading, setIsLoading] = useState(true)
-
+  const [listconfirm, setlistconfirm] = useState([])
   useEffect(() => {
     if (firstRun == 0) {
       navigation.addListener('focus', () => { getDonDatHang(); setsearch('') })
@@ -31,10 +31,12 @@ export default function ManageOrderScreen({ navigation }) {
 
   const getDonDatHang = () => {
     let list = [];
+    var listconfirm = [];
     firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot) => {
       if (snapshot.exists())
         for (let [sdt_key, sdt_value] of Object.entries(snapshot.val())) {
           if (sdt_value.TrangThai == 'on' && sdt_value.DonHang) {
+            var index = 0;
             for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang)) {
               if (donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua && donhang_value.DaXacNhan == 0) {
                 list.push({
@@ -52,17 +54,42 @@ export default function ManageOrderScreen({ navigation }) {
             }
           }
         }
+    }).then(() => {
+      var listconfirm = []
+      list.forEach(async (hoadon) => {
+        {
+          console.log("startttttttttttttttttt")
+          var result = true;
+          await hoadon.SanPhamMua.forEach(async(sanpham) => {
+            var soluong = sanpham.SoLuongMua;
+            var tonkho = 0
+            await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
+              if (DonDatHangsnapshot.exists())
+                tonkho = DonDatHangsnapshot.val().SoLuong
+            }).then(() => {
+              if (soluong > tonkho) {
+                result = false;
+                console.log(";;;;;;;;;;;;;;;;;;;;" + result)
+              }
+            })
+          })
+          listconfirm.push(result);
+          console.log("//////////////")
+          console.log(result)
+        }
+      })
+      setTimeout(function () {
+        setlistconfirm(listconfirm)
+      }, 60);
       setListDonDatHang(list)
       setListDonDatHangtam(list)
       setIsLoading(false)
     })
   }
-
   const onDeleteDonDatHang = (sdt, id) => {
     setSoDienThoaitoDelete(sdt)
     setDeleteID(id) //call back useEffect sẽ mở dialog
   }
-
   const deleteDonHang = (sdt, iddonhang) => {
     try {
       firebaseApp.database().ref('Guest/' + sdt + '/DonHang/' + iddonhang).update({
@@ -84,25 +111,7 @@ export default function ManageOrderScreen({ navigation }) {
     return tongsoluong
   }
 
-  const canConfirmDatHang = (sdt, iddondathang) => { //Neu du so luong de ban thi true
-    var result = true;
-    firebaseApp.database().ref('Guest/' + sdt + '/DonHang/' + iddondathang).once('value', snapshot => {
-      if (snapshot.exists()) {
-        snapshot.val().SanPhamMua.forEach(sanpham => {
-          var soluongmua = sanpham.SoLuongMua
-          var tonkho = 0
-          firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
-            if (DonDatHangsnapshot.exists())
-              tonkho = DonDatHangsnapshot.val().SoLuong
-            if (soluongmua > tonkho) {
-              result = false;
-            }
-          })
-        });
-      }
-    })
-    return result
-  }
+
 
   //Dialog:
   const openDialog = () => { setDialogVisable(true) }
@@ -153,36 +162,37 @@ export default function ManageOrderScreen({ navigation }) {
       <StatusBar barStyle='dark-content' translucent></StatusBar>
       <View style={styles.topdock}></View>
       {
-        isLoading?
-        <ActivityIndicator style={styles.indicator} animating={isLoading} color = '#bc2b78' size = "large"/>
-        :
-        <Fragment>
-           <SearchBar 
-          placeholder="Nhập số điện thoại đơn hàng"
-          lightTheme={true}
-          platform="android"
-          round={10}
-          onChangeText={search =>{searchlist(search); setsearch(search)  ;         
-          }}
-          value={search}
-        />
-          <FlatList style={styles.list}
-            data={listDonDatHangtam}
-            renderItem = {({item})=>(
-              <OrderListItem name = {item.TenKhachHang} maDonHang={item.IdDonDatHang} canDelete={true}
-              phoneNumber = {item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua) }
-              canConfirm ={canConfirmDatHang(item.SoDienThoai, item.IdDonDatHang) }
-              tongtien={item.TongTien}
-              onPress={()=>navigation.navigate('OrderDetail',{so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang})}
-              ngayDat = {item.NgayDat}
-              onDeletePress={()=>onDeleteDonDatHang(item.SoDienThoai, item.IdDonDatHang)}
-              ></OrderListItem>
-            )}
-            keyExtractor={item=>item.IdDonDatHang}
-            showsVerticalScrollIndicator={false}
-          />
-          {renderDialog()}
-        </Fragment>
+        isLoading ?
+          <ActivityIndicator style={styles.indicator} animating={isLoading} color='#bc2b78' size="large" />
+          :
+          <Fragment>
+            <SearchBar
+              placeholder="Nhập số điện thoại đơn hàng"
+              lightTheme={true}
+              platform="android"
+              round={10}
+              onChangeText={search => {
+                searchlist(search); setsearch(search);
+              }}
+              value={search}
+            />
+            <FlatList style={styles.list}
+              data={listDonDatHangtam}
+              renderItem={({ item, index }) => (
+                <OrderListItem name={item.TenKhachHang} maDonHang={item.IdDonDatHang} canDelete={true}
+                  phoneNumber={item.SoDienThoai} soLuongSanPham={tinhTongSoLuong(item.SanPhamMua)}
+                  canConfirm={listconfirm[index]}
+                  tongtien={item.TongTien}
+                  onPress={() => navigation.navigate('OrderDetail', { so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang })}
+                  ngayDat={item.NgayDat}
+                  onDeletePress={() => onDeleteDonDatHang(item.SoDienThoai, item.IdDonDatHang)}
+                ></OrderListItem>
+              )}
+              keyExtractor={item => item.IdDonDatHang}
+              showsVerticalScrollIndicator={false}
+            />
+            {renderDialog()}
+          </Fragment>
       }
 
     </View>
@@ -207,7 +217,7 @@ var styles = StyleSheet.create({
     padding: 5,
     marginTop: 10,
     borderColor: GREY_BORDER,
-    marginBottom:10,
+    marginBottom: 10,
   },
   newBtn: {
     position: 'absolute',

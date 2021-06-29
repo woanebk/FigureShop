@@ -19,7 +19,7 @@ import SuccessOrderScreen from './screens/SuccessOrderScreen';
 const MainStack = createStackNavigator()
 
 export default function App(navigation) { 
-  const [state, setState] = useState(false)
+  const [state, setState] = useState(null)
   const [cart, setCart] = useState([])
   const defaultCartContextValue = {cart, setCart} //value của context gồm 1 biến state, 1 setstate của App.js
   

@@ -43,7 +43,7 @@ export default function OrderDetailScreen({ route, navigation }) {
             if (snapshot.exists()) { listTonkho.push(snapshot.val().SoLuong); console.log(snapshot.val().SoLuong) }
           })
         }
-        setTimeout(function(){setlistTonkho(listTonkho)}, 60);
+        setTimeout(function(){setlistTonkho(listTonkho)}, 1);
         setTrangThai(snapshot.val().DaXacNhan)
       }
       setIsLoading(false)
