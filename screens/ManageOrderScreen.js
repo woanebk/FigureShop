@@ -29,6 +29,63 @@ export default function ManageOrderScreen({ navigation }) {
       openDialog(); //callback khi nhấn chọn delete tránh trường hợp deleteid không thay đổi ngay
   })
 
+  // const getDonDatHang = async () => {
+  //   let list = [];
+  //   var listconfirm = [];
+  //   await firebaseApp.database().ref('Guest').orderByChild('TrangThai').equalTo('on').once('value', (snapshot) => {
+  //     if (snapshot.exists())
+  //       for (let [sdt_key, sdt_value] of Object.entries(snapshot.val())) {
+  //         if (sdt_value.TrangThai == 'on' && sdt_value.DonHang) {
+  //           var index = 0;
+  //           for (let [donhang_key, donhang_value] of Object.entries(sdt_value.DonHang)) {
+  //             if (donhang_value.TrangThai == 'on' && donhang_value.SanPhamMua && donhang_value.DaXacNhan == 0) {
+  //               list.push({
+  //                 IdDonDatHang: donhang_key,
+  //                 DaXacNhan: donhang_value.DaXacNhan,
+  //                 DiaChi: donhang_value.DiaChi,
+  //                 TenKhachHang: donhang_value.HoTen,
+  //                 NgayDat: donhang_value.NgayDat,
+  //                 SanPhamMua: donhang_value.SanPhamMua,
+  //                 TongTien: donhang_value.TongTien,
+  //                 TrangThai: donhang_value.TrangThai,
+  //                 SoDienThoai: sdt_key
+  //               })
+  //             }
+  //           }
+  //         }
+  //       }
+  //   }).then(async () => {
+  //     var listconfirm = []
+  //     list.forEach(async (hoadon) => {
+
+  //       console.log("startttttttttttttttttt")
+  //       var result = true;
+  //       await hoadon.SanPhamMua.forEach(async (sanpham) => {
+  //         var soluong = sanpham.SoLuongMua;
+  //         var tonkho = 0
+  //         await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
+  //           if (DonDatHangsnapshot.exists())
+  //             tonkho = DonDatHangsnapshot.val().SoLuong
+  //         }).then(() => {
+  //           if (soluong > tonkho) {
+  //             result = false;
+  //             console.log(";;;;;;;;;;;;;;;;;;;;" + result)
+  //           }
+  //         })
+  //       })
+  //       listconfirm.push(result);
+  //       console.log("//////////////")
+  //       console.log(result)
+
+  //     })
+  //     setTimeout(() => {
+  //       setlistconfirm(listconfirm); setIsLoading(false)
+  //     }, 1000);
+  //     setListDonDatHang(list)
+  //     setListDonDatHangtam(list)
+  //   })
+  // }
+
   const getDonDatHang = async () => {
     let list = [];
     var listconfirm = [];
@@ -54,37 +111,33 @@ export default function ManageOrderScreen({ navigation }) {
             }
           }
         }
-    }).then(async () => {
-      var listconfirm = []
-      list.forEach(async (hoadon) => {
+    })
 
-        console.log("startttttttttttttttttt")
-        var result = true;
-        await hoadon.SanPhamMua.forEach(async (sanpham) => {
-          var soluong = sanpham.SoLuongMua;
-          var tonkho = 0
+    var listconfirm = []
+      list.forEach(async (hoadon) => {
+        let result = true;
+        hoadon.SanPhamMua.forEach(async (sanpham) => {
+          let soluong = sanpham.SoLuongMua;
+          let tonkho = 0
           await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
             if (DonDatHangsnapshot.exists())
               tonkho = DonDatHangsnapshot.val().SoLuong
-          }).then(() => {
-            if (soluong > tonkho) {
-              result = false;
-              console.log(";;;;;;;;;;;;;;;;;;;;" + result)
-            }
+              if (soluong > tonkho) {
+                result = false;
+              }
           })
         })
-        listconfirm.push(result);
-        console.log("//////////////")
+        
         console.log(result)
+        listconfirm.push(result);
 
       })
-      setTimeout(() => {
-        setlistconfirm(listconfirm); setIsLoading(false)
-      }, 1000);
       setListDonDatHang(list)
       setListDonDatHangtam(list)
-    })
+      setlistconfirm(listconfirm);
+      setIsLoading(false)
   }
+
   const onDeleteDonDatHang = (sdt, id) => {
     setSoDienThoaitoDelete(sdt)
     setDeleteID(id) //call back useEffect sẽ mở dialog
@@ -148,12 +201,33 @@ export default function ManageOrderScreen({ navigation }) {
       </DialogContent>
     </Dialog>
   )
-  const searchlist = (s) => {
+
+  const searchlist = async (s) => {
     var list = [];
     for (var item in listDonDatHang) {
       if (listDonDatHang[item].SoDienThoai.toLowerCase().includes(s.toLowerCase()))
         list.push(listDonDatHang[item]);
     }
+    //update canconfirm
+    var listconfirm = []
+      list.forEach(async (hoadon) => {
+        let result = true;
+        hoadon.SanPhamMua.forEach(async (sanpham) => {
+          let soluong = sanpham.SoLuongMua;
+          let tonkho = 0
+          await firebaseApp.database().ref('Anime/' + sanpham.IdAnime + '/SanPham/' + sanpham.IdSanPham).once('value', DonDatHangsnapshot => {
+            if (DonDatHangsnapshot.exists())
+              tonkho = DonDatHangsnapshot.val().SoLuong
+              if (soluong > tonkho) {
+                result = false;
+              }
+          })
+        })
+        listconfirm.push(result);
+
+      })
+      console.log(listconfirm)
+      setlistconfirm(listconfirm)
     setListDonDatHangtam(list)
   }
   return (
