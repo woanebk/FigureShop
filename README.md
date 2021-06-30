@@ -1,5 +1,5 @@
 # FigureShop (Quản lý cửa hàng nhân vật đồ chơi)
-## Đồ Án 1: Nhóm 12
+## Đồ án môn học
 **Thành viên:** Đào Duy Nam MSSV:18521117, Nguyễn Văn Lương MSSV:18520096
 Ứng dụng được phát triển trên nền Expo CLI sử dụng công nghệ React Native, sử dụng Google Firebase  
 **Yêu cầu cần có:** Cài đặt nodejs, expo cli  
