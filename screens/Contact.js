@@ -56,19 +56,19 @@ export default function Contact({ navigation }) {
           onPress={() => { Linking.openURL("tel:0349156877") }
           }
         >
-          <Text style={styles.commandTxt}>HOTLINE: 0349156877</Text>
+          <Text style={styles.commandTxt}>HOTLINE: 0349156877       </Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.commandBtn2, { alignSelf: 'center' }]}
           onPress={() => { Linking.openURL("mailto:18520096@gm.uit.edu.vn") }
           }
         >
-          <Text style={styles.commandTxt}>EMAIL SUPPORT: 18520096@gm.uit.edi.vn</Text>
+          <Text style={styles.commandTxt}>EMAILSUPPORT: 18520096@gm.uit.edu.vn</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.commandBtn3, { alignSelf: 'center' }]}
           onPress={() => { Linking.openURL("https://www.facebook.com/nam.vs.theworld") }
           }
         >
-          <Text style={styles.commandTxt}>FACEBOOK SUPPORT</Text>
+          <Text style={styles.commandTxt}>FACEBOOK SUPPORT        </Text>
         </TouchableOpacity>
       </View>
     </View>

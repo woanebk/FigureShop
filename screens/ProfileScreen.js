@@ -24,6 +24,8 @@ export default function ProfileScreen({ navigation }) {
     var currentdate = new Date();
     var currentyear = currentdate.getFullYear()
     var currentmonth = currentdate.getMonth() + 1
+    console.log(currentmonth)
+    console.log(currentyear)
 
     navigation.addListener('focus', () => {getuserinfo();
        getSoDonDatHang(currentmonth, currentyear); 
