@@ -75,6 +75,14 @@ export default function OrderDetailScreen({ route, navigation }) {
     })
   }
 
+  const getTonKho = (idanime, idsanpham)=>{
+    var tonkho = 0
+    firebaseApp.database().ref('Anime/'+idanime+'/SanPham/' + idsanpham).on('value',snapshot=>{
+      tonkho = snapshot.val().SoLuong
+    })
+    return tonkho
+  }
+
   const xacNhanDonDathang = (sdt, iddonhang) => {
     var idanime = ''
     var idsanpham = ''
