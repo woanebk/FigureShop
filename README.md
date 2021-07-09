@@ -6,7 +6,7 @@
 **Yêu cầu thiết bị:** Cài đặt expo go (để run app trên nền tảng cloud build:https://expo.io/@18520096/FigureShop), android 8.0 trở lên, ios 10.0 trở lên, Ram 2gb, bộ nhớ 300mb  
 **Các chức năng tiêu biểu của ứng dụng:**
 
-- Đăng nhập với nhiều tư cách (có/không tài khoản)
+- Đăng nhập với nhiều tư cách (có/không tài khoản), Khôi phục mật khẩu qua mail khi quên mật khẩu
 - Đặt hàng (Khách), bán hàng (Nhân viên)
 - Quản lý sản phẩm, Anime
 - Thống kê, báo cáo doanh thu, lợi nhuận, sản phẩm yêu thích, anime
