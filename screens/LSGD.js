@@ -14,6 +14,9 @@ import { Keyboard } from 'react-native';
 export default function LSGD({ navigation }) {
   const [phoneNumber, setphoneNumber] = useState('');
   //const{GUEST_UID}=""
+  const [dialogVisable, setDialogVisable] = useState(false); // true thì hiện dialog, false thì ẩn
+  const [deleteID, setDeleteID] = useState(''); //id  để xóa
+  const [soDienThoaitoDelete, setSoDienThoaitoDelete] = useState(''); //sdt  để xóa
   const fall = new Animated.Value(1); //blur animation
   const [listDonDatHang, setListDonDatHang] = useState([]);
   const [firstRun, setFirstRun] = useState(0);
@@ -42,7 +45,57 @@ export default function LSGD({ navigation }) {
         }
     if(!isLoading){      bottomsheetRef.current.snapTo(0);
     }
+    if (deleteID !== '')
+    openDialog(); 
   })
+  const deleteDonHang = (sdt, iddonhang) => {
+    try {
+      firebaseApp.database().ref('Guest/' + sdt + '/DonHang/' + iddonhang).update({
+        TrangThai: 'off'
+      }, () => {
+        closeDialog()
+        getDonDatHang()
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const openDialog = () => { setDialogVisable(true) }
+  const closeDialog = () => {
+    setDeleteID('')
+    setSoDienThoaitoDelete('')
+    setDialogVisable(false)
+  } //reset để không mở dialog trong useEffect không cần thiết 
+
+  const renderDialog = () => (
+    <Dialog
+      visible={dialogVisable}
+      dialogTitle={<DialogTitle title="Thông Báo" />}
+      onTouchOutside={() => closeDialog()}
+      footer={
+        <DialogFooter>
+          <DialogButton
+            text="CANCEL"
+            onPress={() => closeDialog()}
+          />
+          <DialogButton
+            text="OK"
+            onPress={() => deleteDonHang(soDienThoaitoDelete, deleteID)}
+          />
+        </DialogFooter>
+      }
+      dialogAnimation={new SlideAnimation({
+        slideFrom: 'bottom',
+      })}
+    >
+      <DialogContent style={styles.dialog}>
+        <View style={{ height: '100%' }}>
+          <Text style={{ fontSize: 16, alignSelf: 'center' }}> Bạn có chắc muốn Xóa ?</Text>
+        </View>
+      </DialogContent>
+    </Dialog>
+  )
+
   const convertPhoneNumber = (number) => {
     if (number.charAt(0) == '+')
       return number
@@ -235,6 +288,10 @@ export default function LSGD({ navigation }) {
     )
   }
 
+  const onDeleteDonDatHang = (sdt, id) => {
+    setSoDienThoaitoDelete(sdt)
+    setDeleteID(id) //call back useEffect sẽ mở dialog
+  }
   const renderSheetHeader = () => (
     <View style={styles.header}>
       <View style={styles.panelHandle}></View>
@@ -274,7 +331,7 @@ export default function LSGD({ navigation }) {
                   phoneNumber={item.SoDienThoai} soLuongSanPham={item.TongSoLuongMua}
                   canConfirm={true}
                   canConfirm1={item.DaXacNhan?false:true}
-                  canDelete={false}
+                  canDelete={item.DaXacNhan?false:true}
                   tongtien={item.TongTien}
                   onPress={() => navigation.navigate('OrderDetail', { so_dien_thoai: item.SoDienThoai, id_don_dat_hang: item.IdDonDatHang })}
                   ngayDat={item.NgayDat}
@@ -290,6 +347,7 @@ export default function LSGD({ navigation }) {
           >
             <Text style={styles.commandTxt}>Đổi Số Điện Thoại</Text>
           </TouchableOpacity>
+          {renderDialog()}
           </Fragment>
       }
        
