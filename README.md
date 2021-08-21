@@ -18,8 +18,8 @@
 - Hỗ trợ thanh toán qua các kênh thanh toán như momo
 - Thêm animation đẹp mắt, cải tiến giao diện  
 
-Link expo publish có thể truy cập ngay: https://expo.io/@18520096/FigureShop
-Link Download file apk(mail .uit.edu.vn): https://drive.google.com/drive/folders/11m2cTtlUoyZ1Sv9WTuw7L-rmkGb-u6-7?usp=sharing
-Link Demo Youtube: https://youtu.be/UtAPnF7Ex4E
-Tài khoản Admin: 18521117@gm.uit.edu.vn
+Link expo publish có thể truy cập ngay: https://expo.io/@18520096/FigureShop  
+Link Download file apk(mail .uit.edu.vn): https://drive.google.com/drive/folders/11m2cTtlUoyZ1Sv9WTuw7L-rmkGb-u6-7?usp=sharing  
+Link Demo Youtube: https://youtu.be/UtAPnF7Ex4E  
+Tài khoản Admin: 18521117@gm.uit.edu.vn  
 Mật khẩu: 123456
